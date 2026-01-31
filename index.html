@@ -34,7 +34,6 @@
             margin: 0 auto;
         }
 
-        /* Header Title reducido */
         .header-title {
             text-align: center;
             margin-bottom: 1rem;
@@ -154,7 +153,8 @@
         .bookshelf-bg {
             background: linear-gradient(to bottom, rgba(120, 53, 15, 0.5), rgba(69, 26, 3, 0.5));
             border-radius: 0.5rem;
-            padding: 1rem;
+            padding: 1.5rem;
+            min-height: 200px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
@@ -163,13 +163,24 @@
             align-items: flex-end;
             justify-content: center;
             gap: 0.25rem;
-            min-height: 140px;
+            min-height: 160px;
             padding-bottom: 0.75rem;
             flex-wrap: wrap;
         }
 
+        /* Alineación alternativa de estantes */
+        .books-container.align-left {
+            justify-content: flex-start;
+            padding-left: 0.5rem;
+        }
+
+        .books-container.align-right {
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
         .shelf-board {
-            height: 1rem;
+            height: 1.5rem;
             background: linear-gradient(to bottom, #92400e, #78350f);
             border-radius: 0.125rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -178,8 +189,8 @@
         /* Book Button */
         .book {
             position: relative;
-            width: 2rem;
-            height: 8rem;
+            width: 2.5rem;
+            height: 10rem;
             border-radius: 0.125rem;
             background: #8B4513;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
@@ -260,8 +271,8 @@
         /* Special Book (Enciclopedia) */
         .special-book {
             position: relative;
-            width: 3rem;
-            height: 8rem;
+            width: 4rem;
+            height: 10rem;
             border-radius: 0.125rem;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
             transform: translateY(0);
@@ -269,6 +280,7 @@
             cursor: pointer;
             overflow: hidden;
             text-decoration: none;
+            display: block;
         }
 
         .special-book:hover {
@@ -298,20 +310,21 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-	.special-book-label {
-	    position: absolute;
-	    right: 0.5rem;
-	    top: 50%;
-	    font-size: 0.75rem;
-	    color: white;
-	    font-weight: bold;
-	    letter-spacing: 0.1em;
-	    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-	    line-height: 1.2;
-	    writing-mode: vertical-rl;
-	    text-orientation: mixed;
-	    transform: translateY(-50%) rotate(-180deg);
-	}	
+        .special-book-label {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            line-height: 1.2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(-180deg);
+        }
 
         /* Modal */
         .modal {
@@ -568,21 +581,31 @@
         /* Responsive */
         @media (max-width: 640px) {
             .book {
-                width: 1.5rem;
-                height: 6rem;
+                width: 1.8rem;
+                height: 7rem;
             }
 
             .books-container {
                 gap: 0.125rem;
+                min-height: 110px;
             }
 
             .special-book {
-                width: 2.5rem;
-                height: 6rem;
+                width: 3rem;
+                height: 7rem;
             }
 
             .special-book-label {
-                font-size: 0.65rem;
+                font-size: 0.75rem;
+            }
+
+            .bookshelf-bg {
+                padding: 1rem;
+                min-height: 140px;
+            }
+
+            .shelf-board {
+                height: 1rem;
             }
 
             .header-title h1 {
@@ -607,48 +630,6 @@
                 padding: 1.5rem 1rem 0.5rem 1rem;
             }
         }
-        /* Zoom automático para pantallas muy estrechas */
-@media (max-width: 380px) and (orientation: portrait) {
-    .library-frame {
-        transform: scale(0.6);
-        transform-origin: top center;
-    }
-    
-    main {
-        padding: 1rem 0.5rem;
-    }
-}
-        @media (max-width: 768px) {
-            header {
-                padding: 1.5rem 1rem 0.5rem 1rem;
-            }
-        }
-
-        /* Para celulares verticales - libros en una sola fila */
-        @media (orientation: portrait) and (max-width: 768px) {
-            .books-container {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                overflow-y: hidden;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-                justify-content: flex-start;
-            }
-            
-            .books-container::-webkit-scrollbar {
-                height: 4px;
-            }
-            
-            .books-container::-webkit-scrollbar-thumb {
-                background: #78350f;
-                border-radius: 2px;
-            }
-            
-            .bookshelf-bg {
-                padding: 0.5rem 0.25rem;
-            }
-        }
-    </style>
     </style>
 </head>
 <body>
@@ -682,44 +663,43 @@
         </div>
 
         <div class="instructions">
-            <h3>📝 Instrucciones para activar libros:</h3>
+            <h3>📖 Cómo activar libros</h3>
             <ul>
-                <li>Cada libro tiene una carpeta en <code>books/{id}/</code></li>
-                <li>Cargue los archivos (PDF, EPUB, MOBI, AZW3) en la carpeta correspondiente</li>
-                <li>Para activar un libro, cambie <code>status: 'available'</code> en el código</li>
-                <li>Los libros aparecerán disponibles automáticamente</li>
+                <li>Cree una carpeta <code>books</code> en el mismo directorio que este archivo</li>
+                <li>Dentro de <code>books</code>, cree carpetas numeradas: <code>books/1/</code>, <code>books/2/</code>, etc.</li>
+                <li>Agregue archivos PDF, EPUB, MOBI o AZW3 en cada carpeta de libro</li>
+                <li>Edite la función <code>generateBooks()</code> para cambiar el estado de <code>'unavailable'</code> a <code>'available'</code></li>
             </ul>
         </div>
     </main>
 
-    <!-- Modal -->
+    <footer>
+        <div class="footer-content">
+            <p>📚 Biblioteca Digital - Colección completa</p>
+            <small>© <span id="currentYear"></span> Todos los derechos reservados</small>
+        </div>
+    </footer>
+
+    <!-- Modal para detalles del libro -->
     <div id="bookModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle" class="modal-title"></h2>
-                <button id="modalClose" class="modal-close">✕</button>
+                <button id="modalClose" class="modal-close">×</button>
             </div>
-            <div class="modal-info" id="modalInfo"></div>
-            <div class="modal-formats" id="modalFormats"></div>
+            <div id="modalInfo" class="modal-info"></div>
+            <div id="modalFormats" class="modal-formats"></div>
             <div class="modal-footer">
-                <p>Para activar este libro, cargue los archivos en: <code id="modalPath">books/{id}/</code></p>
+                <p>Ruta: <code id="modalPath"></code></p>
             </div>
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <p>📚 Biblioteca Digital - <span id="currentYear"></span></p>
-            <small>Diseñado para alojar y compartir conocimiento en múltiples formatos</small>
-        </div>
-    </footer>
-
     <script>
         // ========================================
-        // CONFIGURACIÓN DE LIBROS
+        // DATOS DE LIBROS
         // ========================================
-        
-        // Títulos de libros
+
         const titles = [
             'Cien Años de Soledad', 'El Quijote', 'La Odisea', '1984', 'Orgullo y Prejuicio',
             'Crimen y Castigo', 'Moby Dick', 'Guerra y Paz', 'Ulises', 'Divina Comedia',
@@ -766,7 +746,6 @@
             'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Marvel'
         ];
 
-        // Autores
         const authors = [
             'Gabriel García Márquez', 'Miguel de Cervantes', 'Homero', 'George Orwell', 'Jane Austen',
             'Fiodor Dostoyevski', 'Herman Melville', 'León Tolstói', 'James Joyce', 'Dante Alighieri',
@@ -783,7 +762,6 @@
             'Gabriel García Márquez', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
             'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
             'Mario Vargas Llosa', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
-            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
             'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
             'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
             'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
@@ -810,7 +788,6 @@
             'Diseño', 'Diseño', 'Diseño', 'Diseño', 'Diseño'
         ];
 
-        // Colores de libros
         const bookColors = [
             '#8B4513', '#A0522D', '#CD853F', '#D2691E', '#B8860B',
             '#556B2F', '#8FBC8F', '#2F4F4F', '#800020', '#8B0000',
@@ -872,23 +849,18 @@
             return parts[parts.length - 1];
         }
 
-        function formatLabel(text, maxLength) {
-            return text.length > maxLength ? text.substring(0, maxLength) : text;
-        }
-
         // ========================================
-        // CREAR LIBRO
+        // CREAR ELEMENTOS DE LIBROS
         // ========================================
 
         function createBookElement(book) {
-            const bookDiv = document.createElement('div');
-            bookDiv.className = `book ${book.status === 'unavailable' ? 'unavailable' : ''}`;
+            const bookDiv = document.createElement('button');
+            bookDiv.className = 'book' + (book.status === 'unavailable' ? ' unavailable' : '');
             bookDiv.style.backgroundColor = book.color;
-            bookDiv.dataset.bookId = book.id;
+            bookDiv.disabled = book.status === 'unavailable';
             
             if (book.status === 'available') {
                 bookDiv.title = `${book.title} - ${book.author}`;
-                bookDiv.onclick = () => openBookModal(book);
             } else {
                 bookDiv.title = 'No disponible';
             }
@@ -898,7 +870,7 @@
             spine.className = 'book-spine';
             bookDiv.appendChild(spine);
             
-            // Textura
+            // Textura del libro
             const texture = document.createElement('div');
             texture.className = 'book-texture';
             bookDiv.appendChild(texture);
@@ -913,45 +885,45 @@
             }
             bookDiv.appendChild(decoration);
             
-            // Etiqueta (solo si está disponible)
+            // Etiqueta del libro (solo si está disponible)
             if (book.status === 'available') {
                 const label = document.createElement('div');
                 label.className = 'book-label';
                 
                 const labelText = document.createElement('div');
                 labelText.className = 'book-label-text';
-                labelText.textContent = formatLabel(book.title, 10);
-                label.appendChild(labelText);
+                labelText.textContent = book.title.slice(0, 10);
                 
                 const labelAuthor = document.createElement('div');
                 labelAuthor.className = 'book-label-author';
                 labelAuthor.textContent = getAuthorLastName(book.author);
-                label.appendChild(labelAuthor);
                 
+                label.appendChild(labelText);
+                label.appendChild(labelAuthor);
                 bookDiv.appendChild(label);
             }
+            
+            // Event listener
+            bookDiv.addEventListener('click', () => openBookModal(book));
             
             return bookDiv;
         }
 
-        // ========================================
-        // CREAR LIBRO ESPECIAL (ENCICLOPEDIA)
-        // ========================================
-
         function createSpecialBook(title, url, color) {
-            const bookLink = document.createElement('a');
-            bookLink.href = url;
-            bookLink.target = '_blank';
-            bookLink.className = 'special-book';
-            bookLink.style.backgroundColor = color;
-            bookLink.title = title;
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'special-book';
+            link.style.backgroundColor = color;
+            link.title = title;
             
             // Textura
             const texture = document.createElement('div');
             texture.className = 'special-book-texture';
-            bookLink.appendChild(texture);
+            link.appendChild(texture);
             
-            // Decoración del lomo
+            // Decoración
             const decoration = document.createElement('div');
             decoration.className = 'special-book-decoration';
             for (let i = 0; i < 5; i++) {
@@ -959,22 +931,18 @@
                 line.className = 'special-book-line';
                 decoration.appendChild(line);
             }
-            bookLink.appendChild(decoration);
+            link.appendChild(decoration);
             
-            // Etiqueta del libro
+            // Etiqueta
             const label = document.createElement('div');
             label.className = 'special-book-label';
             label.textContent = title;
-            bookLink.appendChild(label);
+            link.appendChild(label);
             
-            return bookLink;
+            return link;
         }
 
-        // ========================================
-        // CREAR ESTANTE
-        // ========================================
-
-        function createBookshelf(books, isFirstShelf) {
+        function createBookshelf(books, isFirstShelf, alignLeft) {
             const shelfDiv = document.createElement('div');
             shelfDiv.className = 'bookshelf';
             
@@ -983,6 +951,13 @@
             
             const booksContainer = document.createElement('div');
             booksContainer.className = 'books-container';
+            
+            // Alinear según el parámetro - CORREGIDO: Usar clases CSS puras
+            if (alignLeft) {
+                booksContainer.classList.add('align-left');
+            } else {
+                booksContainer.classList.add('align-right');
+            }
             
             // Agregar libros especiales si es el primer estante
             if (isFirstShelf) {
@@ -1043,16 +1018,23 @@
                 return;
             }
             
-            const booksPerShelf = 20;
+            // Distribuir libros uniformemente en 24 estantes
+            const totalShelves = 24;
+            const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves);
+            const extraBooks = filteredBooks.length % totalShelves;
+
             const shelves = [];
-            
-            for (let i = 0; i < filteredBooks.length; i += booksPerShelf) {
-                const shelfBooks = filteredBooks.slice(i, i + booksPerShelf);
+            let bookIndex = 0;
+
+            for (let i = 0; i < totalShelves; i++) {
+                const booksThisShelf = baseBooksPerShelf + (i < extraBooks ? 1 : 0);
+                const shelfBooks = filteredBooks.slice(bookIndex, bookIndex + booksThisShelf);
                 shelves.push(shelfBooks);
+                bookIndex += booksThisShelf;
             }
-            
+
             shelves.forEach((shelfBooks, index) => {
-                const shelfElement = createBookshelf(shelfBooks, index === 0);
+                const shelfElement = createBookshelf(shelfBooks, index === 0, index % 2 === 0);
                 container.appendChild(shelfElement);
             });
         }
