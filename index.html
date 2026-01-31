@@ -618,6 +618,37 @@
         padding: 1rem 0.5rem;
     }
 }
+		        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem 0.5rem 1rem;
+            }
+        }
+
+        /* Para celulares verticales - libros en una sola fila */
+        @media (orientation: portrait) and (max-width: 768px) {
+            .books-container {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+                justify-content: flex-start;
+            }
+            
+            .books-container::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .books-container::-webkit-scrollbar-thumb {
+                background: #78350f;
+                border-radius: 2px;
+            }
+            
+            .bookshelf-bg {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
     </style>
 </head>
 <body>
