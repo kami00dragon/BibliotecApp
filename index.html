@@ -40,10 +40,26 @@
         }
 
         .header-title h1 {
-            color: #fef3c7;
             font-size: 1.5rem;
             margin-bottom: 0.25rem;
-            font-weight: normal;
+            font-weight: 900;
+            font-family: 'Georgia', serif, sans-serif;
+        }
+
+        .title-letter {
+            display: inline-block;
+        }
+
+        .title-letter.red {
+            color: #dc2626;
+        }
+
+        .title-letter.white {
+            color: #fef3c7;
+        }
+
+        .title-letter.gold {
+            color: #fbbf24;
         }
 
         .header-title p {
@@ -58,11 +74,29 @@
             align-items: center;
         }
 
+        .search-with-stars {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .search-star {
+            width: 2.5rem;
+            height: 2.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+            flex-shrink: 0;
+        }
+
         @media (min-width: 768px) {
             .search-filters {
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
+            }
+
+            .search-star {
+                width: 2.5rem;
+                height: 2.5rem;
             }
         }
 
@@ -310,20 +344,21 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-           .special-book-label {
-        position: absolute;
-        right: 0.5rem;
-        top: 50%;
-        font-size: 0.75rem;
-        color: white;
-        font-weight: bold;
-        letter-spacing: 0.1em;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        line-height: 1.2;
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-        transform: translateY(-50%) rotate(-180deg);
-    }
+        .special-book-label {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            line-height: 1.2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(-180deg);
+        }
 
         /* Modal */
         .modal {
@@ -629,18 +664,133 @@
                 padding: 1.5rem 1rem 0.5rem 1rem;
             }
         }
+
+        /* ========================================
+           ESTATUAS GUARDIANAS - Shisa y Kitsune
+           ======================================== */
+
+        .header-with-guardians {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .guardians-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.25rem;
+            height: 3.5rem;
+        }
+
+        .guardian-statue {
+            width: 7.5rem;
+            height: 10.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .guardian-shisa {
+            width: 9rem;
+            height: 10.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        @media (min-width: 768px) {
+            .guardian-statue {
+                width: 9rem;
+                height: 12rem;
+            }
+
+            .guardian-shisa {
+                width: 11rem;
+                height: 12rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-with-guardians {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .guardian-statue {
+                width: 6rem;
+                height: 8.4rem;
+            }
+
+            .guardian-shisa {
+                width: 7.2rem;
+                height: 8.4rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
             <div class="header-title">
-                <h1>📚 Biblioteca Digital</h1>
-                <p id="booksCount">Cargando...</p>
+                <div class="header-with-guardians">
+                    <!-- Guardianes izquierdos: Shisa -->
+                    <div class="guardians-container">
+                        <!-- Shisa Okinawense - Imagen real -->
+                        <img class="guardian-shisa" src="https://tabimaniajapan.com/wp-content/uploads/2020/04/Identity-shisa-840x1024.jpg" alt="Shisa Okinawense" />
+                    </div>
+
+                    <!-- Maneki Neko - Gato de la Suerte (en el centro) -->
+                    <img class="guardian-statue" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGIIXQQbKEMEY4_D-4LPmTKyi1TaTNXKbABA&s" alt="Maneki Neko" />
+
+                    <h1 id="pageTitle"></h1>
+
+                    <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
+                    <div class="guardians-container">
+                        <!-- Kitsune de Inari - Imagen real -->
+                        <img class="guardian-statue" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLSZ0VAv8l4o2GJqzpbSUi1sg3ei4IX3S6-A&s" alt="Zorro Kitsune" />
+
+                        <!-- Shisa Okinawense - Imagen real -->
+                        <img class="guardian-shisa" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" alt="Shisa Okinawense" />
+                    </div>
+                </div>
             </div>
-            
+
             <div class="search-filters">
-                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
+                <div class="search-with-stars">
+                    <!-- Estrella dorada de 5 puntas - izquierda del input -->
+                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#goldStar)"
+                            stroke="#B8860B"
+                            stroke-width="2"
+                        />
+                    </svg>
+
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
+
+                    <!-- Estrella roja de 5 puntas - derecha del input -->
+                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#redStar)"
+                            stroke="#7F1D1D"
+                            stroke-width="2"
+                        />
+                    </svg>
+                </div>
+
                 <label class="filter-label">
                     <input type="checkbox" id="availableFilter" class="filter-checkbox">
                     <span>Solo disponibles</span>
@@ -1017,7 +1167,7 @@
                 return;
             }
             
-            // Distribuir libros uniformemente en 24 estantes..
+            // Distribuir libros uniformemente en 24 estantes
             const totalShelves = 50;
             const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves);
             const extraBooks = filteredBooks.length % totalShelves;
@@ -1036,17 +1186,6 @@
                 const shelfElement = createBookshelf(shelfBooks, index === 0, index % 2 === 0);
                 container.appendChild(shelfElement);
             });
-        }
-
-        // ========================================
-        // ACTUALIZAR CONTADOR
-        // ========================================
-
-        function updateBooksCount() {
-            const availableCount = allBooks.filter(b => b.status === 'available').length;
-            const totalCount = allBooks.length;
-            document.getElementById('booksCount').textContent = 
-                `${availableCount} de ${totalCount} libros disponibles`;
         }
 
         // ========================================
@@ -1166,15 +1305,20 @@
 
         // ========================================
         // INICIALIZACIÓN
-        // =======================================
+        // ========================================
 
         function init() {
             // Establecer año actual en el footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
-            // Actualizar contador
-            updateBooksCount();
-            
+
+            // Configurar título con letras intercaladas
+            const titleText = 'Biblioteca Digital';
+            const titleElement = document.getElementById('pageTitle');
+            titleElement.innerHTML = titleText.split('').map((char, index) => {
+                const className = index % 2 === 0 ? 'red' : 'gold';
+                return `<span class="title-letter ${className}">${char}</span>`;
+            }).join('');
+
             // Renderizar biblioteca
             renderLibrary();
         }
