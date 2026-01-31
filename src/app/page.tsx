@@ -146,7 +146,7 @@ function BookComponent({ book, onClick }: { book: Book; onClick: (book: Book) =>
     <button
       onClick={() => onClick(book)}
       className={`
-        relative w-8 h-32 rounded-sm shadow-lg transform transition-all duration-300
+        relative w-10 h-40 rounded-sm shadow-lg transform transition-all duration-300
         hover:scale-105 hover:shadow-2xl hover:translate-y-[-4px]
         ${isAvailable 
           ? 'cursor-pointer hover:brightness-110' 
@@ -191,28 +191,111 @@ function BookComponent({ book, onClick }: { book: Book; onClick: (book: Book) =>
   )
 }
 
+// Componente de Libro Especial (Enciclopedia para estantes)
+function SpecialBook({ title, url, color, onClick }: { 
+  title: string
+  url: string
+  color: string
+  onClick?: () => void
+}) {
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onClick}
+      className={
+        `relative w-16 h-40 rounded-sm shadow-lg ` +
+        `hover:scale-105 hover:shadow-2xl hover:translate-y-[-4px] ` +
+        `hover:brightness-110 cursor-pointer ` +
+        `transition-all duration-300 overflow-hidden`
+      }
+      style={{
+        backgroundColor: color,
+        boxShadow: '2px 2px 8px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.1)'
+      }}
+      title={title}
+    >
+      {/* Textura del libro */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
+      
+      {/* Líneas decorativas en el lomo */}
+      <div className="absolute left-1 top-2 bottom-2 flex flex-col justify-between">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            className="w-1 h-0.5 bg-white/20"
+          />
+        ))}
+      </div>
+
+      {/* Etiqueta del libro - Texto vertical en el lomo */}
+      <div 
+        className="absolute right-2 top-1/2 -translate-y-1/2 text-white font-bold tracking-wider"
+        style={{
+          writingMode: 'vertical-rl',
+          textOrientation: 'mixed',
+          fontSize: '0.85rem',
+          textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+          lineHeight: '1.2',
+          transform: 'rotate(-180deg)'
+        }}
+      >
+        {title}
+      </div>
+    </a>
+  )
+}
+
 // Componente de Estante
-function Bookshelf({ books, startIdx, endIdx, onBookClick }: { 
+function Bookshelf({ books, startIdx, endIdx, onBookClick, isFirstShelf, alignLeft }: { 
   books: Book[]; 
   startIdx: number; 
   endIdx: number; 
-  onBookClick: (book: Book) => void 
+  onBookClick: (book: Book) => void
+  isFirstShelf: boolean
+  alignLeft: boolean
 }) {
   const shelfBooks = books.slice(startIdx, endIdx)
 
   return (
     <div className="relative w-full">
       {/* Fondo de madera del estante */}
-      <div className="bg-gradient-to-b from-amber-900/50 to-amber-950/50 rounded-lg p-4 shadow-inner">
+      <div className="bg-gradient-to-b from-amber-900/50 to-amber-950/50 rounded-lg p-4 shadow-inner min-h-[200px]">
         {/* Estantería superior */}
-        <div className="flex items-end justify-center gap-1 min-h-[140px] px-2 pb-3">
+        <div className={`
+          flex items-end gap-1 min-h-[160px] pb-3
+          ${alignLeft ? 'justify-start pl-2' : 'justify-end pr-2'}
+        `}>
+          {/* Libros especiales en el primer estante (parte izquierda) */}
+          {isFirstShelf && (
+            <>
+              <SpecialBook 
+                title="NihongoApp"
+                url="https://kami00dragon.github.io/NihongoApp/index.html"
+                color="#8B0000"
+              />
+              <SpecialBook 
+                title="AeternusApp"
+                url="https://kami00dragon.github.io/AeternusApp/"
+                color="#5D4037"
+              />
+              <SpecialBook 
+                title="GramaticApp"
+                url="https://kami00dragon.github.io/gramaticapp/#posturas-teoricas"
+                color="#424242"
+              />
+            </>
+          )}
+          
+          {/* Libros normales */}
           {shelfBooks.map((book) => (
             <BookComponent key={book.id} book={book} onClick={onBookClick} />
           ))}
         </div>
         
-        {/* Tablón del estante */}
-        <div className="h-4 bg-gradient-to-b from-amber-800 to-amber-900 rounded-sm shadow-lg">
+        {/* Tablón del estante más alto */}
+        <div className="h-6 bg-gradient-to-b from-amber-800 to-amber-900 rounded-sm shadow-lg">
           <div className="h-0.5 bg-amber-950/50" />
         </div>
       </div>
@@ -348,14 +431,21 @@ export default function Home() {
   const availableBooks = books.filter(b => b.status === 'available').length
   const totalBooks = books.length
 
-  // Crear estantes (20 libros por estante)
-  const booksPerShelf = 20
+  // Distribuir libros uniformemente en 24 estantes
+  const totalShelves = 24
+  const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves)
+  const extraBooks = filteredBooks.length % totalShelves
+
   const shelves = []
-  for (let i = 0; i < Math.ceil(filteredBooks.length / booksPerShelf); i++) {
+  let bookIndex = 0
+
+  for (let i = 0; i < totalShelves; i++) {
+    const booksThisShelf = baseBooksPerShelf + (i < extraBooks ? 1 : 0)
     shelves.push({
-      startIdx: i * booksPerShelf,
-      endIdx: Math.min((i + 1) * booksPerShelf, filteredBooks.length)
+      startIdx: bookIndex,
+      endIdx: bookIndex + booksThisShelf
     })
+    bookIndex += booksThisShelf
   }
 
   return (
@@ -411,7 +501,7 @@ export default function Home() {
             {/* Detalles arquitectónicos - Molduras */}
             <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-amber-600 to-amber-700 rounded-t-xl" />
             <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-amber-600 to-amber-700 rounded-b-xl" />
-            
+
             {/* Estantes de libros */}
             <div className="space-y-6">
               {shelves.map((shelf, index) => (
@@ -421,6 +511,8 @@ export default function Home() {
                   startIdx={shelf.startIdx}
                   endIdx={shelf.endIdx}
                   onBookClick={setSelectedBook}
+                  isFirstShelf={index === 0}
+                  alignLeft={index % 2 === 0}
                 />
               ))}
             </div>
