@@ -298,21 +298,2346 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .special-book-label {
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.75rem;
+	.special-book-label {
+	    position: absolute;
+	    right: 0.5rem;
+	    top: 50%;
+	    font-size: 0.75rem;
+	    color: white;
+	    font-weight: bold;
+	    letter-spacing: 0.1em;
+	    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+	    line-height: 1.2;
+	    writing-mode: vertical-rl;
+	    text-orientation: mixed;
+	    transform: translateY(-50%) rotate(-180deg);
+	}	
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(to bottom right, #fef9c3, #fef3c7);
+            border-radius: 0.5rem;
+            max-width: 32rem;
+            width: 100%;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 4px solid #78350f;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #78350f;
+            flex: 1;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #78350f;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #dc2626;
+        }
+
+        .modal-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-info p {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .modal-info strong {
+            font-weight: bold;
+        }
+
+        .modal-status-available {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .modal-status-unavailable {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .modal-formats {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-formats h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #78350f;
+            margin-bottom: 0.75rem;
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .format-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: none;
+            background: linear-gradient(to bottom right, #d97706, #b45309);
             color: white;
             font-weight: bold;
-            letter-spacing: 0.1em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            line-height: 1.2;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(-180deg);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
         }
+
+        .format-button:hover {
+            background: linear-gradient(to bottom right, #b45309, #92400e);
+            transform: scale(1.02);
+        }
+
+        .format-button:active {
+            transform: scale(0.98);
+        }
+
+        .format-icon {
+            font-size: 1.25rem;
+        }
+
+        .modal-message {
+            background: #fef3c7;
+            border: 2px solid #d97706;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .modal-message p {
+            color: #92400e;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-message small {
+            color: #b45309;
+        }
+
+        .modal-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid #f59e0b;
+        }
+
+        .modal-footer p {
+            color: #b45309;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .modal-footer code {
+            background: #fef3c7;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .no-results h2 {
+            font-size: 1.5rem;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results p {
+            color: #92400e;
+        }
+
+        /* Instructions */
+        .instructions {
+            margin-top: 2rem;
+            background: #fef3c7;
+            border: 2px solid #92400e;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .instructions h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #78350f;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #d97706;
+        }
+
+        .instructions code {
+            background: #fde68a;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #78350f, #92400e, #78350f);
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: #fef3c7;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-content small {
+            color: #fcd34d;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .book {
+                width: 1.5rem;
+                height: 6rem;
+            }
+
+            .books-container {
+                gap: 0.125rem;
+            }
+
+            .special-book {
+                width: 2.5rem;
+                height: 6rem;
+            }
+
+            .special-book-label {
+                font-size: 0.65rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-title p {
+                font-size: 0.8rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-title">
+                <h1>📚 Biblioteca Digital</h1>
+                <p id="booksCount">Cargando...</p>
+            </div>
+            
+            <div class="search-filters">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
+                <label class="filter-label">
+                    <input type="checkbox" id="availableFilter" class="filter-checkbox">
+                    <span>Solo disponibles</span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="library-frame">
+            <div class="library-inner">
+                <div class="library-molding top"></div>
+                
+                <!-- Estantes de Libros -->
+                <div id="bookshelvesContainer"></div>
+                
+                <div class="library-molding bottom"></div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📝 Instrucciones para activar libros:</h3>
+            <ul>
+                <li>Cada libro tiene una carpeta en <code>books/{id}/</code></li>
+                <li>Cargue los archivos (PDF, EPUB, MOBI, AZW3) en la carpeta correspondiente</li>
+                <li>Para activar un libro, cambie <code>status: 'available'</code> en el código</li>
+                <li>Los libros aparecerán disponibles automáticamente</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <button id="modalClose" class="modal-close">✕</button>
+            </div>
+            <div class="modal-info" id="modalInfo"></div>
+            <div class="modal-formats" id="modalFormats"></div>
+            <div class="modal-footer">
+                <p>Para activar este libro, cargue los archivos en: <code id="modalPath">books/{id}/</code></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>📚 Biblioteca Digital - <span id="currentYear"></span></p>
+            <small>Diseñado para alojar y compartir conocimiento en múltiples formatos</small>
+        </div>
+    </footer>
+
+    <script>
+        // ========================================
+        // CONFIGURACIÓN DE LIBROS
+        // ========================================
+        
+        // Títulos de libros
+        const titles = [
+            'Cien Años de Soledad', 'El Quijote', 'La Odisea', '1984', 'Orgullo y Prejuicio',
+            'Crimen y Castigo', 'Moby Dick', 'Guerra y Paz', 'Ulises', 'Divina Comedia',
+            'Don Juan Tenorio', 'El Principito', 'El Alquimista', 'Los Miserables', 'Anna Karenina',
+            'La Ilíada', 'Hamlet', 'Macbeth', 'Romeo y Julieta', 'Otelo',
+            'El Gran Gatsby', 'Matar a un Ruiseñor', 'La Metamorfosis', 'El Señor de los Anillos', 'El Hobbit',
+            'Harry Potter', 'Dune', 'Fundación', 'Neuromante', 'Fahrenheit 451',
+            'Brave New World', 'La Rebelión de Atlas', 'El Código Da Vinci', 'El Nombre de la Rosa', 'La Sombra del Viento',
+            'Como Agua para Chocolate', 'Pedro Páramo', 'Rayuela', 'Ficciones', 'El Aleph',
+            'La Casa de los Espíritus', 'Kafka en la Orilla', '1Q84', 'El Viento en los Sauces', 'Alicia en el País de las Maravillas',
+            'Peter Pan', 'Las Crónicas de Narnia', 'El Pequeño Príncipe', 'El Lobo Estepario', 'Siddhartha',
+            'Demian', 'El Juego de las Sillas', 'La Nausea', 'El Extranjero', 'La Peste',
+            'El Tunel', 'Sobre Héroes y Tumbas', 'Boquitas Pintadas', 'El Amor en los Tiempos del Cólera', 'Crónica de una Muerte Anunciada',
+            'El Coronel no Tiene Quien le Escriba', 'La Casa Verde', 'Conversación en la Catedral', 'La Fiesta del Chivo', 'Travesuras de la Niña Mala',
+            'La Ciudad y los Perros', 'Pantaleón y las Visitadoras', 'Los Cachorros', '¿Quién Mató a Palomino Molero?', 'La Tía Julia y el Escribidor',
+            'Lituma en los Andes', 'Los Cuervos', 'La Casa de Asterión', 'Borges y Yo', 'El Sur',
+            'El Jardín de Senderos que se Bifurcan', 'La Biblioteca de Babel', 'El Zahir', 'La Muerte y la Brújula', 'El Inmortal',
+            'El Otro, el Mismo', 'El Hacedor', 'Elogio de la Sombra', 'El Oro de los Tigres', 'La Rosa Profunda',
+            'El Libro de Arena', 'Historia Universal de la Infamia', 'Fervor de Buenos Aires', 'Luna de Enfrente', 'Cuaderno San Martín',
+            'El Amor, la Muerte y otros Temas', 'Antología Personal', 'Nueva Antología Personal', 'Textos Cautivos', 'Biblioteca Personal',
+            'Obras Completas I', 'Obras Completas II', 'Obras Completas III', 'Obras Completas IV', 'Obras Completas V',
+            'Poesía Completa', 'Cuentos Completos', 'Ensayos Completos', 'Prólogos', 'Discursos',
+            'Entrevistas', 'Cartas', 'Diarios', 'Autobiografías', 'Biografías',
+            'Historias', 'Leyendas', 'Mitología', 'Filosofía', 'Religión',
+            'Ciencia', 'Tecnología', 'Arte', 'Música', 'Cine',
+            'Teatro', 'Danza', 'Pintura', 'Escultura', 'Arquitectura',
+            'Fotografía', 'Diseño', 'Moda', 'Gastronomía', 'Viajes',
+            'Geografía', 'Historia', 'Política', 'Economía', 'Sociología',
+            'Psicología', 'Psiquiatría', 'Medicina', 'Biología', 'Física',
+            'Química', 'Matemáticas', 'Astronomía', 'Geología', 'Ecología',
+            'Botánica', 'Zoología', 'Antropología', 'Arqueología', 'Paleontología',
+            'Genética', 'Neurociencia', 'Robótica', 'Inteligencia Artificial', 'Realidad Virtual',
+            'Blockchain', 'Criptomonedas', 'Big Data', 'Machine Learning', 'Deep Learning',
+            'Ciberseguridad', 'Cloud Computing', 'IoT', '5G', 'Realidad Aumentada',
+            'Impresión 3D', 'Nanotecnología', 'Biotecnología', 'Fusión Nuclear', 'Energía Renovable',
+            'Sostenibilidad', 'Cambio Climático', 'Medio Ambiente', 'Desarrollo Sostenible', 'Economía Circular',
+            'E-commerce', 'Marketing Digital', 'Redes Sociales', 'SEO', 'SEM',
+            'Content Marketing', 'Email Marketing', 'Inbound Marketing', 'Outbound Marketing', 'Growth Hacking',
+            'Product Management', 'Project Management', 'Agile', 'Scrum', 'Kanban',
+            'DevOps', 'CI/CD', 'Docker', 'Kubernetes', 'Terraform',
+            'AWS', 'Azure', 'Google Cloud', 'Heroku', 'Vercel',
+            'Netlify', 'GitHub', 'GitLab', 'Bitbucket', 'Jira',
+            'Confluence', 'Slack', 'Zoom', 'Teams', 'Discord',
+            'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Marvel'
+        ];
+
+        // Autores
+        const authors = [
+            'Gabriel García Márquez', 'Miguel de Cervantes', 'Homero', 'George Orwell', 'Jane Austen',
+            'Fiodor Dostoyevski', 'Herman Melville', 'León Tolstói', 'James Joyce', 'Dante Alighieri',
+            'José Zorrilla', 'Antoine de Saint-Exupéry', 'Paulo Coelho', 'Victor Hugo', 'León Tolstói',
+            'Homero', 'William Shakespeare', 'William Shakespeare', 'William Shakespeare', 'William Shakespeare',
+            'F. Scott Fitzgerald', 'Harper Lee', 'Franz Kafka', 'J.R.R. Tolkien', 'J.R.R. Tolkien',
+            'J.K. Rowling', 'Frank Herbert', 'Isaac Asimov', 'William Gibson', 'Ray Bradbury',
+            'Aldous Huxley', 'Ayn Rand', 'Dan Brown', 'Umberto Eco', 'Carlos Ruiz Zafón',
+            'Laura Esquivel', 'Juan Rulfo', 'Julio Cortázar', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Isabel Allende', 'Haruki Murakami', 'Haruki Murakami', 'Kenneth Grahame', 'Lewis Carroll',
+            'J.M. Barrie', 'C.S. Lewis', 'Antoine de Saint-Exupéry', 'Hermann Hesse', 'Hermann Hesse',
+            'Hermann Hesse', 'Eugène Ionesco', 'Jean-Paul Sartre', 'Albert Camus', 'Albert Camus',
+            'Ernesto Sábato', 'Ernesto Sábato', 'Manuel Puig', 'Gabriel García Márquez', 'Gabriel García Márquez',
+            'Gabriel García Márquez', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
+            'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
+            'Mario Vargas Llosa', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
+            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
+            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
+            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
+            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
+            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
+            'Innovación', 'Innovación', 'Innovación', 'Innovación', 'Innovación',
+            'Innovación', 'Innovación', 'Innovación', 'Innovación', 'Innovación',
+            'Business', 'Business', 'Business', 'Business', 'Business',
+            'Business', 'Business', 'Business', 'Business', 'Business',
+            'Business', 'Business', 'Business', 'Business', 'Business',
+            'DevOps', 'DevOps', 'DevOps', 'DevOps', 'DevOps',
+            'Cloud', 'Cloud', 'Cloud', 'Cloud', 'Cloud',
+            'Herramientas', 'Herramientas', 'Herramientas', 'Herramientas', 'Herramientas',
+            'Colaboración', 'Colaboración', 'Colaboración', 'Colaboración', 'Colaboración',
+            'Diseño', 'Diseño', 'Diseño', 'Diseño', 'Diseño'
+        ];
+
+        // Colores de libros
+        const bookColors = [
+            '#8B4513', '#A0522D', '#CD853F', '#D2691E', '#B8860B',
+            '#556B2F', '#8FBC8F', '#2F4F4F', '#800020', '#8B0000',
+            '#4A4A4A', '#696969', '#2C3E50', '#34495E', '#5D4037',
+            '#795548', '#8D6E63', '#6D4C41', '#5D4037', '#4E342E'
+        ];
+
+        // ========================================
+        // GENERAR LIBROS
+        // ========================================
+
+        function generateBooks() {
+            const books = [];
+            
+            for (let i = 0; i < 200; i++) {
+                const title = titles[i % titles.length];
+                const author = authors[i % authors.length];
+                
+                // CAMBIA AQUÍ: 'available' = disponible, 'unavailable' = no disponible
+                // También puedes cambiar la probabilidad (0.7 = 30% disponibles)
+                const status = Math.random() > 0.7 ? 'available' : 'unavailable';
+                
+                // Formatos disponibles si el libro está activo
+                let formats = [];
+                if (status === 'available') {
+                    const allFormats = ['pdf', 'epub', 'mobi', 'azw3'];
+                    formats = allFormats.filter(() => Math.random() > 0.3);
+                }
+                
+                const color = bookColors[i % bookColors.length];
+                
+                books.push({
+                    id: i + 1,
+                    title: title,
+                    author: author,
+                    year: 1800 + Math.floor(Math.random() * 225),
+                    status: status,
+                    formats: formats,
+                    color: color
+                });
+            }
+            
+            return books;
+        }
+
+        // ========================================
+        // VARIABLES GLOBALES
+        // ========================================
+
+        let allBooks = generateBooks();
+        let filteredBooks = [...allBooks];
+
+        // ========================================
+        // FUNCIONES DE UTILIDAD
+        // ========================================
+
+        function getAuthorLastName(author) {
+            const parts = author.split(' ');
+            return parts[parts.length - 1];
+        }
+
+        function formatLabel(text, maxLength) {
+            return text.length > maxLength ? text.substring(0, maxLength) : text;
+        }
+
+        // ========================================
+        // CREAR LIBRO
+        // ========================================
+
+        function createBookElement(book) {
+            const bookDiv = document.createElement('div');
+            bookDiv.className = `book ${book.status === 'unavailable' ? 'unavailable' : ''}`;
+            bookDiv.style.backgroundColor = book.color;
+            bookDiv.dataset.bookId = book.id;
+            
+            if (book.status === 'available') {
+                bookDiv.title = `${book.title} - ${book.author}`;
+                bookDiv.onclick = () => openBookModal(book);
+            } else {
+                bookDiv.title = 'No disponible';
+            }
+            
+            // Lomo del libro
+            const spine = document.createElement('div');
+            spine.className = 'book-spine';
+            bookDiv.appendChild(spine);
+            
+            // Textura
+            const texture = document.createElement('div');
+            texture.className = 'book-texture';
+            bookDiv.appendChild(texture);
+            
+            // Decoración del lomo
+            const decoration = document.createElement('div');
+            decoration.className = 'book-decoration';
+            for (let i = 0; i < 3; i++) {
+                const line = document.createElement('div');
+                line.className = 'book-line';
+                decoration.appendChild(line);
+            }
+            bookDiv.appendChild(decoration);
+            
+            // Etiqueta (solo si está disponible)
+            if (book.status === 'available') {
+                const label = document.createElement('div');
+                label.className = 'book-label';
+                
+                const labelText = document.createElement('div');
+                labelText.className = 'book-label-text';
+                labelText.textContent = formatLabel(book.title, 10);
+                label.appendChild(labelText);
+                
+                const labelAuthor = document.createElement('div');
+                labelAuthor.className = 'book-label-author';
+                labelAuthor.textContent = getAuthorLastName(book.author);
+                label.appendChild(labelAuthor);
+                
+                bookDiv.appendChild(label);
+            }
+            
+            return bookDiv;
+        }
+
+        // ========================================
+        // CREAR LIBRO ESPECIAL (ENCICLOPEDIA)
+        // ========================================
+
+        function createSpecialBook(title, url, color) {
+            const bookLink = document.createElement('a');
+            bookLink.href = url;
+            bookLink.target = '_blank';
+            bookLink.className = 'special-book';
+            bookLink.style.backgroundColor = color;
+            bookLink.title = title;
+            
+            // Textura
+            const texture = document.createElement('div');
+            texture.className = 'special-book-texture';
+            bookLink.appendChild(texture);
+            
+            // Decoración del lomo
+            const decoration = document.createElement('div');
+            decoration.className = 'special-book-decoration';
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'special-book-line';
+                decoration.appendChild(line);
+            }
+            bookLink.appendChild(decoration);
+            
+            // Etiqueta del libro
+            const label = document.createElement('div');
+            label.className = 'special-book-label';
+            label.textContent = title;
+            bookLink.appendChild(label);
+            
+            return bookLink;
+        }
+
+        // ========================================
+        // CREAR ESTANTE
+        // ========================================
+
+        function createBookshelf(books, isFirstShelf) {
+            const shelfDiv = document.createElement('div');
+            shelfDiv.className = 'bookshelf';
+            
+            const shelfBg = document.createElement('div');
+            shelfBg.className = 'bookshelf-bg';
+            
+            const booksContainer = document.createElement('div');
+            booksContainer.className = 'books-container';
+            
+            // Agregar libros especiales si es el primer estante
+            if (isFirstShelf) {
+                const nihongoBook = createSpecialBook(
+                    'NihongoApp',
+                    'https://kami00dragon.github.io/NihongoApp/index.html',
+                    '#8B0000'
+                );
+                booksContainer.appendChild(nihongoBook);
+                
+                const aeternusBook = createSpecialBook(
+                    'AeternusApp',
+                    'https://kami00dragon.github.io/AeternusApp/',
+                    '#5D4037'
+                );
+                booksContainer.appendChild(aeternusBook);
+                
+                const gramaticBook = createSpecialBook(
+                    'GramaticApp',
+                    'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas',
+                    '#424242'
+                );
+                booksContainer.appendChild(gramaticBook);
+            }
+            
+            // Agregar libros normales
+            books.forEach(book => {
+                const bookElement = createBookElement(book);
+                booksContainer.appendChild(bookElement);
+            });
+            
+            const shelfBoard = document.createElement('div');
+            shelfBoard.className = 'shelf-board';
+            
+            shelfBg.appendChild(booksContainer);
+            shelfBg.appendChild(shelfBoard);
+            shelfDiv.appendChild(shelfBg);
+            
+            return shelfDiv;
+        }
+
+        // ========================================
+        // RENDERIZAR BIBLIOTECA
+        // ========================================
+
+        function renderLibrary() {
+            const container = document.getElementById('bookshelvesContainer');
+            container.innerHTML = '';
+            
+            if (filteredBooks.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <h2>No se encontraron libros</h2>
+                    <p>Intente con otra búsqueda o desactive el filtro</p>
+                `;
+                container.appendChild(noResults);
+                return;
+            }
+            
+            const booksPerShelf = 20;
+            const shelves = [];
+            
+            for (let i = 0; i < filteredBooks.length; i += booksPerShelf) {
+                const shelfBooks = filteredBooks.slice(i, i + booksPerShelf);
+                shelves.push(shelfBooks);
+            }
+            
+            shelves.forEach((shelfBooks, index) => {
+                const shelfElement = createBookshelf(shelfBooks, index === 0);
+                container.appendChild(shelfElement);
+            });
+        }
+
+        // ========================================
+        // ACTUALIZAR CONTADOR
+        // ========================================
+
+        function updateBooksCount() {
+            const availableCount = allBooks.filter(b => b.status === 'available').length;
+            const totalCount = allBooks.length;
+            document.getElementById('booksCount').textContent = 
+                `${availableCount} de ${totalCount} libros disponibles`;
+        }
+
+        // ========================================
+        // FILTRAR LIBROS
+        // ========================================
+
+        function filterBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const availableOnly = document.getElementById('availableFilter').checked;
+            
+            filteredBooks = allBooks.filter(book => {
+                const matchesSearch = 
+                    book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm);
+                const matchesAvailability = !availableOnly || book.status === 'available';
+                
+                return matchesSearch && matchesAvailability;
+            });
+            
+            renderLibrary();
+        }
+
+        // ========================================
+        // MODAL
+        // ========================================
+
+        function openBookModal(book) {
+            const modal = document.getElementById('bookModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalInfo = document.getElementById('modalInfo');
+            const modalFormats = document.getElementById('modalFormats');
+            const modalPath = document.getElementById('modalPath');
+            
+            modalTitle.textContent = book.title;
+            
+            const statusClass = book.status === 'available' ? 'modal-status-available' : 'modal-status-unavailable';
+            const statusText = book.status === 'available' ? 'Disponible' : 'No disponible';
+            
+            modalInfo.innerHTML = `
+                <p><strong>Autor:</strong> ${book.author}</p>
+                <p><strong>Año:</strong> ${book.year}</p>
+                <p><strong>Estado:</strong> <span class="${statusClass}">${statusText}</span></p>
+            `;
+            
+            if (book.status === 'available' && book.formats.length > 0) {
+                const formatIcons = {
+                    pdf: '📄',
+                    epub: '📱',
+                    mobi: '📚',
+                    azw3: '📖'
+                };
+                
+                const formatLabels = {
+                    pdf: 'PDF',
+                    epub: 'EPUB',
+                    mobi: 'MOBI',
+                    azw3: 'AZW3'
+                };
+                
+                let formatsHTML = '<h3>Formatos disponibles:</h3><div class="formats-grid">';
+                
+                book.formats.forEach(format => {
+                    formatsHTML += `
+                        <button class="format-button" onclick="downloadBook('${book.title}', '${format}')">
+                            <span class="format-icon">${formatIcons[format]}</span>
+                            <span>${formatLabels[format]}</span>
+                        </button>
+                    `;
+                });
+                
+                formatsHTML += '</div>';
+                modalFormats.innerHTML = formatsHTML;
+            } else {
+                modalFormats.innerHTML = `
+                    <div class="modal-message">
+                        <p>📚 Este libro aún no está disponible en formato digital</p>
+                        <small>Cargue los archivos (PDF, EPUB, MOBI, AZW3) para activar este libro</small>
+                    </div>
+                `;
+            }
+            
+            modalPath.textContent = `books/${book.id}/`;
+            modal.classList.add('active');
+        }
+
+        function closeBookModal() {
+            document.getElementById('bookModal').classList.remove('active');
+        }
+
+        function downloadBook(title, format) {
+            alert(`Descargando ${title} en formato ${format.toUpperCase()}\n\n` +
+                   `Nota: Debe cargar el archivo ${format.toUpperCase()} en la carpeta books/{id}/ ` +
+                   `para que el enlace funcione correctamente.`);
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+
+        document.getElementById('searchInput').addEventListener('input', filterBooks);
+        document.getElementById('availableFilter').addEventListener('change', filterBooks);
+        document.getElementById('modalClose').addEventListener('click', closeBookModal);
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBookModal();
+            }
+        });
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeBookModal();
+            }
+        });
+
+        // ========================================
+        // INICIALIZACIÓN
+        // ========================================
+
+        function init() {
+            // Establecer año actual en el footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Actualizar contador
+            updateBooksCount();
+            
+            // Renderizar biblioteca
+            renderLibrary();
+        }
+
+        // Iniciar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #fef3c7, #fcd34d);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to bottom, #451a03, #78350f);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            padding: 2rem 1rem 1rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Title reducido */
+        .header-title {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .header-title h1 {
+            color: #fef3c7;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            font-weight: normal;
+        }
+
+        .header-title p {
+            color: #fcd34d;
+            font-size: 0.9rem;
+        }
+
+        .search-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .search-filters {
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #92400e;
+            background: #fef3c7;
+            color: #78350f;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        .search-input::placeholder {
+            color: #b45309;
+        }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fef3c7;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .filter-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: #f59e0b;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
+        }
+
+        .library-frame {
+            position: relative;
+            background: linear-gradient(to bottom, #78350f, #451a03);
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .library-inner {
+            position: relative;
+            background: linear-gradient(to bottom right, #fef9c3, #fde68a);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .library-molding {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1rem;
+            background: linear-gradient(to bottom, #92400e, #78350f);
+        }
+
+        .library-molding.top {
+            top: 0;
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+
+        .library-molding.bottom {
+            bottom: 0;
+            border-radius: 0 0 0.75rem 0.75rem;
+        }
+
+        /* Bookshelf */
+        .bookshelf {
+            margin-bottom: 1.5rem;
+        }
+
+        .bookshelf-bg {
+            background: linear-gradient(to bottom, rgba(120, 53, 15, 0.5), rgba(69, 26, 3, 0.5));
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .books-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 0.25rem;
+            min-height: 140px;
+            padding-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .shelf-board {
+            height: 1rem;
+            background: linear-gradient(to bottom, #92400e, #78350f);
+            border-radius: 0.125rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Book Button */
+        .book {
+            position: relative;
+            width: 2rem;
+            height: 8rem;
+            border-radius: 0.125rem;
+            background: #8B4513;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .book:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .book.unavailable {
+            cursor: not-allowed;
+            opacity: 0.4;
+            filter: grayscale(100%);
+            box-shadow: none;
+        }
+
+        .book.unavailable:hover {
+            transform: none;
+        }
+
+        .book-spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .book-texture {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        }
+
+        .book-decoration {
+            position: absolute;
+            left: 0.125rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .book-line {
+            width: 0.25rem;
+            height: 0.125rem;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .book-label {
+            position: absolute;
+            right: 0.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+        }
+
+        .book-label-text {
+            font-size: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .book-label-author {
+            font-size: 0.4rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.125rem;
+        }
+
+        /* Special Book (Enciclopedia) */
+        .special-book {
+            position: relative;
+            width: 3rem;
+            height: 8rem;
+            border-radius: 0.125rem;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .special-book:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .special-book-texture {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        }
+
+        .special-book-decoration {
+            position: absolute;
+            left: 0.25rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .special-book-line {
+            width: 0.25rem;
+            height: 0.125rem;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+	.special-book-label {
+	    position: absolute;
+	    right: 0.5rem;
+	    top: 50%;
+	    font-size: 0.75rem;
+	    color: white;
+	    font-weight: bold;
+	    letter-spacing: 0.1em;
+	    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+	    line-height: 1.2;
+	    writing-mode: vertical-rl;
+	    text-orientation: mixed;
+	    transform: translateY(-50%) rotate(-180deg);
+	}	
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(to bottom right, #fef9c3, #fef3c7);
+            border-radius: 0.5rem;
+            max-width: 32rem;
+            width: 100%;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 4px solid #78350f;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #78350f;
+            flex: 1;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #78350f;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #dc2626;
+        }
+
+        .modal-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-info p {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .modal-info strong {
+            font-weight: bold;
+        }
+
+        .modal-status-available {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .modal-status-unavailable {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .modal-formats {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-formats h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #78350f;
+            margin-bottom: 0.75rem;
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .format-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: none;
+            background: linear-gradient(to bottom right, #d97706, #b45309);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .format-button:hover {
+            background: linear-gradient(to bottom right, #b45309, #92400e);
+            transform: scale(1.02);
+        }
+
+        .format-button:active {
+            transform: scale(0.98);
+        }
+
+        .format-icon {
+            font-size: 1.25rem;
+        }
+
+        .modal-message {
+            background: #fef3c7;
+            border: 2px solid #d97706;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .modal-message p {
+            color: #92400e;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-message small {
+            color: #b45309;
+        }
+
+        .modal-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid #f59e0b;
+        }
+
+        .modal-footer p {
+            color: #b45309;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .modal-footer code {
+            background: #fef3c7;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .no-results h2 {
+            font-size: 1.5rem;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results p {
+            color: #92400e;
+        }
+
+        /* Instructions */
+        .instructions {
+            margin-top: 2rem;
+            background: #fef3c7;
+            border: 2px solid #92400e;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .instructions h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #78350f;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #d97706;
+        }
+
+        .instructions code {
+            background: #fde68a;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #78350f, #92400e, #78350f);
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: #fef3c7;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-content small {
+            color: #fcd34d;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .book {
+                width: 1.5rem;
+                height: 6rem;
+            }
+
+            .books-container {
+                gap: 0.125rem;
+            }
+
+            .special-book {
+                width: 2.5rem;
+                height: 6rem;
+            }
+
+            .special-book-label {
+                font-size: 0.65rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-title p {
+                font-size: 0.8rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-title">
+                <h1>📚 Biblioteca Digital</h1>
+                <p id="booksCount">Cargando...</p>
+            </div>
+            
+            <div class="search-filters">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
+                <label class="filter-label">
+                    <input type="checkbox" id="availableFilter" class="filter-checkbox">
+                    <span>Solo disponibles</span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="library-frame">
+            <div class="library-inner">
+                <div class="library-molding top"></div>
+                
+                <!-- Estantes de Libros -->
+                <div id="bookshelvesContainer"></div>
+                
+                <div class="library-molding bottom"></div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📝 Instrucciones para activar libros:</h3>
+            <ul>
+                <li>Cada libro tiene una carpeta en <code>books/{id}/</code></li>
+                <li>Cargue los archivos (PDF, EPUB, MOBI, AZW3) en la carpeta correspondiente</li>
+                <li>Para activar un libro, cambie <code>status: 'available'</code> en el código</li>
+                <li>Los libros aparecerán disponibles automáticamente</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <button id="modalClose" class="modal-close">✕</button>
+            </div>
+            <div class="modal-info" id="modalInfo"></div>
+            <div class="modal-formats" id="modalFormats"></div>
+            <div class="modal-footer">
+                <p>Para activar este libro, cargue los archivos en: <code id="modalPath">books/{id}/</code></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>📚 Biblioteca Digital - <span id="currentYear"></span></p>
+            <small>Diseñado para alojar y compartir conocimiento en múltiples formatos</small>
+        </div>
+    </footer>
+
+    <script>
+        // ========================================
+        // CONFIGURACIÓN DE LIBROS
+        // ========================================
+        
+        // Títulos de libros
+        const titles = [
+            'Cien Años de Soledad', 'El Quijote', 'La Odisea', '1984', 'Orgullo y Prejuicio',
+            'Crimen y Castigo', 'Moby Dick', 'Guerra y Paz', 'Ulises', 'Divina Comedia',
+            'Don Juan Tenorio', 'El Principito', 'El Alquimista', 'Los Miserables', 'Anna Karenina',
+            'La Ilíada', 'Hamlet', 'Macbeth', 'Romeo y Julieta', 'Otelo',
+            'El Gran Gatsby', 'Matar a un Ruiseñor', 'La Metamorfosis', 'El Señor de los Anillos', 'El Hobbit',
+            'Harry Potter', 'Dune', 'Fundación', 'Neuromante', 'Fahrenheit 451',
+            'Brave New World', 'La Rebelión de Atlas', 'El Código Da Vinci', 'El Nombre de la Rosa', 'La Sombra del Viento',
+            'Como Agua para Chocolate', 'Pedro Páramo', 'Rayuela', 'Ficciones', 'El Aleph',
+            'La Casa de los Espíritus', 'Kafka en la Orilla', '1Q84', 'El Viento en los Sauces', 'Alicia en el País de las Maravillas',
+            'Peter Pan', 'Las Crónicas de Narnia', 'El Pequeño Príncipe', 'El Lobo Estepario', 'Siddhartha',
+            'Demian', 'El Juego de las Sillas', 'La Nausea', 'El Extranjero', 'La Peste',
+            'El Tunel', 'Sobre Héroes y Tumbas', 'Boquitas Pintadas', 'El Amor en los Tiempos del Cólera', 'Crónica de una Muerte Anunciada',
+            'El Coronel no Tiene Quien le Escriba', 'La Casa Verde', 'Conversación en la Catedral', 'La Fiesta del Chivo', 'Travesuras de la Niña Mala',
+            'La Ciudad y los Perros', 'Pantaleón y las Visitadoras', 'Los Cachorros', '¿Quién Mató a Palomino Molero?', 'La Tía Julia y el Escribidor',
+            'Lituma en los Andes', 'Los Cuervos', 'La Casa de Asterión', 'Borges y Yo', 'El Sur',
+            'El Jardín de Senderos que se Bifurcan', 'La Biblioteca de Babel', 'El Zahir', 'La Muerte y la Brújula', 'El Inmortal',
+            'El Otro, el Mismo', 'El Hacedor', 'Elogio de la Sombra', 'El Oro de los Tigres', 'La Rosa Profunda',
+            'El Libro de Arena', 'Historia Universal de la Infamia', 'Fervor de Buenos Aires', 'Luna de Enfrente', 'Cuaderno San Martín',
+            'El Amor, la Muerte y otros Temas', 'Antología Personal', 'Nueva Antología Personal', 'Textos Cautivos', 'Biblioteca Personal',
+            'Obras Completas I', 'Obras Completas II', 'Obras Completas III', 'Obras Completas IV', 'Obras Completas V',
+            'Poesía Completa', 'Cuentos Completos', 'Ensayos Completos', 'Prólogos', 'Discursos',
+            'Entrevistas', 'Cartas', 'Diarios', 'Autobiografías', 'Biografías',
+            'Historias', 'Leyendas', 'Mitología', 'Filosofía', 'Religión',
+            'Ciencia', 'Tecnología', 'Arte', 'Música', 'Cine',
+            'Teatro', 'Danza', 'Pintura', 'Escultura', 'Arquitectura',
+            'Fotografía', 'Diseño', 'Moda', 'Gastronomía', 'Viajes',
+            'Geografía', 'Historia', 'Política', 'Economía', 'Sociología',
+            'Psicología', 'Psiquiatría', 'Medicina', 'Biología', 'Física',
+            'Química', 'Matemáticas', 'Astronomía', 'Geología', 'Ecología',
+            'Botánica', 'Zoología', 'Antropología', 'Arqueología', 'Paleontología',
+            'Genética', 'Neurociencia', 'Robótica', 'Inteligencia Artificial', 'Realidad Virtual',
+            'Blockchain', 'Criptomonedas', 'Big Data', 'Machine Learning', 'Deep Learning',
+            'Ciberseguridad', 'Cloud Computing', 'IoT', '5G', 'Realidad Aumentada',
+            'Impresión 3D', 'Nanotecnología', 'Biotecnología', 'Fusión Nuclear', 'Energía Renovable',
+            'Sostenibilidad', 'Cambio Climático', 'Medio Ambiente', 'Desarrollo Sostenible', 'Economía Circular',
+            'E-commerce', 'Marketing Digital', 'Redes Sociales', 'SEO', 'SEM',
+            'Content Marketing', 'Email Marketing', 'Inbound Marketing', 'Outbound Marketing', 'Growth Hacking',
+            'Product Management', 'Project Management', 'Agile', 'Scrum', 'Kanban',
+            'DevOps', 'CI/CD', 'Docker', 'Kubernetes', 'Terraform',
+            'AWS', 'Azure', 'Google Cloud', 'Heroku', 'Vercel',
+            'Netlify', 'GitHub', 'GitLab', 'Bitbucket', 'Jira',
+            'Confluence', 'Slack', 'Zoom', 'Teams', 'Discord',
+            'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Marvel'
+        ];
+
+        // Autores
+        const authors = [
+            'Gabriel García Márquez', 'Miguel de Cervantes', 'Homero', 'George Orwell', 'Jane Austen',
+            'Fiodor Dostoyevski', 'Herman Melville', 'León Tolstói', 'James Joyce', 'Dante Alighieri',
+            'José Zorrilla', 'Antoine de Saint-Exupéry', 'Paulo Coelho', 'Victor Hugo', 'León Tolstói',
+            'Homero', 'William Shakespeare', 'William Shakespeare', 'William Shakespeare', 'William Shakespeare',
+            'F. Scott Fitzgerald', 'Harper Lee', 'Franz Kafka', 'J.R.R. Tolkien', 'J.R.R. Tolkien',
+            'J.K. Rowling', 'Frank Herbert', 'Isaac Asimov', 'William Gibson', 'Ray Bradbury',
+            'Aldous Huxley', 'Ayn Rand', 'Dan Brown', 'Umberto Eco', 'Carlos Ruiz Zafón',
+            'Laura Esquivel', 'Juan Rulfo', 'Julio Cortázar', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Isabel Allende', 'Haruki Murakami', 'Haruki Murakami', 'Kenneth Grahame', 'Lewis Carroll',
+            'J.M. Barrie', 'C.S. Lewis', 'Antoine de Saint-Exupéry', 'Hermann Hesse', 'Hermann Hesse',
+            'Hermann Hesse', 'Eugène Ionesco', 'Jean-Paul Sartre', 'Albert Camus', 'Albert Camus',
+            'Ernesto Sábato', 'Ernesto Sábato', 'Manuel Puig', 'Gabriel García Márquez', 'Gabriel García Márquez',
+            'Gabriel García Márquez', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
+            'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
+            'Mario Vargas Llosa', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
+            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
+            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
+            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
+            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
+            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
+            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
+            'Innovación', 'Innovación', 'Innovación', 'Innovación', 'Innovación',
+            'Innovación', 'Innovación', 'Innovación', 'Innovación', 'Innovación',
+            'Business', 'Business', 'Business', 'Business', 'Business',
+            'Business', 'Business', 'Business', 'Business', 'Business',
+            'Business', 'Business', 'Business', 'Business', 'Business',
+            'DevOps', 'DevOps', 'DevOps', 'DevOps', 'DevOps',
+            'Cloud', 'Cloud', 'Cloud', 'Cloud', 'Cloud',
+            'Herramientas', 'Herramientas', 'Herramientas', 'Herramientas', 'Herramientas',
+            'Colaboración', 'Colaboración', 'Colaboración', 'Colaboración', 'Colaboración',
+            'Diseño', 'Diseño', 'Diseño', 'Diseño', 'Diseño'
+        ];
+
+        // Colores de libros
+        const bookColors = [
+            '#8B4513', '#A0522D', '#CD853F', '#D2691E', '#B8860B',
+            '#556B2F', '#8FBC8F', '#2F4F4F', '#800020', '#8B0000',
+            '#4A4A4A', '#696969', '#2C3E50', '#34495E', '#5D4037',
+            '#795548', '#8D6E63', '#6D4C41', '#5D4037', '#4E342E'
+        ];
+
+        // ========================================
+        // GENERAR LIBROS
+        // ========================================
+
+        function generateBooks() {
+            const books = [];
+            
+            for (let i = 0; i < 200; i++) {
+                const title = titles[i % titles.length];
+                const author = authors[i % authors.length];
+                
+                // CAMBIA AQUÍ: 'available' = disponible, 'unavailable' = no disponible
+                // También puedes cambiar la probabilidad (0.7 = 30% disponibles)
+                const status = Math.random() > 0.7 ? 'available' : 'unavailable';
+                
+                // Formatos disponibles si el libro está activo
+                let formats = [];
+                if (status === 'available') {
+                    const allFormats = ['pdf', 'epub', 'mobi', 'azw3'];
+                    formats = allFormats.filter(() => Math.random() > 0.3);
+                }
+                
+                const color = bookColors[i % bookColors.length];
+                
+                books.push({
+                    id: i + 1,
+                    title: title,
+                    author: author,
+                    year: 1800 + Math.floor(Math.random() * 225),
+                    status: status,
+                    formats: formats,
+                    color: color
+                });
+            }
+            
+            return books;
+        }
+
+        // ========================================
+        // VARIABLES GLOBALES
+        // ========================================
+
+        let allBooks = generateBooks();
+        let filteredBooks = [...allBooks];
+
+        // ========================================
+        // FUNCIONES DE UTILIDAD
+        // ========================================
+
+        function getAuthorLastName(author) {
+            const parts = author.split(' ');
+            return parts[parts.length - 1];
+        }
+
+        function formatLabel(text, maxLength) {
+            return text.length > maxLength ? text.substring(0, maxLength) : text;
+        }
+
+        // ========================================
+        // CREAR LIBRO
+        // ========================================
+
+        function createBookElement(book) {
+            const bookDiv = document.createElement('div');
+            bookDiv.className = `book ${book.status === 'unavailable' ? 'unavailable' : ''}`;
+            bookDiv.style.backgroundColor = book.color;
+            bookDiv.dataset.bookId = book.id;
+            
+            if (book.status === 'available') {
+                bookDiv.title = `${book.title} - ${book.author}`;
+                bookDiv.onclick = () => openBookModal(book);
+            } else {
+                bookDiv.title = 'No disponible';
+            }
+            
+            // Lomo del libro
+            const spine = document.createElement('div');
+            spine.className = 'book-spine';
+            bookDiv.appendChild(spine);
+            
+            // Textura
+            const texture = document.createElement('div');
+            texture.className = 'book-texture';
+            bookDiv.appendChild(texture);
+            
+            // Decoración del lomo
+            const decoration = document.createElement('div');
+            decoration.className = 'book-decoration';
+            for (let i = 0; i < 3; i++) {
+                const line = document.createElement('div');
+                line.className = 'book-line';
+                decoration.appendChild(line);
+            }
+            bookDiv.appendChild(decoration);
+            
+            // Etiqueta (solo si está disponible)
+            if (book.status === 'available') {
+                const label = document.createElement('div');
+                label.className = 'book-label';
+                
+                const labelText = document.createElement('div');
+                labelText.className = 'book-label-text';
+                labelText.textContent = formatLabel(book.title, 10);
+                label.appendChild(labelText);
+                
+                const labelAuthor = document.createElement('div');
+                labelAuthor.className = 'book-label-author';
+                labelAuthor.textContent = getAuthorLastName(book.author);
+                label.appendChild(labelAuthor);
+                
+                bookDiv.appendChild(label);
+            }
+            
+            return bookDiv;
+        }
+
+        // ========================================
+        // CREAR LIBRO ESPECIAL (ENCICLOPEDIA)
+        // ========================================
+
+        function createSpecialBook(title, url, color) {
+            const bookLink = document.createElement('a');
+            bookLink.href = url;
+            bookLink.target = '_blank';
+            bookLink.className = 'special-book';
+            bookLink.style.backgroundColor = color;
+            bookLink.title = title;
+            
+            // Textura
+            const texture = document.createElement('div');
+            texture.className = 'special-book-texture';
+            bookLink.appendChild(texture);
+            
+            // Decoración del lomo
+            const decoration = document.createElement('div');
+            decoration.className = 'special-book-decoration';
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'special-book-line';
+                decoration.appendChild(line);
+            }
+            bookLink.appendChild(decoration);
+            
+            // Etiqueta del libro
+            const label = document.createElement('div');
+            label.className = 'special-book-label';
+            label.textContent = title;
+            bookLink.appendChild(label);
+            
+            return bookLink;
+        }
+
+        // ========================================
+        // CREAR ESTANTE
+        // ========================================
+
+        function createBookshelf(books, isFirstShelf) {
+            const shelfDiv = document.createElement('div');
+            shelfDiv.className = 'bookshelf';
+            
+            const shelfBg = document.createElement('div');
+            shelfBg.className = 'bookshelf-bg';
+            
+            const booksContainer = document.createElement('div');
+            booksContainer.className = 'books-container';
+            
+            // Agregar libros especiales si es el primer estante
+            if (isFirstShelf) {
+                const nihongoBook = createSpecialBook(
+                    'NihongoApp',
+                    'https://kami00dragon.github.io/NihongoApp/index.html',
+                    '#8B0000'
+                );
+                booksContainer.appendChild(nihongoBook);
+                
+                const aeternusBook = createSpecialBook(
+                    'AeternusApp',
+                    'https://kami00dragon.github.io/AeternusApp/',
+                    '#5D4037'
+                );
+                booksContainer.appendChild(aeternusBook);
+                
+                const gramaticBook = createSpecialBook(
+                    'GramaticApp',
+                    'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas',
+                    '#424242'
+                );
+                booksContainer.appendChild(gramaticBook);
+            }
+            
+            // Agregar libros normales
+            books.forEach(book => {
+                const bookElement = createBookElement(book);
+                booksContainer.appendChild(bookElement);
+            });
+            
+            const shelfBoard = document.createElement('div');
+            shelfBoard.className = 'shelf-board';
+            
+            shelfBg.appendChild(booksContainer);
+            shelfBg.appendChild(shelfBoard);
+            shelfDiv.appendChild(shelfBg);
+            
+            return shelfDiv;
+        }
+
+        // ========================================
+        // RENDERIZAR BIBLIOTECA
+        // ========================================
+
+        function renderLibrary() {
+            const container = document.getElementById('bookshelvesContainer');
+            container.innerHTML = '';
+            
+            if (filteredBooks.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <h2>No se encontraron libros</h2>
+                    <p>Intente con otra búsqueda o desactive el filtro</p>
+                `;
+                container.appendChild(noResults);
+                return;
+            }
+            
+            const booksPerShelf = 20;
+            const shelves = [];
+            
+            for (let i = 0; i < filteredBooks.length; i += booksPerShelf) {
+                const shelfBooks = filteredBooks.slice(i, i + booksPerShelf);
+                shelves.push(shelfBooks);
+            }
+            
+            shelves.forEach((shelfBooks, index) => {
+                const shelfElement = createBookshelf(shelfBooks, index === 0);
+                container.appendChild(shelfElement);
+            });
+        }
+
+        // ========================================
+        // ACTUALIZAR CONTADOR
+        // ========================================
+
+        function updateBooksCount() {
+            const availableCount = allBooks.filter(b => b.status === 'available').length;
+            const totalCount = allBooks.length;
+            document.getElementById('booksCount').textContent = 
+                `${availableCount} de ${totalCount} libros disponibles`;
+        }
+
+        // ========================================
+        // FILTRAR LIBROS
+        // ========================================
+
+        function filterBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const availableOnly = document.getElementById('availableFilter').checked;
+            
+            filteredBooks = allBooks.filter(book => {
+                const matchesSearch = 
+                    book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm);
+                const matchesAvailability = !availableOnly || book.status === 'available';
+                
+                return matchesSearch && matchesAvailability;
+            });
+            
+            renderLibrary();
+        }
+
+        // ========================================
+        // MODAL
+        // ========================================
+
+        function openBookModal(book) {
+            const modal = document.getElementById('bookModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalInfo = document.getElementById('modalInfo');
+            const modalFormats = document.getElementById('modalFormats');
+            const modalPath = document.getElementById('modalPath');
+            
+            modalTitle.textContent = book.title;
+            
+            const statusClass = book.status === 'available' ? 'modal-status-available' : 'modal-status-unavailable';
+            const statusText = book.status === 'available' ? 'Disponible' : 'No disponible';
+            
+            modalInfo.innerHTML = `
+                <p><strong>Autor:</strong> ${book.author}</p>
+                <p><strong>Año:</strong> ${book.year}</p>
+                <p><strong>Estado:</strong> <span class="${statusClass}">${statusText}</span></p>
+            `;
+            
+            if (book.status === 'available' && book.formats.length > 0) {
+                const formatIcons = {
+                    pdf: '📄',
+                    epub: '📱',
+                    mobi: '📚',
+                    azw3: '📖'
+                };
+                
+                const formatLabels = {
+                    pdf: 'PDF',
+                    epub: 'EPUB',
+                    mobi: 'MOBI',
+                    azw3: 'AZW3'
+                };
+                
+                let formatsHTML = '<h3>Formatos disponibles:</h3><div class="formats-grid">';
+                
+                book.formats.forEach(format => {
+                    formatsHTML += `
+                        <button class="format-button" onclick="downloadBook('${book.title}', '${format}')">
+                            <span class="format-icon">${formatIcons[format]}</span>
+                            <span>${formatLabels[format]}</span>
+                        </button>
+                    `;
+                });
+                
+                formatsHTML += '</div>';
+                modalFormats.innerHTML = formatsHTML;
+            } else {
+                modalFormats.innerHTML = `
+                    <div class="modal-message">
+                        <p>📚 Este libro aún no está disponible en formato digital</p>
+                        <small>Cargue los archivos (PDF, EPUB, MOBI, AZW3) para activar este libro</small>
+                    </div>
+                `;
+            }
+            
+            modalPath.textContent = `books/${book.id}/`;
+            modal.classList.add('active');
+        }
+
+        function closeBookModal() {
+            document.getElementById('bookModal').classList.remove('active');
+        }
+
+        function downloadBook(title, format) {
+            alert(`Descargando ${title} en formato ${format.toUpperCase()}\n\n` +
+                   `Nota: Debe cargar el archivo ${format.toUpperCase()} en la carpeta books/{id}/ ` +
+                   `para que el enlace funcione correctamente.`);
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+
+        document.getElementById('searchInput').addEventListener('input', filterBooks);
+        document.getElementById('availableFilter').addEventListener('change', filterBooks);
+        document.getElementById('modalClose').addEventListener('click', closeBookModal);
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBookModal();
+            }
+        });
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeBookModal();
+            }
+        });
+
+        // ========================================
+        // INICIALIZACIÓN
+        // ========================================
+
+        function init() {
+            // Establecer año actual en el footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Actualizar contador
+            updateBooksCount();
+            
+            // Renderizar biblioteca
+            renderLibrary();
+        }
+
+        // Iniciar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #fef3c7, #fcd34d);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to bottom, #451a03, #78350f);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            padding: 2rem 1rem 1rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Title reducido */
+        .header-title {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .header-title h1 {
+            color: #fef3c7;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            font-weight: normal;
+        }
+
+        .header-title p {
+            color: #fcd34d;
+            font-size: 0.9rem;
+        }
+
+        .search-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .search-filters {
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #92400e;
+            background: #fef3c7;
+            color: #78350f;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        .search-input::placeholder {
+            color: #b45309;
+        }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fef3c7;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .filter-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: #f59e0b;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
+        }
+
+        .library-frame {
+            position: relative;
+            background: linear-gradient(to bottom, #78350f, #451a03);
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .library-inner {
+            position: relative;
+            background: linear-gradient(to bottom right, #fef9c3, #fde68a);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .library-molding {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1rem;
+            background: linear-gradient(to bottom, #92400e, #78350f);
+        }
+
+        .library-molding.top {
+            top: 0;
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+
+        .library-molding.bottom {
+            bottom: 0;
+            border-radius: 0 0 0.75rem 0.75rem;
+        }
+
+        /* Bookshelf */
+        .bookshelf {
+            margin-bottom: 1.5rem;
+        }
+
+        .bookshelf-bg {
+            background: linear-gradient(to bottom, rgba(120, 53, 15, 0.5), rgba(69, 26, 3, 0.5));
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .books-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 0.25rem;
+            min-height: 140px;
+            padding-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .shelf-board {
+            height: 1rem;
+            background: linear-gradient(to bottom, #92400e, #78350f);
+            border-radius: 0.125rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Book Button */
+        .book {
+            position: relative;
+            width: 2rem;
+            height: 8rem;
+            border-radius: 0.125rem;
+            background: #8B4513;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .book:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .book.unavailable {
+            cursor: not-allowed;
+            opacity: 0.4;
+            filter: grayscale(100%);
+            box-shadow: none;
+        }
+
+        .book.unavailable:hover {
+            transform: none;
+        }
+
+        .book-spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .book-texture {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        }
+
+        .book-decoration {
+            position: absolute;
+            left: 0.125rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .book-line {
+            width: 0.25rem;
+            height: 0.125rem;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .book-label {
+            position: absolute;
+            right: 0.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+        }
+
+        .book-label-text {
+            font-size: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .book-label-author {
+            font-size: 0.4rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.125rem;
+        }
+
+        /* Special Book (Enciclopedia) */
+        .special-book {
+            position: relative;
+            width: 3rem;
+            height: 8rem;
+            border-radius: 0.125rem;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .special-book:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .special-book-texture {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        }
+
+        .special-book-decoration {
+            position: absolute;
+            left: 0.25rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .special-book-line {
+            width: 0.25rem;
+            height: 0.125rem;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+	.special-book-label {
+	    position: absolute;
+	    right: 0.5rem;
+	    top: 50%;
+	    font-size: 0.75rem;
+	    color: white;
+	    font-weight: bold;
+	    letter-spacing: 0.1em;
+	    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+	    line-height: 1.2;
+	    writing-mode: vertical-rl;
+	    text-orientation: mixed;
+	    transform: translateY(-50%) rotate(-180deg);
+	}	
 
         /* Modal */
         .modal {
