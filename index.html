@@ -40,26 +40,10 @@
         }
 
         .header-title h1 {
+            color: #fef3c7;
             font-size: 1.5rem;
             margin-bottom: 0.25rem;
-            font-weight: 900;
-            font-family: 'Georgia', serif, sans-serif;
-        }
-
-        .title-letter {
-            display: inline-block;
-        }
-
-        .title-letter.red {
-            color: #dc2626;
-        }
-
-        .title-letter.white {
-            color: #fef3c7;
-        }
-
-        .title-letter.gold {
-            color: #fbbf24;
+            font-weight: normal;
         }
 
         .header-title p {
@@ -74,29 +58,11 @@
             align-items: center;
         }
 
-        .search-with-stars {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .search-star {
-            width: 2.5rem;
-            height: 2.5rem;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
-            flex-shrink: 0;
-        }
-
         @media (min-width: 768px) {
             .search-filters {
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
-            }
-
-            .search-star {
-                width: 2.5rem;
-                height: 2.5rem;
             }
         }
 
@@ -250,25 +216,6 @@
             transform: none;
         }
 
-        .pdf-indicator {
-            position: absolute;
-            top: 0.25rem;
-            right: 0.25rem;
-            background: rgba(220, 38, 38, 0.9);
-            color: white;
-            font-size: 0.6rem;
-            padding: 0.125rem;
-            border-radius: 0.125rem;
-            z-index: 2;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-
         .book-spine {
             position: absolute;
             left: 0;
@@ -363,21 +310,20 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .special-book-label {
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.75rem;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 0.1em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            line-height: 1.2;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(-180deg);
-        }
+		.special-book-label {
+	    position: absolute;
+	    right: 0.5rem;
+	    top: 50%;
+	    font-size: 0.75rem;
+	    color: white;
+	    font-weight: bold;
+	    letter-spacing: 0.1em;
+	    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+	    line-height: 1.2;
+	    writing-mode: vertical-rl;
+	    text-orientation: mixed;
+	    transform: translateY(-50%) rotate(-180deg);
+	}
 
         /* Modal */
         .modal {
@@ -503,40 +449,6 @@
 
         .format-button:active {
             transform: scale(0.98);
-        }
-
-        .pdf-link-container {
-            margin-bottom: 1rem;
-        }
-
-        .pdf-download-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-            width: 100%;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .pdf-download-button:hover {
-            background: linear-gradient(135deg, #b91c1c, #7f1d1d);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
-        }
-
-        .pdf-download-button small {
-            font-size: 0.75rem;
-            opacity: 0.9;
-            font-weight: normal;
         }
 
         .format-icon {
@@ -717,133 +629,18 @@
                 padding: 1.5rem 1rem 0.5rem 1rem;
             }
         }
-
-        /* ========================================
-           ESTATUAS GUARDIANAS - Shisa y Kitsune
-           ======================================== */
-
-        .header-with-guardians {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .guardians-container {
-            display: flex;
-            align-items: flex-end;
-            gap: 0.25rem;
-            height: 3.5rem;
-        }
-
-        .guardian-statue {
-            width: 7.5rem;
-            height: 10.5rem;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
-        }
-
-        .guardian-shisa {
-            width: 9rem;
-            height: 10.5rem;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
-        }
-
-        @media (min-width: 768px) {
-            .guardian-statue {
-                width: 9rem;
-                height: 12rem;
-            }
-
-            .guardian-shisa {
-                width: 11rem;
-                height: 12rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-with-guardians {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .guardian-statue {
-                width: 6rem;
-                height: 8.4rem;
-            }
-
-            .guardian-shisa {
-                width: 7.2rem;
-                height: 8.4rem;
-            }
-        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
             <div class="header-title">
-                <div class="header-with-guardians">
-                    <!-- Guardianes izquierdos: Shisa -->
-                    <div class="guardians-container">
-                        <!-- Shisa Okinawense - Imagen real -->
-                        <img class="guardian-shisa" src="https://tabimaniajapan.com/wp-content/uploads/2020/04/Identity-shisa-840x1024.jpg" alt="Shisa Okinawense" />
-                    </div>
-
-                    <!-- Maneki Neko - Gato de la Suerte (en el centro) -->
-                    <img class="guardian-statue" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGIIXQQbKEMEY4_D-4LPmTKyi1TaTNXKbABA&s" alt="Maneki Neko" />
-
-                    <h1 id="pageTitle"></h1>
-
-                    <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
-                    <div class="guardians-container">
-                        <!-- Kitsune de Inari - Imagen real -->
-                        <img class="guardian-statue" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLSZ0VAv8l4o2GJqzpbSUi1sg3ei4IX3S6-A&s" alt="Zorro Kitsune" />
-
-                        <!-- Shisa Okinawense - Imagen real -->
-                        <img class="guardian-shisa" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" alt="Shisa Okinawense" />
-                    </div>
-                </div>
+                <h1>📚 Biblioteca Digital</h1>
+                <p id="booksCount">Cargando...</p>
             </div>
-
+            
             <div class="search-filters">
-                <div class="search-with-stars">
-                    <!-- Estrella dorada de 5 puntas - izquierda del input -->
-                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <polygon
-                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                            fill="url(#goldStar)"
-                            stroke="#B8860B"
-                            stroke-width="2"
-                        />
-                    </svg>
-
-                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
-
-                    <!-- Estrella roja de 5 puntas - derecha del input -->
-                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <polygon
-                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                            fill="url(#redStar)"
-                            stroke="#7F1D1D"
-                            stroke-width="2"
-                        />
-                    </svg>
-                </div>
-
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
                 <label class="filter-label">
                     <input type="checkbox" id="availableFilter" class="filter-checkbox">
                     <span>Solo disponibles</span>
@@ -902,499 +699,7 @@
         // DATOS DE LIBROS
         // ========================================
 
-        // Libros con PDF links directos desde repositorios latinos (SOLO enlaces que terminan en .pdf)
-        const booksWithPDF = [
-            // Clásicos del Marxismo
-            {
-                title: 'El Capital',
-                author: 'Karl Marx',
-                pdfLink: 'https://archive.org/download/marx-karl.-el-capital-obra-completa-ocr-2008/El%20Capital%20-%20Karl%20Marx.pdf'
-            },
-            {
-                title: 'El Manifiesto Comunista',
-                author: 'Karl Marx & Friedrich Engels',
-                pdfLink: 'https://archive.org/details/marx-manifiesto-comunista_202304'
-            },
-            {
-                title: 'La Ideología Alemana',
-                author: 'Karl Marx & Friedrich Engels',
-                pdfLink: 'https://archive.org/details/marx-karl-engels-friedrich.-la-ideologia-alemana-1974'
-            },
-            {
-                title: 'El Estado y la Revolución',
-                author: 'Vladimir Lenin',
-                pdfLink: 'https://www.marxists.org/espanol/lenin/obras/1910s/estyrev/'
-            },
-            {
-                title: 'Historia de la Revolución Rusa',
-                author: 'León Trotsky',
-                pdfLink: 'https://www.marxists.org/espanol/trotsky/obras/1930s/hrr/'
-            },
-            {
-                title: 'Reforma o Revolución',
-                author: 'Rosa Luxemburgo',
-                pdfLink: 'https://archive.org/details/luxemburgo-reforma-o-revolucion'
-            },
-            {
-                title: 'Los Cuadernos de la Cárcel',
-                author: 'Antonio Gramsci',
-                pdfLink: 'https://www.marxists.org/archive/gramsci/prison_notebooks/download/gramsci-prison-notebooks.pdf'
-            },
-            
-            // Matemáticas
-            {
-                title: 'Fundamentos de Matemáticas',
-                author: 'UNAM',
-                pdfLink: 'http://www.enelaula.unam.mx/Libreria/DGPYFE_1A%20LIBRERIA_47/Fundamentos%20de%20matematicas.pdf'
-            },
-            {
-                title: 'Álgebra Lineal',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/1000'
-            },
-            {
-                title: 'Cálculo Diferencial',
-                author: 'Universidad Nacional de Córdoba',
-                pdfLink: 'https://librosministerio.com/matematicas/'
-            },
-            {
-                title: 'Geometría Analítica',
-                author: 'Ministerio de Educación Argentina',
-                pdfLink: 'https://librosministerio.com/matematicas/'
-            },
-            {
-                title: 'Estadística Matemática',
-                author: 'UBA Argentina',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            
-            // Física
-            {
-                title: 'Física General',
-                author: 'UNAM',
-                pdfLink: 'https://copitarxives.fisica.unam.mx/LT0001ES/LT0001ES.pdf'
-            },
-            {
-                title: 'Relatividad para Futuros Físicos',
-                author: 'UNAM',
-                pdfLink: 'https://copitarxives.fisica.unam.mx/LT0001ES/LT0001ES.html'
-            },
-            {
-                title: 'Física Cuántica',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Mecánica Teórica',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Termodinámica',
-                author: 'Ministerio de Educación Bolivia',
-                pdfLink: 'https://librosdelminedu.com/libro-de-fisica/'
-            },
-            
-            // Química
-            {
-                title: 'Química General',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Química Orgánica',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://librosdelministerio.cl/quimica/'
-            },
-            {
-                title: 'Bioquímica',
-                author: 'Ministerio de Educación Argentina',
-                pdfLink: 'https://librosministerio.com/quimica/'
-            },
-            {
-                title: 'Tabla Periódica',
-                author: 'UBA Argentina',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            
-            // Biología
-            {
-                title: 'Biología Celular',
-                author: 'UNAM',
-                pdfLink: 'https://repositorio.unam.mx/contenidos'
-            },
-            {
-                title: 'Genética',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Ecología',
-                author: 'Ministerio de Educación Perú',
-                pdfLink: 'https://librosminedu.gob.pe/'
-            },
-            {
-                title: 'Botánica Sistemática',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            {
-                title: 'Zoología General',
-                author: 'UBA Argentina',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            
-            // Filosofía Clásica
-            {
-                title: 'La República de Platón',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Ética a Nicómaco',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Política de Aristóteles',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Meditaciones de Descartes',
-                author: 'Universidad Nacional de Córdoba',
-                pdfLink: 'https://librosministerio.com/filosofia/'
-            },
-            {
-                title: 'El Criticón de Kant',
-                author: 'Ministerio de Educación Argentina',
-                pdfLink: 'https://librosministerio.com/filosofia/'
-            },
-            {
-                title: 'Being and Time de Heidegger',
-                author: 'UBA Argentina',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            
-            // Historia
-            {
-                title: 'Historia Universal',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Historia de América Latina',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Revoluciones del Siglo XX',
-                author: 'Ministerio de Educación Cuba',
-                pdfLink: 'https://libros.cubaedu.cu/'
-            },
-            {
-                title: 'Historia Social del Arte',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Sociología Latinoamericana',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            
-            // Literatura
-            {
-                title: 'Poética de Aristóteles',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Literatura Latinoamericana',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Cien Años de Soledad - Análisis',
-                author: 'Universidad Nacional de Córdoba',
-                pdfLink: 'https://librosministerio.com/literatura/'
-            },
-            {
-                title: 'El Quijote - Estudios Críticos',
-                author: 'Ministerio de Educación España',
-                pdfLink: 'https://www.mecd.gob.es/libros-para-descargar'
-            },
-            {
-                title: 'Narrativa Latinoamericana Contemporánea',
-                author: 'UBA Argentina',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            
-            // Mitología y Cultura Originaria
-            {
-                title: 'Mitología Andina',
-                author: 'Universidad de San Marcos',
-                pdfLink: 'https://repositorio.unmsm.edu.pe/'
-            },
-            {
-                title: 'Cosmogonía Mapuche',
-                author: 'Universidad de la Frontera',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Leyendas de los Pueblos Originarios',
-                author: 'Ministerio de Cultura Ecuador',
-                pdfLink: 'https://www.culturaypatrimonio.gob.ec/'
-            },
-            {
-                title: 'Simbología Prehispánica',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            
-            // Arte y Música
-            {
-                title: 'Historia del Arte',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Teoría Musical',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            {
-                title: 'Arte Contemporáneo Latinoamericano',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Música Tradicional Andina',
-                author: 'Universidad Nacional de Cusco',
-                pdfLink: 'https://repositorio.unsa.edu.pe/'
-            },
-            
-            // Ingeniería y Tecnología
-            {
-                title: 'Ingeniería Civil',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Programación en Python',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Inteligencia Artificial',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Redes Neuronales',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            {
-                title: 'Robótica Educativa',
-                author: 'Ministerio de Educación Costa Rica',
-                pdfLink: 'https://www.mep.go.cr/'
-            },
-            
-            // Cristianismo y Teología
-            {
-                title: 'La Gracia y la Libertad',
-                author: 'Simone Weil',
-                pdfLink: 'https://archive.org/download/weil-simone-gracia-y-libertad/La%20Gracia%20y%20la%20Libertad%20-%20Simone%20Weil.pdf'
-            },
-            {
-                title: 'Encíclicas del Papa Francisco',
-                author: 'Vaticano',
-                pdfLink: 'https://www.vatican.va/content/francesco/es/encyclicals/documents.html'
-            },
-            {
-                title: 'Teología de la Liberación',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Mística Cristiana',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            
-            // Anarquismo y Socialismo Utópico
-            {
-                title: 'Pedagogía del Oprimido',
-                author: 'Paulo Freire',
-                pdfLink: 'https://www.redalyc.org/pdf/869/86901005.pdf'
-            },
-            {
-                title: 'El Dios Padre',
-                author: 'Papa Francisco',
-                pdfLink: 'https://www.vatican.va/content/francesco/es/encyclicals/documents.html'
-            },
-            {
-                title: 'El Diario del Che en Bolivia',
-                author: 'Ernesto Che Guevara',
-                pdfLink: 'https://proletarios.org/books/CHE-Guevara-Diario_del_CHE_en_Bolivia.pdf'
-            },
-            {
-                title: 'Socialismo Utópico',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Anarquismo Clásico',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            
-            // Lingüística y Literatura
-            {
-                title: 'Lingüística Histórica',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Análisis del Discurso',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Semiótica Literaria',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Literatura Comparada',
-                author: 'UBA Argentina',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            
-            // Ciencias de la Computación
-            {
-                title: 'Algoritmos y Estructuras de Datos',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Bases de Datos',
-                author: 'Universidad de la Plata',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Sistemas Operativos',
-                author: 'UNAM',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Desarrollo Web Full Stack',
-                author: 'Universidad Nacional de Colombia',
-                pdfLink: 'https://repositorio.unal.edu.co/'
-            },
-            {
-                title: 'El Manifiesto Comunista',
-                author: 'Karl Marx & Friedrich Engels',
-                pdfLink: 'https://archive.org/download/marx-manifiesto-comunista_202304/El%20Manifiesto%20Comunista%20-%20Marx%20y%20Engels.pdf'
-            },
-            {
-                title: 'La Ideología Alemana',
-                author: 'Karl Marx & Friedrich Engels',
-                pdfLink: 'https://archive.org/download/marx-karl-engels-friedrich.-la-ideologia-alemana-1974/Marx%20-%20Karl%20y%20Engels%20-%20La%20Ideologia%20Alemana.pdf'
-            },
-            {
-                title: 'El Estado y la Revolución',
-                author: 'Vladimir Lenin',
-                pdfLink: 'https://archive.org/download/lenin-el-estado-y-la-revolucion/El%20Estado%20y%20la%20Revolucion%20-%20Vladimir%20Lenin.pdf'
-            },
-            {
-                title: 'Historia de la Revolución Rusa',
-                author: 'León Trotsky',
-                pdfLink: 'https://archive.org/download/trotsky-historia-revolucion-rusa/Historia%20de%20la%20Revolucion%20Rusa%20-%20Leon%20Trotsky.pdf'
-            },
-            {
-                title: 'Reforma o Revolución',
-                author: 'Rosa Luxemburgo',
-                pdfLink: 'https://www.marxists.org/archive/luxemburg/works/download/luxemburg-reform-or-revolution.pdf'
-            },
-            {
-                title: 'Manual de Matemática Primer Año Medio',
-                author: 'Ministerio de Educación Chile',
-                pdfLink: 'https://librosdelministerio.cl/matematica-1-medio-texto-estudiante/'
-            },
-            {
-                title: 'Historia, Geografía y Ciencias Sociales 1° Medio',
-                author: 'Ministerio de Educación Chile',
-                pdfLink: 'https://librosdelministerio.cl/historia-geografia-y-ciencias-sociales-1-medio-texto-estudiante-2/'
-            },
-            {
-                title: 'Filosofía y Educación',
-                author: 'Ministerio de Educación Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/handle/20.500.12365/615'
-            },
-            {
-                title: 'Física Universitaria',
-                author: 'Universidad Nacional Autónoma de México',
-                pdfLink: 'https://librosoa.unam.mx/'
-            },
-            {
-                title: 'Química General',
-                author: 'Universidad de Buenos Aires',
-                pdfLink: 'https://publicaciones.filo.uba.ar/libros-ya-disponibles-para-descarga-gratuita'
-            },
-            {
-                title: 'Biología Celular',
-                author: 'Universidad Nacional Autónoma de México',
-                pdfLink: 'https://repositorio.unam.mx/contenidos'
-            },
-            {
-                title: 'Introducción a la Programación',
-                author: 'Universidad de Chile',
-                pdfLink: 'https://bibliotecadigital.mineduc.cl/'
-            },
-            {
-                title: 'El Dios Padre',
-                author: 'Papa Francisco',
-                pdfLink: 'https://librosdelministerio.cl/'
-            },
-            {
-                title: 'El Diario del Che en Bolivia',
-                author: 'Ernesto Che Guevara',
-                pdfLink: 'https://proletarios.org/books/CHE-Guevara-Diario_del_CHE_en_Bolivia.pdf'
-            },
-            {
-                title: 'Los Cuadernos de la Cárcel',
-                author: 'Antonio Gramsci',
-                pdfLink: 'https://archive.org/details/gramsci-antonio.-cuadernos-de-la-carcel.-tomo-2-ocr-1981'
-            },
-            {
-                title: 'La Gracia y la Libertad',
-                author: 'Simone Weil',
-                pdfLink: 'https://archive.org/details/weil-simone-grace-and-liberty/download/weil-simone-grace-and-liberty.pdf'
-            },
-            {
-                title: 'Pedagogía del Oprimido',
-                author: 'Paulo Freire',
-                pdfLink: 'https://www.redalyc.org/pdf/869/86901005.pdf'
-            },
-            {
-                title: 'La Lucha de los Pueblos Originarios',
-                author: 'Autores Latinoamericanos',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            },
-            {
-                title: 'Mitología Andina',
-                author: 'Autores Latinoamericanos',
-                pdfLink: 'https://biblioteca.ciencialatina.org/'
-            }
-        ];
-
-        // Títulos con PDF disponibles primero (coherentes)
         const titles = [
-            'El Capital', 'El Manifiesto Comunista', 'La Ideología Alemana', 'El Estado y la Revolución', 'Historia de la Revolución Rusa', 'Reforma o Revolución', 'Los Cuadernos de la Cárcel', 'La Gracia y la Libertad', 'Pedagogía del Oprimido', 'El Diario del Che en Bolivia',
-            'Fundamentos de Matemáticas', 'Álgebra Lineal', 'Cálculo Diferencial', 'Geometría Analítica', 'Estadística Matemática', 'Física General', 'Relatividad para Futuros Físicos', 'Física Cuántica', 'Mecánica Teórica', 'Termodinámica', 'Química General', 'Química Orgánica', 'Bioquímica', 'Tabla Periódica', 'Botánica Sistemática', 'Zoología General',
-            // Resto de títulos aleatorios (sin PDF para no romper coherencia)
             'Cien Años de Soledad', 'El Quijote', 'La Odisea', '1984', 'Orgullo y Prejuicio',
             'Crimen y Castigo', 'Moby Dick', 'Guerra y Paz', 'Ulises', 'Divina Comedia',
             'Don Juan Tenorio', 'El Principito', 'El Alquimista', 'Los Miserables', 'Anna Karenina',
@@ -1496,63 +801,32 @@
         function generateBooks() {
             const books = [];
             
-            // Primero agregar los libros con PDF links específicos
-            booksWithPDF.forEach((book, index) => {
-                books.push({
-                    id: index + 1,
-                    title: book.title,
-                    author: book.author,
-                    year: 1800 + Math.floor(Math.random() * 100),
-                    status: 'available',
-                    formats: ['pdf'],
-                    color: bookColors[index % bookColors.length],
-                    pdfLink: book.pdfLink
-                });
-            });
-            
-            // Primero agregar libros con PDF (coherentes)
-            booksWithPDF.forEach(book => {
-                books.push({
-                    id: books.length + 1,
-                    title: book.title,
-                    author: book.author,
-                    year: 1800 + Math.floor(Math.random() * 100),  // Más reciente para PDFs
-                    status: 'available',
-                    formats: ['pdf'],  // Solo PDF disponible
-                    color: book.color,
-                    pdfLink: book.pdfLink
-                });
-            });
-            
-            // Luego agregar libros aleatorios para completar hasta 400
-            for (let i = books.length; i < 400; i++) {
+            for (let i = 0; i < 200; i++) {
                 const title = titles[i % titles.length];
                 const author = authors[i % authors.length];
                 
                 // CAMBIA AQUÍ: 'available' = disponible, 'unavailable' = no disponible
-                // También puedes cambiar la probabilidad (0.8 = 20% disponibles)
-                const status = Math.random() > 0.8 ? 'available' : 'unavailable';
+                // También puedes cambiar la probabilidad (0.7 = 30% disponibles)
+                const status = Math.random() > 0.7 ? 'available' : 'unavailable';
                 
                 // Formatos disponibles si el libro está activo
                 let formats = [];
                 if (status === 'available') {
                     const allFormats = ['pdf', 'epub', 'mobi', 'azw3'];
-                    formats = allFormats.filter(() => Math.random() > 0.4);
+                    formats = allFormats.filter(() => Math.random() > 0.3);
                 }
                 
                 const color = bookColors[i % bookColors.length];
                 
                 books.push({
-                    id: books.length + 1,
+                    id: i + 1,
                     title: title,
                     author: author,
                     year: 1800 + Math.floor(Math.random() * 225),
                     status: status,
                     formats: formats,
-                    color: color,
-                    pdfLink: null  // Los libros aleatorios no tienen PDF
+                    color: color
                 });
-            }
             }
             
             return books;
@@ -1628,26 +902,8 @@
                 bookDiv.appendChild(label);
             }
             
-            // Indicador de PDF disponible
-            if (book.pdfLink) {
-                const pdfIndicator = document.createElement('div');
-                pdfIndicator.className = 'pdf-indicator';
-                pdfIndicator.innerHTML = '📄';
-                pdfIndicator.title = 'PDF disponible - Click para abrir';
-                bookDiv.appendChild(pdfIndicator);
-            }
-            
             // Event listener
-            if (book.pdfLink) {
-                bookDiv.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (book.pdfLink) {
-                        window.open(book.pdfLink, '_blank', 'noopener,noreferrer');
-                    }
-                });
-            } else {
-                bookDiv.addEventListener('click', () => openBookModal(book));
-            }
+            bookDiv.addEventListener('click', () => openBookModal(book));
             
             return bookDiv;
         }
@@ -1783,6 +1039,17 @@
         }
 
         // ========================================
+        // ACTUALIZAR CONTADOR
+        // ========================================
+
+        function updateBooksCount() {
+            const availableCount = allBooks.filter(b => b.status === 'available').length;
+            const totalCount = allBooks.length;
+            document.getElementById('booksCount').textContent = 
+                `${availableCount} de ${totalCount} libros disponibles`;
+        }
+
+        // ========================================
         // FILTRAR LIBROS
         // ========================================
 
@@ -1824,22 +1091,7 @@
                 <p><strong>Estado:</strong> <span class="${statusClass}">${statusText}</span></p>
             `;
             
-            if (book.pdfLink) {
-                // Mostrar enlace directo al PDF
-                modalFormats.innerHTML = `
-                    <h3>📄 Enlace directo disponible:</h3>
-                    <div class="pdf-link-container">
-                        <button class="pdf-download-button" onclick="window.open('${book.pdfLink}', '_blank')">
-                            <span class="format-icon">📄</span>
-                            <span>Abrir PDF Directo</span>
-                            <small>Repositorio Latinoamericano</small>
-                        </button>
-                    </div>
-                    <div class="modal-message">
-                        <p>✅ Este libro está disponible gratuitamente desde repositorios educativos latinoamericanos</p>
-                    </div>
-                `;
-            } else if (book.status === 'available' && book.formats.length > 0) {
+            if (book.status === 'available' && book.formats.length > 0) {
                 const formatIcons = {
                     pdf: '📄',
                     epub: '📱',
@@ -1919,15 +1171,10 @@
         function init() {
             // Establecer año actual en el footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Configurar título con letras intercaladas
-            const titleText = 'Biblioteca Digital';
-            const titleElement = document.getElementById('pageTitle');
-            titleElement.innerHTML = titleText.split('').map((char, index) => {
-                const className = index % 2 === 0 ? 'red' : 'gold';
-                return `<span class="title-letter ${className}">${char}</span>`;
-            }).join('');
-
+            
+            // Actualizar contador
+            updateBooksCount();
+            
             // Renderizar biblioteca
             renderLibrary();
         }
