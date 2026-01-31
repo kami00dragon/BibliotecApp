@@ -21,9 +21,9 @@
 
         /* Header */
         header {
-            background: linear-gradient(to right, #78350f, #92400e, #78350f);
+            background: linear-gradient(to bottom, #451a03, #78350f);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
+            padding: 2rem 1rem 1rem 1rem;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -32,44 +32,24 @@
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
         }
 
-        @media (min-width: 768px) {
-            .header-content {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
+        /* Header Title reducido */
         .header-title {
             text-align: center;
-        }
-
-        @media (min-width: 768px) {
-            .header-title {
-                text-align: left;
-            }
+            margin-bottom: 1rem;
         }
 
         .header-title h1 {
             color: #fef3c7;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .header-title h1 {
-                font-size: 3rem;
-            }
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            font-weight: normal;
         }
 
         .header-title p {
             color: #fcd34d;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
         }
 
         .search-filters {
@@ -83,6 +63,7 @@
             .search-filters {
                 flex-direction: row;
                 align-items: center;
+                justify-content: center;
             }
         }
 
@@ -274,6 +255,63 @@
             font-size: 0.4rem;
             color: rgba(255, 255, 255, 0.6);
             margin-top: 0.125rem;
+        }
+
+        /* Special Book (Enciclopedia) */
+        .special-book {
+            position: relative;
+            width: 3rem;
+            height: 8rem;
+            border-radius: 0.125rem;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .special-book:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .special-book-texture {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        }
+
+        .special-book-decoration {
+            position: absolute;
+            left: 0.25rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .special-book-line {
+            width: 0.25rem;
+            height: 0.125rem;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .special-book-label {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            line-height: 1.2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(-180deg);
         }
 
         /* Modal */
@@ -539,12 +577,35 @@
                 gap: 0.125rem;
             }
 
+            .special-book {
+                width: 2.5rem;
+                height: 6rem;
+            }
+
+            .special-book-label {
+                font-size: 0.65rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-title p {
+                font-size: 0.8rem;
+            }
+
             .modal-content {
                 padding: 1rem;
             }
 
             .modal-title {
                 font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem 0.5rem 1rem;
             }
         }
     </style>
@@ -556,6 +617,7 @@
                 <h1>📚 Biblioteca Digital</h1>
                 <p id="booksCount">Cargando...</p>
             </div>
+            
             <div class="search-filters">
                 <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
                 <label class="filter-label">
@@ -570,7 +632,10 @@
         <div class="library-frame">
             <div class="library-inner">
                 <div class="library-molding top"></div>
+                
+                <!-- Estantes de Libros -->
                 <div id="bookshelvesContainer"></div>
+                
                 <div class="library-molding bottom"></div>
             </div>
         </div>
@@ -829,10 +894,46 @@
         }
 
         // ========================================
+        // CREAR LIBRO ESPECIAL (ENCICLOPEDIA)
+        // ========================================
+
+        function createSpecialBook(title, url, color) {
+            const bookLink = document.createElement('a');
+            bookLink.href = url;
+            bookLink.target = '_blank';
+            bookLink.className = 'special-book';
+            bookLink.style.backgroundColor = color;
+            bookLink.title = title;
+            
+            // Textura
+            const texture = document.createElement('div');
+            texture.className = 'special-book-texture';
+            bookLink.appendChild(texture);
+            
+            // Decoración del lomo
+            const decoration = document.createElement('div');
+            decoration.className = 'special-book-decoration';
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'special-book-line';
+                decoration.appendChild(line);
+            }
+            bookLink.appendChild(decoration);
+            
+            // Etiqueta del libro
+            const label = document.createElement('div');
+            label.className = 'special-book-label';
+            label.textContent = title;
+            bookLink.appendChild(label);
+            
+            return bookLink;
+        }
+
+        // ========================================
         // CREAR ESTANTE
         // ========================================
 
-        function createBookshelf(books) {
+        function createBookshelf(books, isFirstShelf) {
             const shelfDiv = document.createElement('div');
             shelfDiv.className = 'bookshelf';
             
@@ -842,6 +943,31 @@
             const booksContainer = document.createElement('div');
             booksContainer.className = 'books-container';
             
+            // Agregar libros especiales si es el primer estante
+            if (isFirstShelf) {
+                const nihongoBook = createSpecialBook(
+                    'NihongoApp',
+                    'https://kami00dragon.github.io/NihongoApp/index.html',
+                    '#8B0000'
+                );
+                booksContainer.appendChild(nihongoBook);
+                
+                const aeternusBook = createSpecialBook(
+                    'AeternusApp',
+                    'https://kami00dragon.github.io/AeternusApp/',
+                    '#5D4037'
+                );
+                booksContainer.appendChild(aeternusBook);
+                
+                const gramaticBook = createSpecialBook(
+                    'GramaticApp',
+                    'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas',
+                    '#424242'
+                );
+                booksContainer.appendChild(gramaticBook);
+            }
+            
+            // Agregar libros normales
             books.forEach(book => {
                 const bookElement = createBookElement(book);
                 booksContainer.appendChild(bookElement);
@@ -884,8 +1010,8 @@
                 shelves.push(shelfBooks);
             }
             
-            shelves.forEach(shelfBooks => {
-                const shelfElement = createBookshelf(shelfBooks);
+            shelves.forEach((shelfBooks, index) => {
+                const shelfElement = createBookshelf(shelfBooks, index === 0);
                 container.appendChild(shelfElement);
             });
         }
