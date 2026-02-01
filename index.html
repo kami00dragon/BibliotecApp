@@ -36,7 +36,7 @@
 
         .header-title {
             text-align: center;
-            margin-bottom: 0.5rem; /* Margen reducido para acercar buscador */
+            margin-bottom: 0.5rem;
         }
 
         .header-title h1 {
@@ -48,10 +48,10 @@
             letter-spacing: 2px;
         }
 
-        /* Flex container principal de la fila superior */
+        /* Flex container principal de la fila */
         .header-with-guardians {
             display: flex;
-            align-items: flex-end; /* Alinea todo al fondo (baseline de Maneki) */
+            align-items: flex-end; 
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
@@ -59,7 +59,7 @@
 
         .guardians-container {
             display: flex;
-            align-items: flex-end; /* Alinea las imágenes al fondo */
+            align-items: flex-end; 
             gap: 0.25rem;
         }
 
@@ -106,7 +106,7 @@
             flex-direction: column;
             gap: 0.75rem;
             align-items: center;
-            margin-top: 0; /* Elimina margen extra para acercar al título */
+            margin-top: 0;
         }
 
         .search-with-stars {
@@ -381,7 +381,7 @@
 
         /* Insectos (Bichos) */
         
-        /* Mariposa - Grande y Colores */
+        /* Mariposa */
         .butterfly {
             position: absolute;
             top: 10px;
@@ -404,10 +404,10 @@
         
         /* Variantes de color */
         .butterfly.blue .butterfly-wing {
-            background: rgba(59, 130, 246, 0.7); /* Azul */
+            background: rgba(59, 130, 246, 0.7);
         }
         .butterfly.yellow .butterfly-wing {
-            background: rgba(234, 179, 8, 0.7); /* Amarillo */
+            background: rgba(234, 179, 8, 0.7);
         }
 
         .butterfly-wing.left {
@@ -424,7 +424,7 @@
             100% { transform: rotateY(60deg); }
         }
 
-        /* Mariquita (en libro) - Abierta 3D */
+        /* Mariquita (en libro) */
         .ladybug-container {
             position: absolute;
             top: 10px;
@@ -449,7 +449,6 @@
             z-index: 30;
         }
 
-        /* Alas inferiores (visibles cuando se abren las de arriba) */
         .ladybug-wing-under {
             position: absolute;
             top: 2px;
@@ -457,7 +456,7 @@
             width: 40%;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 50%;
-            z-index: 10;
+            z-index: 10; 
             animation: flutterWings 0.1s infinite alternate;
         }
         .ladybug-wing-under.left { left: 10%; transform-origin: right center; }
@@ -468,7 +467,6 @@
             100% { transform: rotateY(10deg); }
         }
 
-        /* Caparachón (Alas rojas superiores) */
         .ladybug-shell {
             position: absolute;
             top: 0;
@@ -489,7 +487,6 @@
             transform-origin: left center; 
         }
 
-        /* Manchas negras (hijas del caparachón) */
         .ladybug-spot-shell {
             position: absolute;
             width: 2px;
@@ -504,7 +501,7 @@
 
         @keyframes openShell {
             0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(-70deg); } /* Abierto (hacia arriba) */
+            100% { transform: rotateY(-70deg); }
         }
 
 
@@ -516,9 +513,9 @@
             background: radial-gradient(circle at 30% 30%, #ef4444, #b91c1c);
             border-radius: 50%;
             z-index: 4;
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        .ladybug-walking::before {
+        .ladybug-walking::before { /* Cabeza */
             content: '';
             position: absolute;
             top: -2px;
@@ -528,7 +525,7 @@
             background: black;
             border-radius: 50%;
         }
-        .ladybug-walking::after {
+        .ladybug-walking::after { /* Línea */
             content: '';
             position: absolute;
             top: 0;
@@ -600,7 +597,6 @@
             border: 4px solid #78350f;
             max-height: 90vh;
             overflow-y: auto;
-            position: relative;
         }
 
         .modal-header {
@@ -753,7 +749,7 @@
                 height: 7rem;
             }
             .special-book-label {
-                font-size: 0.75rem;
+                font-size: 0.6rem;
                 top: 10%;
             }
             .bookshelf-bg {
@@ -800,7 +796,7 @@
 
                     <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
                     <div class="guardians-container">
-                        <!-- Zorro de Inari -->
+                        <!-- Kitsune de Inari -->
                         <img class="guardian-statue" 
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8AyBlti_G6jkGC1lKWl3dNU1aqPrQyryoxg&s" 
                             alt="Zorro Kitsune" />
@@ -895,17 +891,18 @@
         // DATOS DE LIBROS - ACTUALIZADOS
         // ========================================
         const books = [
-            { id: 1, title: 'Tao Te King', author: 'Lao-Tse', year: -500, status: 'available', color: '#8B4513', pdfUrl: 'https://teots.org/wp-content/uploads/2021/08/Tao-Te-Ching-traduccion-de-Stephen-Mitchell-espanol.pdf' },
-            { id: 2, title: 'I Ching', author: 'Anónimo', year: -1000, status: 'available', color: '#A0522D', pdfUrl: 'https://laventanaazulblog.com/wp-content/uploads/2016/12/i_ching-1.pdf' },
-            { id: 3, title: 'Así habló Zaratustra', author: 'Friedrich Nietzsche', year: 1883, status: 'available', color: '#CD853F', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/Resources/T70781/AsiHabloZaratustraManga.pdf' },
-            { id: 4, title: 'El mundo como voluntad...', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
-            { id: 5, title: 'Libro Tibetano de los Muertos', author: 'Anónimo', year: 800, status: 'available', color: '#B8860B', pdfUrl: 'https://budismo.org.mx/material/estudio/talleresespeciales/06-libro-tibetano-de-los-muertos.pdf' },
-            { id: 6, title: 'Matemáticas Básicas', author: 'Stewart', year: 2005, status: 'available', color: '#556B2F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_matematicas_basicas-_completo-_09-15.pdf' },
-            { id: 7, title: 'Álgebra Lineal', author: 'Sheldon Axler', year: 2015, status: 'available', color: '#8FBC8F', pdfUrl: 'https://linear.axler.net/LADR4e.pdf' },
-            { id: 8, title: 'Geometría Analítica', author: 'Lehmann', year: 2007, status: 'available', color: '#2E8B57', pdfUrl: 'https://bdigital.uncu.edu.ar/objetos_digitales/7224/librogeoing.pdf' },
-            { id: 9, title: 'Cálculo Diferencial', author: 'Larson', year: 2008, status: 'available', color: '#3CB371', pdfUrl: 'https://www.cimat.mx/ciencia_para_jovenes/bachillerato/libros/Wooton.pdf' },
-            { id: 10, title: 'Historia de las Matemáticas', author: 'Carl Boyer', year: 2009, status: 'available', color: '#20B2AA', pdfUrl: '' }, 
-            { id: 11, title: 'Pensamiento Matemático', author: 'Mason', year: 2010, status: 'available', color: '#4682B4', pdfUrl: '' }, 
+            // Nuevos libros agregados
+            { id: 121, title: 'Sutra del Diamante', author: 'Siddhartha Gautama', year: -400, status: 'available', color: '#9acd32', pdfUrl: 'https://www.lastelladelmattino.org/wp-content/uploads/2010/04/El-diamante_parte-budista-completa_F.pdf' },
+            { id: 122, title: 'Sutra del Corazón', author: 'Thich Nhat Hanh', year: 1998, status: 'available', color: '#ba55d3', pdfUrl: 'https://cdn.bookey.app/files/book/es/el-sutra-del-corazon.pdf' },
+            
+            { id: 4, title: 'El mundo como voluntad y representación', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
+
+            { id: 6, title: 'Matemáticas Básicas', author: 'Varios Autores', year: 2005, status: 'available', color: '#556B2F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_matematicas_basicas-_completo-_09-15.pdf' },
+            { id: 7, title: 'Álgebra Lineal', author: 'Varios Autores', year: 2006, status: 'available', color: '#8FBC8F', pdfUrl: 'https://linear.axler.net/LADR4e.pdf' },
+            { id: 8, title: 'Geometría Analítica', author: 'Varios Autores', year: 2007, status: 'available', color: '#2E8B57', pdfUrl: 'https://bdigital.uncu.edu.ar/objetos_digitales/7224/librogeoing.pdf' },
+            { id: 9, title: 'Cálculo Diferencial e Integral', author: 'Varios Autores', year: 2008, status: 'available', color: '#3CB371', pdfUrl: 'https://www.cimat.mx/ciencia_para_jovenes/bachillerato/libros/Wooton.pdf' },
+            { id: 10, title: 'Historia de las Matemáticas', author: 'Varios Autores', year: 2009, status: 'available', color: '#20B2AA', pdfUrl: '' }, 
+            { id: 11, title: 'Pensamiento Matemático', author: 'Varios Autores', year: 2010, status: 'available', color: '#4682B4', pdfUrl: '' }, 
             { id: 12, title: 'La República', author: 'Platón', year: -375, status: 'available', color: '#5F9EA0', pdfUrl: 'http://bibliotecadigital.econ.uba.ar/download/Pe/180266.pdf' },
             { id: 13, title: 'Poética', author: 'Aristóteles', year: -335, status: 'available', color: '#6495ED', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/poetica_aristoteles.pdf' },
             { id: 14, title: 'Historia de la Filosofía', author: 'Giovanni Reale', year: 1980, status: 'available', color: '#7B68EE', pdfUrl: '' }, 
@@ -1028,7 +1025,7 @@
         // ========================================
         function getAuthorLastName(author) {
             const parts = author.split(' ');
-            return parts[parts.length - 1];
+            return parts[parts.length -1];
         }
 
         // ========================================
@@ -1037,6 +1034,7 @@
         function createBug(type) {
             const bug = document.createElement('div');
             if (type === 'butterfly') {
+                // Variante de color para mariposas
                 const randColor = Math.random();
                 let colorClass = '';
                 if (randColor > 0.66) {
@@ -1044,6 +1042,7 @@
                 } else if (randColor > 0.33) {
                     colorClass = 'yellow';
                 }
+
                 bug.className = `butterfly ${colorClass}`;
                 bug.innerHTML = '<div class="butterfly-wing left"></div><div class="butterfly-wing right"></div>';
             } else if (type === 'ladybug') {
@@ -1063,7 +1062,7 @@
                 head.className = 'ladybug-head';
                 bug.appendChild(head);
 
-                // Alas rojas superiores (Caparachón)
+                // Alas rojas superiores
                 const shellL = document.createElement('div');
                 shellL.className = 'ladybug-shell left';
                 const sl1 = document.createElement('div'); sl1.className = 'ladybug-spot-shell ls-1'; shellL.appendChild(sl1);
@@ -1085,17 +1084,14 @@
             bookDiv.style.backgroundColor = book.color;
             bookDiv.title = `${book.title} - ${book.author}`;
 
-            // Lomo del libro
             const spine = document.createElement('div');
             spine.className = 'book-spine';
             bookDiv.appendChild(spine);
 
-            // Textura del libro
             const texture = document.createElement('div');
             texture.className = 'book-texture';
             bookDiv.appendChild(texture);
 
-            // Decoración del lomo
             const decoration = document.createElement('div');
             decoration.className = 'book-decoration';
             for (let i = 0; i < 3; i++) {
@@ -1105,7 +1101,6 @@
             }
             bookDiv.appendChild(decoration);
 
-            // Etiqueta del libro
             const label = document.createElement('div');
             label.className = 'book-label';
             const labelText = document.createElement('div');
@@ -1118,7 +1113,6 @@
             label.appendChild(labelAuthor);
             bookDiv.appendChild(label);
 
-            // Insectos
             if (book.pdfUrl && book.pdfUrl.trim() !== '' && book.pdfUrl !== 'undefined') {
                 const rand = Math.random();
                 if (rand > 0.85) {
@@ -1162,7 +1156,6 @@
             label.textContent = title;
             link.appendChild(label);
             
-            // Insectos
             const rand = Math.random();
             if (rand > 0.6) {
                  const bug = createBug(rand > 0.8 ? 'butterfly' : 'ladybug');
@@ -1185,11 +1178,10 @@
             legs.className = 'ladybug-walking-legs';
             container.appendChild(legs);
 
-            const direction = Math.random() > 0.5 ? 1 : -1;
+            const direction = Math.random() > 0.5 ? 1 : -1; 
             const startX = direction === 1 ? -10 : 110;
             const endX = direction === 1 ? 110 : -10;
-            const duration = 10000 + Math.random() * 5000;
-            
+            const duration = 10000 + Math.random() * 5000; 
             container.style.left = startX + '%';
             container.style.bottom = '5px';
             container.style.transform = `scaleX(${direction})`;
