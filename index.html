@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Digital</title>
+    <title>BibliotecApp - Biblioteca Digital</title>
     <style>
         * {
             margin: 0;
@@ -21,12 +21,10 @@
 
         /* Header */
         header {
-            background: linear-gradient(to bottom, #451a03, #78350f);
+            background: linear-gradient(to bottom, #451a03, #78350f, #451a03);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             padding: 2rem 1rem 1rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border-bottom: 4px solid #451a03;
         }
 
         .header-content {
@@ -40,31 +38,26 @@
         }
 
         .header-title h1 {
-            font-size: 1.5rem;
-            margin-bottom: 0.25rem;
+            font-size: 2.5rem;
             font-weight: 900;
-            font-family: 'Georgia', serif, sans-serif;
-        }
-
-        .title-letter {
-            display: inline-block;
-        }
-
-        .title-letter.red {
-            color: #dc2626;
-        }
-
-        .title-letter.white {
-            color: #ffffff;
-        }
-
-        .title-letter.gold {
-            color: #fbbf24;
-        }
-
-        .header-title p {
+            margin-bottom: 0.25rem;
             color: #fcd34d;
-            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .header-guardians {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .guardian-img {
+            width: 6rem;
+            height: 8rem;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .search-filters {
@@ -72,12 +65,16 @@
             flex-direction: column;
             gap: 0.75rem;
             align-items: center;
+            margin-top: 1rem;
         }
 
         .search-with-stars {
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .search-star {
@@ -87,37 +84,20 @@
             flex-shrink: 0;
         }
 
-        @media (min-width: 768px) {
-            .search-filters {
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .search-star {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-        }
-
         .search-input {
+            flex: 1;
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
             border: 2px solid #92400e;
-            background: #fef3c7;
+            background: white;
             color: #78350f;
             font-size: 1rem;
-            width: 100%;
-            max-width: 300px;
+            min-width: 200px;
         }
 
         .search-input:focus {
             outline: none;
             border-color: #f59e0b;
-        }
-
-        .search-input::placeholder {
-            color: #b45309;
         }
 
         .filter-label {
@@ -139,10 +119,9 @@
         /* Main Content */
         main {
             flex: 1;
+            padding: 2rem 1rem;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem 1rem;
-            width: 100%;
         }
 
         .library-frame {
@@ -161,25 +140,6 @@
             box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .library-molding {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 1rem;
-            background: linear-gradient(to bottom, #92400e, #78350f);
-        }
-
-        .library-molding.top {
-            top: 0;
-            border-radius: 0.75rem 0.75rem 0 0;
-        }
-
-        .library-molding.bottom {
-            bottom: 0;
-            border-radius: 0 0 0.75rem 0.75rem;
-        }
-
-        /* Bookshelf */
         .bookshelf {
             margin-bottom: 1.5rem;
         }
@@ -192,38 +152,31 @@
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
+        .bookshelf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .bookshelf-number {
+            color: #fef3c7;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
         .books-container {
             display: flex;
             align-items: flex-end;
-            justify-content: center;
             gap: 0.25rem;
             min-height: 160px;
-            padding-bottom: 0.75rem;
             flex-wrap: wrap;
         }
 
-        /* Alineación alternativa de estantes */
-        .books-container.align-left {
-            justify-content: flex-start;
-            padding-left: 0.5rem;
-        }
-
-        .books-container.align-right {
-            justify-content: flex-end;
-            padding-right: 0.5rem;
-        }
-
-        .shelf-board {
-            height: 1.5rem;
-            background: linear-gradient(to bottom, #92400e, #78350f);
-            border-radius: 0.125rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Book Button */
+        /* Book */
         .book {
             position: relative;
-            width: 2.5rem;
+            width: 3rem;
             height: 10rem;
             border-radius: 0.125rem;
             background: #8B4513;
@@ -239,23 +192,12 @@
             box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .book.unavailable {
-            cursor: not-allowed;
-            opacity: 0.4;
-            filter: grayscale(100%);
-            box-shadow: none;
-        }
-
-        .book.unavailable:hover {
-            transform: none;
-        }
-
         .book-spine {
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 0.5rem;
+            width: 0.25rem;
             background: rgba(0, 0, 0, 0.2);
         }
 
@@ -290,74 +232,56 @@
         }
 
         .book-label-text {
-            font-size: 0.5rem;
+            font-size: 0.375rem;
             color: rgba(255, 255, 255, 0.8);
             font-weight: bold;
             line-height: 1.2;
         }
 
-        .book-label-author {
-            font-size: 0.4rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 0.125rem;
-        }
-
-        /* Special Book (Enciclopedia) */
+        /* Special Books */
         .special-book {
             position: relative;
             width: 4rem;
             height: 10rem;
             border-radius: 0.125rem;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
             transform: translateY(0);
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
             text-decoration: none;
-            display: block;
+            color: white;
         }
 
         .special-book:hover {
             transform: translateY(-4px) scale(1.05);
-            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .special-book-texture {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
-        }
-
-        .special-book-decoration {
-            position: absolute;
+        .special-book .book-decoration {
             left: 0.25rem;
-            top: 0.5rem;
-            bottom: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
-        .special-book-line {
-            width: 0.25rem;
-            height: 0.125rem;
-            background: rgba(255, 255, 255, 0.2);
+        .special-book .book-label {
+            font-size: 0.5rem;
         }
 
-        .special-book-label {
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.75rem;
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #991b1b, #dc2626, #b91c1c);
             color: white;
-            font-weight: bold;
-            letter-spacing: 0.1em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            line-height: 1.2;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(-180deg);
+            padding: 1.5rem;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-content small {
+            font-size: 0.75rem;
+            opacity: 0.8;
         }
 
         /* Modal */
@@ -365,7 +289,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.6);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -431,10 +355,6 @@
             font-size: 1rem;
         }
 
-        .modal-info strong {
-            font-weight: bold;
-        }
-
         .modal-status-available {
             color: #16a34a;
             font-weight: bold;
@@ -445,183 +365,52 @@
             font-weight: bold;
         }
 
-        .modal-formats {
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-formats h3 {
-            font-size: 1.125rem;
-            font-weight: bold;
-            color: #78350f;
-            margin-bottom: 0.75rem;
-        }
-
-        .formats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-
-        .format-button {
+        .read-pdf-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            border: none;
-            background: linear-gradient(to bottom right, #d97706, #b45309);
+            background: linear-gradient(to right, #dc2626, #b91c1c);
             color: white;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 1rem;
             transition: all 0.2s ease;
         }
 
-        .format-button:hover {
-            background: linear-gradient(to bottom right, #b45309, #92400e);
+        .read-pdf-btn:hover {
+            background: linear-gradient(to right, #b91c1c, #991b1b);
             transform: scale(1.02);
         }
 
-        .format-button:active {
-            transform: scale(0.98);
-        }
-
-        .format-icon {
-            font-size: 1.25rem;
-        }
-
-        .modal-message {
+        .no-pdf-message {
             background: #fef3c7;
-            border: 2px solid #d97706;
+            border: 2px solid #f59e0b;
             border-radius: 0.5rem;
             padding: 1rem;
             text-align: center;
         }
 
-        .modal-message p {
-            color: #92400e;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-message small {
-            color: #b45309;
-        }
-
-        .modal-footer {
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 2px solid #f59e0b;
-        }
-
-        .modal-footer p {
-            color: #b45309;
-            font-size: 0.875rem;
-            text-align: center;
-        }
-
-        .modal-footer code {
-            background: #fef3c7;
-            padding: 0.125rem 0.5rem;
-            border-radius: 0.25rem;
-            font-family: monospace;
-            font-size: 0.75rem;
-        }
-
-        /* No Results */
-        .no-results {
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-
-        .no-results h2 {
-            font-size: 1.5rem;
+        .no-pdf-message p {
             color: #78350f;
-            margin-bottom: 0.5rem;
-        }
-
-        .no-results p {
-            color: #92400e;
-        }
-
-        /* Instructions */
-        .instructions {
-            margin-top: 2rem;
-            background: #fef3c7;
-            border: 2px solid #92400e;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .instructions h3 {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #78350f;
-            margin-bottom: 1rem;
-        }
-
-        .instructions ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .instructions li {
-            color: #92400e;
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .instructions li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #d97706;
-        }
-
-        .instructions code {
-            background: #fde68a;
-            padding: 0.125rem 0.5rem;
-            border-radius: 0.25rem;
-            font-family: monospace;
-            font-size: 0.875rem;
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(to right, #78350f, #92400e, #78350f);
-            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-content p {
-            color: #fef3c7;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-content small {
-            color: #fcd34d;
             font-size: 0.875rem;
         }
 
         /* Responsive */
         @media (max-width: 640px) {
             .book {
-                width: 1.8rem;
+                width: 2.25rem;
                 height: 7rem;
             }
 
-            .books-container {
-                gap: 0.125rem;
-                min-height: 110px;
+            .book-label {
+                width: 1rem;
+            }
+
+            .book-label-text {
+                font-size: 0.3125rem;
             }
 
             .special-book {
@@ -629,8 +418,8 @@
                 height: 7rem;
             }
 
-            .special-book-label {
-                font-size: 0.75rem;
+            .special-book .book-label {
+                font-size: 0.4375rem;
             }
 
             .bookshelf-bg {
@@ -638,124 +427,55 @@
                 min-height: 140px;
             }
 
-            .shelf-board {
-                height: 1rem;
-            }
-
             .header-title h1 {
-                font-size: 1.2rem;
+                font-size: 1.8rem;
             }
 
-            .header-title p {
-                font-size: 0.8rem;
+            .search-star {
+                width: 2rem;
+                height: 2rem;
             }
-
-            .modal-content {
-                padding: 1rem;
-            }
-
-            .modal-title {
-                font-size: 1.25rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 1.5rem 1rem 0.5rem 1rem;
-            }
-        }
-
-        /* ========================================
-           ESTATUAS GUARDIANAS - Shisa y Kitsune
-           ======================================== */
-
-        .header-with-guardians {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .guardians-container {
-            display: flex;
-            align-items: flex-end;
-            gap: 0.25rem;
-            height: 3.5rem;
-        }
-
-        .guardian-statue {
-            width: 7.5rem;
-            height: 10.5rem;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
-        }
-
-        .guardian-shisa {
-            width: 9rem;
-            height: 10.5rem;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
         }
 
         @media (min-width: 768px) {
-            .guardian-statue {
-                width: 9rem;
-                height: 12rem;
+            header {
+                padding: 1.5rem 1rem 0.5rem 1rem;
             }
 
-            .guardian-shisa {
-                width: 11rem;
-                height: 12rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-with-guardians {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .guardian-statue {
-                width: 6rem;
-                height: 8.4rem;
-            }
-
-            .guardian-shisa {
-                width: 7.2rem;
-                height: 8.4rem;
+            .search-filters {
+                margin-top: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="header-content">
-            <div class="header-title">
-                <div class="header-with-guardians">
-                    <!-- Guardianes izquierdos: Shisa -->
-                    <div class="guardians-container">
-                        <!-- Shisa Okinawense - Imagen real -->
-                        <img class="guardian-shisa" src="https://tabimaniajapan.com/wp-content/uploads/2020/04/Identity-shisa-840x1024.jpg" alt="Shisa Okinawense" />
-                    </div>
+            <!-- Título con guardianes -->
+            <div class="header-guardians">
+                <!-- Guardianes izquierdos -->
+                <div class="header-guardians">
+                    <img class="guardian-img" src="https://tabimaniajapan.com/wp-content/uploads/2020/04/Identity-shisa-840x1024.jpg" alt="Shisa Okinawense">
+                    <img class="guardian-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGIIXQQbKEMEY4_D-4LPmTKyi1TaTNXKbABA&s" alt="Maneki Neko">
+                </div>
 
-                    <!-- Maneki Neko - Gato de la Suerte (en el centro) -->
-                    <img class="guardian-statue" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGIIXQQbKEMEY4_D-4LPmTKyi1TaTNXKbABA&s" alt="Maneki Neko" />
+                <!-- Título -->
+                <div class="header-title">
+                    <h1>BibliotecApp</h1>
+                </div>
 
-                    <h1 id="pageTitle"></h1>
-
-                    <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
-                    <div class="guardians-container">
-                        <!-- Kitsune de Inari - Imagen real -->
-                        <img class="guardian-statue" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLSZ0VAv8l4o2GJqzpbSUi1sg3ei4IX3S6-A&s" alt="Zorro Kitsune" />
-
-                        <!-- Shisa Okinawense - Imagen real -->
-                        <img class="guardian-shisa" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" alt="Shisa Okinawense" />
-                    </div>
+                <!-- Guardianes derechos -->
+                <div class="header-guardians">
+                    <img class="guardian-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLSZ0VAv8l4o2GJqzpbSUi1sg3ei4IX3S6-A&s" alt="Zorro Kitsune">
+                    <img class="guardian-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" alt="Shisa Okinawense">
                 </div>
             </div>
 
+            <!-- Barra de búsqueda -->
             <div class="search-filters">
                 <div class="search-with-stars">
-                    <!-- Estrella dorada de 5 puntas - izquierda del input -->
+                    <!-- Estrella dorada izquierda -->
                     <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -764,30 +484,22 @@
                                 <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
                             </linearGradient>
                         </defs>
-                        <polygon
-                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                            fill="url(#goldStar)"
-                            stroke="#B8860B"
-                            stroke-width="2"
-                        />
+                        <polygon points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40" fill="url(#goldStar)" stroke="#B8860B" stroke-width="2" />
                     </svg>
 
+                    <!-- Input de búsqueda -->
                     <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
 
-                    <!-- Estrella roja de 5 puntas - derecha del input -->
+                    <!-- Estrella roja derecha -->
                     <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#B91C1C;stop-opacity:1" />
                                 <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
                             </linearGradient>
                         </defs>
-                        <polygon
-                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                            fill="url(#redStar)"
-                            stroke="#7F1D1D"
-                            stroke-width="2"
-                        />
+                        <polygon points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40" fill="url(#redStar)" stroke="#7F1D1D" stroke-width="2" />
                     </svg>
                 </div>
 
@@ -799,232 +511,191 @@
         </div>
     </header>
 
+    <!-- Main Content -->
     <main>
         <div class="library-frame">
             <div class="library-inner">
-                <div class="library-molding top"></div>
-                
-                <!-- Estantes de Libros -->
                 <div id="bookshelvesContainer"></div>
-                
-                <div class="library-molding bottom"></div>
             </div>
-        </div>
-
-        <div class="instructions">
-            <h3>📖 Cómo activar libros</h3>
-            <ul>
-                <li>Cree una carpeta <code>books</code> en el mismo directorio que este archivo</li>
-                <li>Dentro de <code>books</code>, cree carpetas numeradas: <code>books/1/</code>, <code>books/2/</code>, etc.</li>
-                <li>Agregue archivos PDF, EPUB, MOBI o AZW3 en cada carpeta de libro</li>
-                <li>Edite la función <code>generateBooks()</code> para cambiar el estado de <code>'unavailable'</code> a <code>'available'</code></li>
-            </ul>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>📚 Biblioteca Digital - Colección completa</p>
+            <p>📚 BibliotecApp - Tu puerta al conocimiento universal 📚</p>
             <small>© <span id="currentYear"></span> Todos los derechos reservados</small>
         </div>
     </footer>
 
-    <!-- Modal para detalles del libro -->
+    <!-- Modal -->
     <div id="bookModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle" class="modal-title"></h2>
                 <button id="modalClose" class="modal-close">×</button>
             </div>
-            <div id="modalInfo" class="modal-info"></div>
-            <div id="modalFormats" class="modal-formats"></div>
-            <div class="modal-footer">
-                <p>Ruta: <code id="modalPath"></code></p>
+            <div class="modal-info">
+                <p><strong>Autor:</strong> <span id="modalAuthor"></span></p>
+                <p><strong>Año:</strong> <span id="modalYear"></span></p>
+                <p><strong>Estado:</strong> <span id="modalStatus"></span></p>
             </div>
+            <div id="modalActions"></div>
         </div>
     </div>
 
     <script>
-        // ========================================
-        // DATOS DE LIBROS
-        // ========================================
-
-        const titles = [
-            'Cien Años de Soledad', 'El Quijote', 'La Odisea', '1984', 'Orgullo y Prejuicio',
-            'Crimen y Castigo', 'Moby Dick', 'Guerra y Paz', 'Ulises', 'Divina Comedia',
-            'Don Juan Tenorio', 'El Principito', 'El Alquimista', 'Los Miserables', 'Anna Karenina',
-            'La Ilíada', 'Hamlet', 'Macbeth', 'Romeo y Julieta', 'Otelo',
-            'El Gran Gatsby', 'Matar a un Ruiseñor', 'La Metamorfosis', 'El Señor de los Anillos', 'El Hobbit',
-            'Harry Potter', 'Dune', 'Fundación', 'Neuromante', 'Fahrenheit 451',
-            'Brave New World', 'La Rebelión de Atlas', 'El Código Da Vinci', 'El Nombre de la Rosa', 'La Sombra del Viento',
-            'Como Agua para Chocolate', 'Pedro Páramo', 'Rayuela', 'Ficciones', 'El Aleph',
-            'La Casa de los Espíritus', 'Kafka en la Orilla', '1Q84', 'El Viento en los Sauces', 'Alicia en el País de las Maravillas',
-            'Peter Pan', 'Las Crónicas de Narnia', 'El Pequeño Príncipe', 'El Lobo Estepario', 'Siddhartha',
-            'Demian', 'El Juego de las Sillas', 'La Nausea', 'El Extranjero', 'La Peste',
-            'El Tunel', 'Sobre Héroes y Tumbas', 'Boquitas Pintadas', 'El Amor en los Tiempos del Cólera', 'Crónica de una Muerte Anunciada',
-            'El Coronel no Tiene Quien le Escriba', 'La Casa Verde', 'Conversación en la Catedral', 'La Fiesta del Chivo', 'Travesuras de la Niña Mala',
-            'La Ciudad y los Perros', 'Pantaleón y las Visitadoras', 'Los Cachorros', '¿Quién Mató a Palomino Molero?', 'La Tía Julia y el Escribidor',
-            'Lituma en los Andes', 'Los Cuervos', 'La Casa de Asterión', 'Borges y Yo', 'El Sur',
-            'El Jardín de Senderos que se Bifurcan', 'La Biblioteca de Babel', 'El Zahir', 'La Muerte y la Brújula', 'El Inmortal',
-            'El Otro, el Mismo', 'El Hacedor', 'Elogio de la Sombra', 'El Oro de los Tigres', 'La Rosa Profunda',
-            'El Libro de Arena', 'Historia Universal de la Infamia', 'Fervor de Buenos Aires', 'Luna de Enfrente', 'Cuaderno San Martín',
-            'El Amor, la Muerte y otros Temas', 'Antología Personal', 'Nueva Antología Personal', 'Textos Cautivos', 'Biblioteca Personal',
-            'Obras Completas I', 'Obras Completas II', 'Obras Completas III', 'Obras Completas IV', 'Obras Completas V',
-            'Poesía Completa', 'Cuentos Completos', 'Ensayos Completos', 'Prólogos', 'Discursos',
-            'Entrevistas', 'Cartas', 'Diarios', 'Autobiografías', 'Biografías',
-            'Historias', 'Leyendas', 'Mitología', 'Filosofía', 'Religión',
-            'Ciencia', 'Tecnología', 'Arte', 'Música', 'Cine',
-            'Teatro', 'Danza', 'Pintura', 'Escultura', 'Arquitectura',
-            'Fotografía', 'Diseño', 'Moda', 'Gastronomía', 'Viajes',
-            'Geografía', 'Historia', 'Política', 'Economía', 'Sociología',
-            'Psicología', 'Psiquiatría', 'Medicina', 'Biología', 'Física',
-            'Química', 'Matemáticas', 'Astronomía', 'Geología', 'Ecología',
-            'Botánica', 'Zoología', 'Antropología', 'Arqueología', 'Paleontología',
-            'Genética', 'Neurociencia', 'Robótica', 'Inteligencia Artificial', 'Realidad Virtual',
-            'Blockchain', 'Criptomonedas', 'Big Data', 'Machine Learning', 'Deep Learning',
-            'Ciberseguridad', 'Cloud Computing', 'IoT', '5G', 'Realidad Aumentada',
-            'Impresión 3D', 'Nanotecnología', 'Biotecnología', 'Fusión Nuclear', 'Energía Renovable',
-            'Sostenibilidad', 'Cambio Climático', 'Medio Ambiente', 'Desarrollo Sostenible', 'Economía Circular',
-            'E-commerce', 'Marketing Digital', 'Redes Sociales', 'SEO', 'SEM',
-            'Content Marketing', 'Email Marketing', 'Inbound Marketing', 'Outbound Marketing', 'Growth Hacking',
-            'Product Management', 'Project Management', 'Agile', 'Scrum', 'Kanban',
-            'DevOps', 'CI/CD', 'Docker', 'Kubernetes', 'Terraform',
-            'AWS', 'Azure', 'Google Cloud', 'Heroku', 'Vercel',
-            'Netlify', 'GitHub', 'GitLab', 'Bitbucket', 'Jira',
-            'Confluence', 'Slack', 'Zoom', 'Teams', 'Discord',
-            'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Marvel'
+        // Base de datos de libros
+        const books = [
+            { id: 1, title: 'Tao Te King', author: 'Lao Tse', year: 1998, status: 'available', color: '#8B4513', pdfUrl: 'https://app.pulsar.uba.ar/default.aspx/Resources/T69768/LaoTseTaoTeKing.pdf' },
+            { id: 2, title: 'I Ching', author: 'Anónimo', year: 2001, status: 'available', color: '#A0522D', pdfUrl: 'https://app.pulsar.uba.ar/default.aspx/libweb/T69769/RichardWilhelmIChing.pdf' },
+            { id: 3, title: 'Así habló Zaratustra', author: 'Friedrich Nietzsche', year: 2002, status: 'available', color: '#CD853F', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/Resources/T70781/AsiHabloZaratustraManga.pdf' },
+            { id: 4, title: 'El mundo como voluntad y representación', author: 'Arthur Schopenhauer', year: 2003, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
+            { id: 5, title: 'Libro Tibetano de los Muertos', author: 'Anónimo', year: 2004, status: 'available', color: '#B8860B', pdfUrl: 'https://budismo.org.mx/material/estudio/talleresespeciales/06-libro-tibetano-de-los-muertos.pdf' },
+            { id: 6, title: 'Matemáticas Básicas', author: 'Varios Autores', year: 2005, status: 'available', color: '#556B2F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_matematicas_basicas-_completo-_09-15.pdf' },
+            { id: 7, title: 'Álgebra Lineal', author: 'Varios Autores', year: 2006, status: 'available', color: '#8FBC8F', pdfUrl: 'https://linear.axler.net/LADR4e.pdf' },
+            { id: 8, title: 'Geometría Analítica', author: 'Varios Autores', year: 2007, status: 'available', color: '#2E8B57', pdfUrl: 'https://bdigital.uncu.edu.ar/objetos_digitales/7224/librogeoing.pdf' },
+            { id: 9, title: 'Cálculo Diferencial e Integral', author: 'Varios Autores', year: 2008, status: 'available', color: '#3CB371', pdfUrl: 'https://www.cimat.mx/ciencia_para_jovenes/bachillerato/libros/Wooton.pdf' },
+            { id: 10, title: 'Historia de las Matemáticas', author: 'Varios Autores', year: 2009, status: 'available', color: '#20B2AA', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 11, title: 'Pensamiento Matemático', author: 'Varios Autores', year: 2010, status: 'available', color: '#4682B4', pdfUrl: 'https://archive.org/details/matematicas-basicas-by-alan-s.-tussy-diane-r-koen' },
+            { id: 12, title: 'La República', author: 'Platón', year: 2011, status: 'available', color: '#5F9EA0', pdfUrl: 'http://bibliotecadigital.econ.uba.ar/download/Pe/180266.pdf' },
+            { id: 13, title: 'Poética', author: 'Aristóteles', year: 2012, status: 'available', color: '#6495ED', pdfUrl: 'https://bibliotecavirtual.unl.edu.ar/publicaciones/index.php/HilodelaFabula/en/article/download/7340/11177/22950' },
+            { id: 14, title: 'Historia de la Filosofía', author: 'Varios Autores', year: 2013, status: 'available', color: '#7B68EE', pdfUrl: 'http://www.derecho.uba.ar/publicaciones/lye/revistas/92/el-estado-ideal-de-republica-y-sus-relaciones-internacionales-platon-en-clave-cosmopolita.pdf' },
+            { id: 15, title: 'Filosofía Antigua', author: 'Varios Autores', year: 2014, status: 'available', color: '#483D8B', pdfUrl: 'http://www.unl.edu.ar/ingreso/cursos/filosoficos/wp-content/uploads/sites/11/2016/11/05-Plat%C3%B3nRep%C3%BAblica.pdf' },
+            { id: 16, title: 'Humano, Demasiado Humano', author: 'Friedrich Nietzsche', year: 2015, status: 'available', color: '#8B008B', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.140/pr.140.pdf' },
+            { id: 17, title: 'Historia de la Filosofía en México', author: 'Varios Autores', year: 2016, status: 'available', color: '#9932CC', pdfUrl: 'https://perio.unlp.edu.ar/catedras/lecturayescritura/wp-content/uploads/sites/16/2020/03/1-La-Rep%C3%BAblica-de-Plat%C3%B3n-Libro-IV-Cap%C3%ADtulo-I-a-VII_compressed.pdf' },
+            { id: 18, title: 'Teoría de la Música', author: 'Varios Autores', year: 2017, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 19, title: 'Armonía Musical', author: 'Varios Autores', year: 2018, status: 'available', color: '#C71585', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 20, title: 'Teoría del Arte', author: 'Varios Autores', year: 2019, status: 'available', color: '#DB7093', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/libros/pm.416/pm.416.pdf' },
+            { id: 21, title: 'Historia del Arte', author: 'Varios Autores', year: 2020, status: 'available', color: '#A0522D', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 22, title: 'Arte en Chile', author: 'Varios Autores', year: 2021, status: 'available', color: '#CD853F', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/libros/pm.416/pm.416.pdf' },
+            { id: 23, title: 'Artes Plásticas', author: 'Varios Autores', year: 2022, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/libros/pm.416/pm.416.pdf' },
+            { id: 24, title: 'Astronomía Básica', author: 'Varios Autores', year: 2023, status: 'available', color: '#B8860B', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 25, title: 'Sistema Solar', author: 'Varios Autores', year: 2024, status: 'available', color: '#9932CC', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 26, title: 'Conceptos de Astronomía', author: 'Varios Autores', year: 2025, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 27, title: 'Astrónomos', author: 'Varios Autores', year: 2026, status: 'available', color: '#2F4F4F', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 28, title: 'Astronomía en la Escuela', author: 'Varios Autores', year: 2027, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 29, title: 'Mitología Griega', author: 'Varios Autores', year: 2028, status: 'available', color: '#6495ED', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 30, title: 'Dioses y Héroes de la Mitología Griega', author: 'Varios Autores', year: 2029, status: 'available', color: '#7B68EE', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 31, title: 'Historia Mundial', author: 'Varios Autores', year: 2010, status: 'available', color: '#483D8B', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 32, title: 'Historia Universal Contemporánea', author: 'Varios Autores', year: 2011, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 33, title: 'Historia de México', author: 'Varios Autores', year: 2012, status: 'available', color: '#2E8B57', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 34, title: 'Viaje por la Historia de México', author: 'Varios Autores', year: 2013, status: 'available', color: '#3CB371', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 35, title: 'Historia del Arte en México', author: 'Varios Autores', year: 2014, status: 'available', color: '#20B2AA', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 36, title: 'Biografía del Che Guevara', author: 'Che Guevara', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 37, title: 'José de San Martín', author: 'Varios Autores', year: 2016, status: 'available', color: '#556B2F', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 38, title: 'Simón Bolívar', author: 'Varios Autores', year: 2017, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 39, title: 'San Martín: Soldado Argentino', author: 'Varios Autores', year: 2018, status: 'available', color: '#2E8B57', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 40, title: 'Bolívar: Libertador', author: 'Varios Autores', year: 2019, status: 'available', color: '#3CB371', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 41, title: 'Física General', author: 'Varios Autores', year: 2020, status: 'available', color: '#9932CC', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_fisica_general.pdf' },
+            { id: 42, title: 'Fundamentos de Física', author: 'Varios Autores', year: 2021, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_fisica_general.pdf' },
+            { id: 43, title: 'Física Universitaria', author: 'Varios Autores', year: 2022, status: 'available', color: '#C71585', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_fisica_general.pdf' },
+            { id: 44, title: 'Física Básica para Ingenieros', author: 'Varios Autores', year: 2023, status: 'available', color: '#DB7093', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_fisica_general.pdf' },
+            { id: 45, title: 'Química Básica', author: 'Varios Autores', year: 2024, status: 'available', color: '#A0522D', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_quimica_basica.pdf' },
+            { id: 46, title: 'Química General', author: 'Varios Autores', year: 2025, status: 'available', color: '#CD853F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_quimica_general.pdf' },
+            { id: 47, title: 'Química Orgánica', author: 'Varios Autores', year: 2026, status: 'available', color: '#D2691E', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_quimica_organica.pdf' },
+            { id: 48, title: 'Química: Conceptos Básicos', author: 'Varios Autores', year: 2027, status: 'available', color: '#B8860B', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_quimica_conceptos_basicos.pdf' },
+            { id: 49, title: 'Química I', author: 'Varios Autores', year: 2028, status: 'available', color: '#9932CC', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_quimica_i.pdf' },
+            { id: 50, title: 'Informática Básica', author: 'Varios Autores', year: 2009, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_informatica_basica.pdf' },
+            { id: 51, title: 'Computación Básica', author: 'Varios Autores', year: 2010, status: 'available', color: '#2E8B57', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_informatica_basica.pdf' },
+            { id: 52, title: 'Python: Aprende a Programar', author: 'Varios Autores', year: 2011, status: 'available', color: '#3CB371', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_python_basico.pdf' },
+            { id: 53, title: 'Tutorial de Python 3', author: 'Varios Autores', year: 2012, status: 'available', color: '#20B2AA', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_python_3.pdf' },
+            { id: 54, title: 'Programador Python Junior', author: 'Varios Autores', year: 2013, status: 'available', color: '#4682B4', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_python_intermedio.pdf' },
+            { id: 55, title: 'Bases de Datos', author: 'Varios Autores', year: 2014, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_bases_de_datos.pdf' },
+            { id: 56, title: 'Fundamentos de Permacultura', author: 'Varios Autores', year: 2015, status: 'available', color: '#6495ED', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 57, title: 'La Esencia de la Permacultura', author: 'Varios Autores', year: 2016, status: 'available', color: '#7B68EE', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 58, title: 'Manual de Hidroponía', author: 'Varios Autores', year: 2017, status: 'available', color: '#8FBC8F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 59, title: 'ABC de la Hidroponía', author: 'Varios Autores', year: 2018, status: 'available', color: '#2F4F4F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 60, title: 'Manual Básico de Hidroponía', author: 'Varios Autores', year: 2019, status: 'available', color: '#3CB371', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 61, title: 'Sistema Hidropónico', author: 'Varios Autores', year: 2020, status: 'available', color: '#20B2AA', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 62, title: 'Manual Básico de Piscicultura', author: 'Varios Autores', year: 2021, status: 'available', color: '#4682B4', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 63, title: 'Piscicultura: Manual Práctico', author: 'Varios Autores', year: 2022, status: 'available', color: '#5F9EA0', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 64, title: 'Manual de Construcción con Tierra', author: 'Varios Autores', year: 2023, status: 'available', color: '#6495ED', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 65, title: 'Bioconstrucción', author: 'Varios Autores', year: 2024, status: 'available', color: '#7B68EE', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 66, title: 'Taller de Bioconstrucción', author: 'Varios Autores', year: 2025, status: 'available', color: '#483D8B', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 67, title: 'Manual de Carpintería', author: 'Varios Autores', year: 2026, status: 'available', color: '#8FBC8F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 68, title: 'Manual de Muebles de Madera', author: 'Varios Autores', year: 2027, status: 'available', color: '#9932CC', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 69, title: 'Manual Básico de Apicultura', author: 'Varios Autores', year: 2028, status: 'available', color: '#BA55D3', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 70, title: 'Guía Práctica del Apicultor', author: 'Varios Autores', year: 2029, status: 'available', color: '#C71585', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 71, title: 'Manual de Apicultura', author: 'Varios Autores', year: 2030, status: 'available', color: '#DB7093', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 72, title: 'Guía de la Abeja Reina', author: 'Varios Autores', year: 2031, status: 'available', color: '#A0522D', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 73, title: 'Mecatrónica Básica', author: 'Varios Autores', year: 2032, status: 'available', color: '#CD853F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 74, title: 'Electrónica para Mecatrónica', author: 'Varios Autores', year: 2033, status: 'available', color: '#D2691E', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 75, title: 'Robótica Aplicada', author: 'Varios Autores', year: 2034, status: 'available', color: '#B8860B', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 76, title: 'Neurociencia para Ingenieros', author: 'Varios Autores', year: 2035, status: 'available', color: '#9932CC', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 77, title: 'Economía Solidaria', author: 'Varios Autores', year: 2036, status: 'available', color: '#BA55D3', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 78, title: 'Libro de los Muertos Egipcio', author: 'Anónimo', year: 2037, status: 'available', color: '#556B2F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 79, title: 'Textos Budistas', author: 'Anónimo', year: 2038, status: 'available', color: '#8FBC8F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 80, title: 'Sutras del Budismo', author: 'Anónimo', year: 2039, status: 'available', color: '#2E8B57', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 81, title: 'Vedanta', author: 'Anónimo', year: 2040, status: 'available', color: '#3CB371', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 82, title: 'Vedas', author: 'Anónimo', year: 2041, status: 'available', color: '#20B2AA', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 83, title: 'Fundamentos de Lingüística', author: 'Varios Autores', year: 2042, status: 'available', color: '#4682B4', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 84, title: 'Historia del Lenguaje', author: 'Varios Autores', year: 2043, status: 'available', color: '#5F9EA0', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 85, title: 'Lingüística General', author: 'Varios Autores', year: 2044, status: 'available', color: '#6495ED', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 86, title: 'Análisis del Discurso', author: 'Varios Autores', year: 2045, status: 'available', color: '#7B68EE', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 87, title: 'Fonología y Fonética', author: 'Varios Autores', year: 2046, status: 'available', color: '#483D8B', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 88, title: 'Teoría de la Literatura', author: 'Varios Autores', year: 2047, status: 'available', color: '#8FBC8F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 89, title: 'Historia de la Literatura', author: 'Varios Autores', year: 2048, status: 'available', color: '#9932CC', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 90, title: 'Análisis Literario', author: 'Varios Autores', year: 2049, status: 'available', color: '#BA55D3', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 91, title: 'Crítica Literaria', author: 'Varios Autores', year: 2050, status: 'available', color: '#C71585', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 92, title: 'Literatura Comparada', author: 'Varios Autores', year: 2051, status: 'available', color: '#DB7093', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 93, title: 'Diseño Arquitectónico', author: 'Varios Autores', year: 2052, status: 'available', color: '#A0522D', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 94, title: 'Historia de la Arquitectura', author: 'Varios Autores', year: 2053, status: 'available', color: '#CD853F', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 95, title: 'Urbanismo', author: 'Varios Autores', year: 2054, status: 'available', color: '#D2691E', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 96, title: 'Arquitectura Sostenible', author: 'Varios Autores', year: 2055, status: 'available', color: '#B8860B', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 97, title: 'Teoría de la Arquitectura', author: 'Varios Autores', year: 2056, status: 'available', color: '#9932CC', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/Matematicas_Basicas2023.pdf' },
+            { id: 98, title: 'Cien Años de Soledad', author: 'Gabriel García Márquez', year: 2057, status: 'available', color: '#8B4513', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/scholarship/T64701/CienAnosDeSoledadLibroCompleto.pdf' },
+            { id: 99, title: 'Don Quijote de la Mancha', author: 'Miguel de Cervantes', year: 2058, status: 'available', color: '#A0522D', pdfUrl: 'https://sedici.unlp.edu.ar/bitstream/handle/10915/61575/Documento_completo__.pdf?sequence=1&isAllowed=y' },
+            { id: 100, title: 'La Ilíada', author: 'Homero', year: 2059, status: 'available', color: '#CD853F', pdfUrl: 'https://colegiolospensamientos.cl/wp-content/uploads/2023/09/Octubre-I%C2%B0M-La-Iliada-Homero.pdf' },
+            { id: 101, title: '1984', author: 'George Orwell', year: 2060, status: 'available', color: '#B8860B', pdfUrl: 'https://www.philosophia.cl/biblioteca/orwell/1984.pdf' },
+            { id: 102, title: 'Orgullo y Prejuicio', author: 'Jane Austen', year: 2061, status: 'available', color: '#556B2F', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/orgullo_y_prejuicio_austen.pdf' },
+            { id: 103, title: 'Crimen y Castigo', author: 'Fiódor Dostoyevski', year: 2062, status: 'available', color: '#8FBC8F', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Fedor%20Dostoievski%20-%20Crimen%20y%20castigo.pdf' },
+            { id: 104, title: 'Guerra y Paz', author: 'León Tolstói', year: 2063, status: 'available', color: '#9932CC', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Le%C3%B3n%20Tolstoi%20Guerra%20y%20Paz.pdf' },
+            { id: 105, title: 'La Divina Comedia', author: 'Dante Alighieri', year: 2064, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dante%20Alighieri%20Divina%20comedia.pdf' },
+            { id: 106, title: 'La Odisea', author: 'Homero', year: 2065, status: 'available', color: '#D2691E', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
+            { id: 107, title: 'Moby Dick', author: 'Herman Melville', year: 2066, status: 'available', color: '#C71585', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
+            { id: 108, title: 'Ana Karenina', author: 'León Tolstói', year: 2067, status: 'available', color: '#DB7093', pdfUrl: 'https://www.agr-tc.pt/bibliotecadigital/aetc/download/674/Ana%20Karenina%20-%20Leon%20Tolstoi.pdf' },
+            { id: 109, title: 'Fahrenheit 451', author: 'Ray Bradbury', year: 2068, status: 'available', color: '#556B2F', pdfUrl: 'https://lexiconic.net/english/F451.pdf' },
+            { id: 110, title: 'Neuromante', author: 'William Gibson', year: 2069, status: 'available', color: '#9932CC', pdfUrl: ' 'https://dn720006.ca.archive.org/0/items/neuromancer_202209/neuromancer.pdf' },
+            { id: 111, title: 'Pedro Páramo', author: 'Juan Rulfo', year: 2070, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Juan%20Rulfo%20-%20Pedro%20P%C3%A1ramo.pdf' },
+            { id: 112, title: 'Fundación', author: 'Isaac Asimov', year: 2071, status: 'available', color: '#C71585', pdfUrl: 'https://www.mercaba.org/SANLUIS/ALiteratura/Literatura%20contempor%C3%A1nea/Asimov,%20Issac/Fundaci%C3%B3n.PDF' },
+            { id: 113, title: 'Don Juan Tenorio', author: 'José Zorrilla', year: 2072, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Jos%C3%A9%20Zorrilla%20Don%20Juan%20Tenorio.pdf' },
+            { id: 114, title: 'La Casa de los Espíritus', author: 'Isabel Allende', year: 2073, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Isabel%20Allende%20La%20Casa%20de%20los%20Esp%C3%ADritus.pdf' },
+            { id: 115, title: 'Rayuela', author: 'Julio Cortázar', year: 2074, status: 'available', color: '#CD853F', pdfUrl: 'https://seduc.edomex.gob.mx/sites/seduc.edomex.gob.mx/files/padres_familia/fomento_lectura/Julio%20Cortazar%20-%20Rayuela.pdf' },
+            { id: 116, title: 'El Nombre de la Rosa', author: 'Umberto Eco', year: 2075, status: 'available', color: '#556B2F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Umberto%20Eco%20El%20Nombre%20de%20la%20Rosa.pdf' },
+            { id: 117, title: 'El Viento en los Sauces', author: 'Kenneth Grahame', year: 2076, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Grahame-Viento-Sauces.pdf' },
+            { id: 118, title: 'Siddhartha', author: 'Hermann Hesse', year: 2077, status: 'available', color: '#BA55D3', pdfUrl: 'https://cpcglobal.org/publications/Siddhartha%20by%20Hermann%20Hesse.pdf' },
+            { id: 119, title: 'Demián', author: 'Hermann Hesse', year: 2078, status: 'available', color: '#C71585', pdfUrl: 'https://www.holybooks.com/wp-content/uploads/DemianBy-Hermann-Hesse.pdf' },
+            { id: 120, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 2079, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' }
         ];
 
-        const authors = [
-            'Gabriel García Márquez', 'Miguel de Cervantes', 'Homero', 'George Orwell', 'Jane Austen',
-            'Fiodor Dostoyevski', 'Herman Melville', 'León Tolstói', 'James Joyce', 'Dante Alighieri',
-            'José Zorrilla', 'Antoine de Saint-Exupéry', 'Paulo Coelho', 'Victor Hugo', 'León Tolstói',
-            'Homero', 'William Shakespeare', 'William Shakespeare', 'William Shakespeare', 'William Shakespeare',
-            'F. Scott Fitzgerald', 'Harper Lee', 'Franz Kafka', 'J.R.R. Tolkien', 'J.R.R. Tolkien',
-            'J.K. Rowling', 'Frank Herbert', 'Isaac Asimov', 'William Gibson', 'Ray Bradbury',
-            'Aldous Huxley', 'Ayn Rand', 'Dan Brown', 'Umberto Eco', 'Carlos Ruiz Zafón',
-            'Laura Esquivel', 'Juan Rulfo', 'Julio Cortázar', 'Jorge Luis Borges', 'Jorge Luis Borges',
-            'Isabel Allende', 'Haruki Murakami', 'Haruki Murakami', 'Kenneth Grahame', 'Lewis Carroll',
-            'J.M. Barrie', 'C.S. Lewis', 'Antoine de Saint-Exupéry', 'Hermann Hesse', 'Hermann Hesse',
-            'Hermann Hesse', 'Eugène Ionesco', 'Jean-Paul Sartre', 'Albert Camus', 'Albert Camus',
-            'Ernesto Sábato', 'Ernesto Sábato', 'Manuel Puig', 'Gabriel García Márquez', 'Gabriel García Márquez',
-            'Gabriel García Márquez', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
-            'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa', 'Mario Vargas Llosa',
-            'Mario Vargas Llosa', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
-            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
-            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
-            'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges', 'Jorge Luis Borges',
-            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
-            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
-            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
-            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
-            'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos', 'Clásicos',
-            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
-            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
-            'Modernos', 'Modernos', 'Modernos', 'Modernos', 'Modernos',
-            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
-            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
-            'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología', 'Tecnología',
-            'Innovación', 'Innovación', 'Innovación', 'Innovación', 'Innovación',
-            'Innovación', 'Innovación', 'Innovación', 'Innovación', 'Innovación',
-            'Business', 'Business', 'Business', 'Business', 'Business',
-            'Business', 'Business', 'Business', 'Business', 'Business',
-            'Business', 'Business', 'Business', 'Business', 'Business',
-            'DevOps', 'DevOps', 'DevOps', 'DevOps', 'DevOps',
-            'Cloud', 'Cloud', 'Cloud', 'Cloud', 'Cloud',
-            'Herramientas', 'Herramientas', 'Herramientas', 'Herramientas', 'Herramientas',
-            'Colaboración', 'Colaboración', 'Colaboración', 'Colaboración', 'Colaboración',
-            'Diseño', 'Diseño', 'Diseño', 'Diseño', 'Diseño'
-        ];
+        // Variables de estado
+        let allBooks = [...books];
+        let filteredBooks = [...books];
 
-        const bookColors = [
-            '#8B4513', '#A0522D', '#CD853F', '#D2691E', '#B8860B',
-            '#556B2F', '#8FBC8F', '#2F4F4F', '#800020', '#8B0000',
-            '#4A4A4A', '#696969', '#2C3E50', '#34495E', '#5D4037',
-            '#795548', '#8D6E63', '#6D4C41', '#5D4037', '#4E342E'
-        ];
-
-        // ========================================
-        // GENERAR LIBROS
-        // ========================================
-
-        function generateBooks() {
-            const books = [];
-            
-            for (let i = 0; i < 200; i++) {
-                const title = titles[i % titles.length];
-                const author = authors[i % authors.length];
-                
-                // CAMBIA AQUÍ: 'available' = disponible, 'unavailable' = no disponible
-                // También puedes cambiar la probabilidad (0.7 = 30% disponibles)
-                const status = Math.random() > 0.7 ? 'available' : 'unavailable';
-                
-                // Formatos disponibles si el libro está activo
-                let formats = [];
-                if (status === 'available') {
-                    const allFormats = ['pdf', 'epub', 'mobi', 'azw3'];
-                    formats = allFormats.filter(() => Math.random() > 0.3);
-                }
-                
-                const color = bookColors[i % bookColors.length];
-                
-                books.push({
-                    id: i + 1,
-                    title: title,
-                    author: author,
-                    year: 1800 + Math.floor(Math.random() * 225),
-                    status: status,
-                    formats: formats,
-                    color: color
-                });
-            }
-            
-            return books;
-        }
-
-        // ========================================
-        // VARIABLES GLOBALES
-        // ========================================
-
-        let allBooks = generateBooks();
-        let filteredBooks = [...allBooks];
-
-        // ========================================
-        // FUNCIONES DE UTILIDAD
-        // ========================================
-
-        function getAuthorLastName(author) {
-            const parts = author.split(' ');
-            return parts[parts.length - 1];
-        }
-
-        // ========================================
-        // CREAR ELEMENTOS DE LIBROS
-        // ========================================
-
+        // Función para crear elemento de libro
         function createBookElement(book) {
-            const bookDiv = document.createElement('button');
-            bookDiv.className = 'book' + (book.status === 'unavailable' ? ' unavailable' : '');
-            bookDiv.style.backgroundColor = book.color;
-            bookDiv.disabled = book.status === 'unavailable';
+            const height = 100 + Math.floor(Math.random() * 40);
+            const bookDiv = document.createElement('div');
+            bookDiv.className = 'book';
+            bookDiv.style.height = `${height}px`;
+            bookDiv.onclick = () => openBookModal(book);
             
-            if (book.status === 'available') {
-                bookDiv.title = `${book.title} - ${book.author}`;
-            } else {
-                bookDiv.title = 'No disponible';
-            }
+            // Color del libro
+            const innerDiv = document.createElement('div');
+            innerDiv.style.backgroundColor = book.color;
             
-            // Lomo del libro
+            // Efecto de lomo
             const spine = document.createElement('div');
             spine.className = 'book-spine';
-            bookDiv.appendChild(spine);
+            innerDiv.appendChild(spine);
             
-            // Textura del libro
+            // Textura
             const texture = document.createElement('div');
             texture.className = 'book-texture';
-            bookDiv.appendChild(texture);
+            innerDiv.appendChild(texture);
             
-            // Decoración del lomo
+            // Decoración
             const decoration = document.createElement('div');
             decoration.className = 'book-decoration';
             for (let i = 0; i < 3; i++) {
@@ -1032,299 +703,205 @@
                 line.className = 'book-line';
                 decoration.appendChild(line);
             }
-            bookDiv.appendChild(decoration);
+            innerDiv.appendChild(decoration);
             
-            // Etiqueta del libro (solo si está disponible)
-            if (book.status === 'available') {
-                const label = document.createElement('div');
-                label.className = 'book-label';
-                
-                const labelText = document.createElement('div');
-                labelText.className = 'book-label-text';
-                labelText.textContent = book.title.slice(0, 10);
-                
-                const labelAuthor = document.createElement('div');
-                labelAuthor.className = 'book-label-author';
-                labelAuthor.textContent = getAuthorLastName(book.author);
-                
-                label.appendChild(labelText);
-                label.appendChild(labelAuthor);
-                bookDiv.appendChild(label);
+            // Etiqueta del libro
+            const label = document.createElement('div');
+            label.className = 'book-label';
+            const labelText = document.createElement('div');
+            labelText.className = 'book-label-text';
+            let titleText = book.title;
+            if (titleText.length > 12) {
+                titleText = titleText.substring(0, 12) + '...';
             }
+            labelText.textContent = titleText;
+            label.appendChild(labelText);
+            label.appendChild(label);
+            innerDiv.appendChild(label);
             
-            // Event listener
-            bookDiv.addEventListener('click', () => openBookModal(book));
+            bookDiv.appendChild(innerDiv);
             
             return bookDiv;
         }
 
-        function createSpecialBook(title, url, color) {
+        // Función para crear libro especial
+        function createSpecialBook(title, url, color, specialClass) {
             const link = document.createElement('a');
             link.href = url;
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
-            link.className = 'special-book';
+            link.className = `special-book ${specialClass}`;
             link.style.backgroundColor = color;
-            link.title = title;
             
             // Textura
             const texture = document.createElement('div');
-            texture.className = 'special-book-texture';
+            texture.className = 'book-texture';
             link.appendChild(texture);
             
             // Decoración
             const decoration = document.createElement('div');
-            decoration.className = 'special-book-decoration';
+            decoration.className = 'book-decoration';
             for (let i = 0; i < 5; i++) {
                 const line = document.createElement('div');
-                line.className = 'special-book-line';
+                line.className = 'book-line';
                 decoration.appendChild(line);
             }
             link.appendChild(decoration);
             
             // Etiqueta
             const label = document.createElement('div');
-            label.className = 'special-book-label';
+            label.className = 'book-label';
             label.textContent = title;
             link.appendChild(label);
             
             return link;
         }
 
-        function createBookshelf(books, isFirstShelf, alignLeft) {
+        // Función para crear estante
+        function createBookshelf(shelfBooks, shelfIndex, isFirstShelf) {
             const shelfDiv = document.createElement('div');
             shelfDiv.className = 'bookshelf';
             
             const shelfBg = document.createElement('div');
             shelfBg.className = 'bookshelf-bg';
             
+            const header = document.createElement('div');
+            header.className = 'bookshelf-header';
+            
+            const numberSpan = document.createElement('span');
+            numberSpan.className = 'bookshelf-number';
+            numberSpan.textContent = `Estante #${shelfIndex + 1}`;
+            header.appendChild(numberSpan);
+            shelfBg.appendChild(header);
+            
             const booksContainer = document.createElement('div');
             booksContainer.className = 'books-container';
             
-            // Alinear según el parámetro - CORREGIDO: Usar clases CSS puras
-            if (alignLeft) {
-                booksContainer.classList.add('align-left');
-            } else {
-                booksContainer.classList.add('align-right');
-            }
-            
             // Agregar libros especiales si es el primer estante
             if (isFirstShelf) {
-                const nihongoBook = createSpecialBook(
-                    'NihongoApp',
-                    'https://kami00dragon.github.io/NihongoApp/index.html',
-                    '#8B0000'
-                );
-                booksContainer.appendChild(nihongoBook);
-                
-                const aeternusBook = createSpecialBook(
-                    'AeternusApp',
-                    'https://kami00dragon.github.io/AeternusApp/',
-                    '#5D4037'
-                );
-                booksContainer.appendChild(aeternusBook);
-                
-                const gramaticBook = createSpecialBook(
-                    'GramaticApp',
-                    'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas',
-                    '#424242'
-                );
-                booksContainer.appendChild(gramaticBook);
+                booksContainer.appendChild(createSpecialBook('NihongoApp', 'https://kami00dragon.github.io/NihongoApp/index.html', '#8B0000'));
+                booksContainer.appendChild(createSpecialBook('AeternusApp', 'https://kami00dragon.github.io/AeternusApp/', '#5D4037'));
+                booksContainer.appendChild(createSpecialBook('GramaticApp', 'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas', '#424242'));
             }
             
             // Agregar libros normales
-            books.forEach(book => {
-                const bookElement = createBookElement(book);
-                booksContainer.appendChild(bookElement);
+            shelfBooks.forEach(book => {
+                booksContainer.appendChild(createBookElement(book));
             });
             
-            const shelfBoard = document.createElement('div');
-            shelfBoard.className = 'shelf-board';
-            
             shelfBg.appendChild(booksContainer);
-            shelfBg.appendChild(shelfBoard);
             shelfDiv.appendChild(shelfBg);
             
             return shelfDiv;
         }
 
-        // ========================================
-        // RENDERIZAR BIBLIOTECA
-        // ========================================
-
+        // Función para renderizar biblioteca
         function renderLibrary() {
             const container = document.getElementById('bookshelvesContainer');
             container.innerHTML = '';
             
             if (filteredBooks.length === 0) {
-                const noResults = document.createElement('div');
-                noResults.className = 'no-results';
-                noResults.innerHTML = `
-                    <h2>No se encontraron libros</h2>
-                    <p>Intente con otra búsqueda o desactive el filtro</p>
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <h2 style="color: #78350f; margin-bottom: 0.5rem;">No se encontraron libros</h2>
+                        <p style="color: #92400e;">Intente con otra búsqueda o desactive el filtro</p>
+                    </div>
                 `;
-                container.appendChild(noResults);
                 return;
             }
             
-            // Distribuir libros uniformemente en 24 estantes
+            // Distribuir libros en estantes
             const totalShelves = 50;
-            const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves);
+            const booksPerShelf = Math.ceil(filteredBooks.length / totalShelves);
             const extraBooks = filteredBooks.length % totalShelves;
-
-            const shelves = [];
-            let bookIndex = 0;
-
+            
             for (let i = 0; i < totalShelves; i++) {
-                const booksThisShelf = baseBooksPerShelf + (i < extraBooks ? 1 : 0);
-                const shelfBooks = filteredBooks.slice(bookIndex, bookIndex + booksThisShelf);
-                shelves.push(shelfBooks);
-                bookIndex += booksThisShelf;
+                const startIdx = i * booksPerShelf;
+                const endIdx = startIdx + booksPerShelf + (i < extraBooks ? 1 : 0);
+                const shelfBooks = filteredBooks.slice(startIdx, endIdx);
+                const isFirstShelf = i === 0;
+                container.appendChild(createBookshelf(shelfBooks, i, isFirstShelf));
             }
-
-            shelves.forEach((shelfBooks, index) => {
-                const shelfElement = createBookshelf(shelfBooks, index === 0, index % 2 === 0);
-                container.appendChild(shelfElement);
-            });
         }
 
-        // ========================================
-        // FILTRAR LIBROS
-        // ========================================
-
+        // Función para filtrar libros
         function filterBooks() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const availableOnly = document.getElementById('availableFilter').checked;
             
             filteredBooks = allBooks.filter(book => {
-                const matchesSearch = 
-                    book.title.toLowerCase().includes(searchTerm) ||
-                    book.author.toLowerCase().includes(searchTerm);
+                const matchesSearch = book.title.toLowerCase().includes(searchTerm) ||
+                                     book.author.toLowerCase().includes(searchTerm);
                 const matchesAvailability = !availableOnly || book.status === 'available';
-                
                 return matchesSearch && matchesAvailability;
             });
             
             renderLibrary();
         }
 
-        // ========================================
-        // MODAL
-        // ========================================
-
+        // Función para abrir modal
         function openBookModal(book) {
             const modal = document.getElementById('bookModal');
             const modalTitle = document.getElementById('modalTitle');
-            const modalInfo = document.getElementById('modalInfo');
-            const modalFormats = document.getElementById('modalFormats');
-            const modalPath = document.getElementById('modalPath');
+            const modalAuthor = document.getElementById('modalAuthor');
+            const modalYear = document.getElementById('modalYear');
+            const modalStatus = document.getElementById('modalStatus');
+            const modalActions = document.getElementById('modalActions');
             
             modalTitle.textContent = book.title;
+            modalAuthor.textContent = book.author;
+            modalYear.textContent = book.year;
             
             const statusClass = book.status === 'available' ? 'modal-status-available' : 'modal-status-unavailable';
             const statusText = book.status === 'available' ? 'Disponible' : 'No disponible';
+            modalStatus.textContent = statusText;
+            modalStatus.className = statusClass;
             
-            modalInfo.innerHTML = `
-                <p><strong>Autor:</strong> ${book.author}</p>
-                <p><strong>Año:</strong> ${book.year}</p>
-                <p><strong>Estado:</strong> <span class="${statusClass}">${statusText}</span></p>
-            `;
-            
-            if (book.status === 'available' && book.formats.length > 0) {
-                const formatIcons = {
-                    pdf: '📄',
-                    epub: '📱',
-                    mobi: '📚',
-                    azw3: '📖'
-                };
-                
-                const formatLabels = {
-                    pdf: 'PDF',
-                    epub: 'EPUB',
-                    mobi: 'MOBI',
-                    azw3: 'AZW3'
-                };
-                
-                let formatsHTML = '<h3>Formatos disponibles:</h3><div class="formats-grid">';
-                
-                book.formats.forEach(format => {
-                    formatsHTML += `
-                        <button class="format-button" onclick="downloadBook('${book.title}', '${format}')">
-                            <span class="format-icon">${formatIcons[format]}</span>
-                            <span>${formatLabels[format]}</span>
-                        </button>
-                    `;
-                });
-                
-                formatsHTML += '</div>';
-                modalFormats.innerHTML = formatsHTML;
+            if (book.pdfUrl) {
+                modalActions.innerHTML = `
+                    <a href="${book.pdfUrl}" target="_blank" rel="noopener noreferrer" class="read-pdf-btn">
+                        📄 LEER PDF
+                    </a>
+                `;
             } else {
-                modalFormats.innerHTML = `
-                    <div class="modal-message">
-                        <p>📚 Este libro aún no está disponible en formato digital</p>
-                        <small>Cargue los archivos (PDF, EPUB, MOBI, AZW3) para activar este libro</small>
+                modalActions.innerHTML = `
+                    <div class="no-pdf-message">
+                        <p>📚 Este libro aún no tiene un enlace directo a PDF disponible</p>
                     </div>
                 `;
             }
             
-            modalPath.textContent = `books/${book.id}/`;
             modal.classList.add('active');
         }
 
+        // Función para cerrar modal
         function closeBookModal() {
-            document.getElementById('bookModal').classList.remove('active');
+            const modal = document.getElementById('bookModal');
+            modal.classList.remove('active');
         }
 
-        function downloadBook(title, format) {
-            alert(`Descargando ${title} en formato ${format.toUpperCase()}\n\n` +
-                   `Nota: Debe cargar el archivo ${format.toUpperCase()} en la carpeta books/{id}/ ` +
-                   `para que el enlace funcione correctamente.`);
-        }
-
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
-
+        // Event listeners
         document.getElementById('searchInput').addEventListener('input', filterBooks);
         document.getElementById('availableFilter').addEventListener('change', filterBooks);
         document.getElementById('modalClose').addEventListener('click', closeBookModal);
-
-        // Cerrar modal al hacer clic fuera
-        document.getElementById('bookModal').addEventListener('click', function(e) {
-            if (e.target === this) {
+        document.getElementById('bookModal').addEventListener('click', (e) => {
+            if (e.target.id === 'bookModal') {
                 closeBookModal();
             }
         });
 
-        // Cerrar modal con ESC
-        document.addEventListener('keydown', function(e) {
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeBookModal();
             }
         });
 
-        // ========================================
-        // INICIALIZACIÓN
-        // ========================================
+        // Año actual en footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        function init() {
-            // Establecer año actual en el footer
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Configurar título con letras intercaladas
-            const titleText = 'Biblioteca Digital';
-            const titleElement = document.getElementById('pageTitle');
-            titleElement.innerHTML = titleText.split('').map((char, index) => {
-                const className = index % 2 === 0 ? 'red' : 'gold';
-                return `<span class="title-letter ${className}">${char}</span>`;
-            }).join('');
-
-            // Renderizar biblioteca
-            renderLibrary();
-        }
-
-        // Iniciar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', init);
+        // Renderizar inicialmente
+        renderLibrary();
     </script>
 </body>
 </html>
