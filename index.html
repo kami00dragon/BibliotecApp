@@ -17,14 +17,13 @@
             background: linear-gradient(to bottom, #fef3c7, #fcd34d);
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
-        /* Header Modificado */
+        /* Header - Estructura de la versión antigua */
         header {
             background: linear-gradient(to bottom, #451a03, #78350f, #451a03);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            padding: 1.5rem 1rem 1rem 1rem;
+            padding: 2rem 1rem 1rem 1rem;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -33,68 +32,48 @@
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            width: 100%;
         }
 
         .header-title {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            flex-wrap: nowrap; /* Evita que se rompan en móviles muy pequeños si es posible */
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            min-height: 120px; /* Asegura espacio para las imágenes */
-        }
-
-        .header-center {
-            flex: 1;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 250px; 
+            margin-bottom: 1rem;
         }
 
-        .header-center h1 {
+        .header-title h1 {
             font-size: 2.5rem;
+            margin-bottom: 0.25rem;
             font-weight: 900;
             font-family: 'Georgia', serif, sans-serif;
             color: #fcd34d;
             letter-spacing: 2px;
-            margin-bottom: 1rem;
-            white-space: nowrap; /* Evita que el título se rompa feo */
         }
 
-        /* Grupos de Guardianes - Asegurar visibilidad */
-        .guardians-left, .guardians-right {
+        /* Contenedor principal de la fila */
+        .header-with-guardians {
             display: flex;
-            align-items: flex-end;
-            gap: 0.5rem;
-            flex-shrink: 0; /* Evita que se aplasten */
+            align-items: flex-end; /* Alinea todo abajo */
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        /* Estilos de Imágenes Guardianes */
+        .guardians-container {
+            display: flex;
+            align-items: flex-end; /* Alinea las imágenes dentro de sus grupos */
+            gap: 0.25rem;
+            /* Eliminé la altura fija (3.5rem) para que las imágenes nuevas se vean completas */
+        }
+
         .guardian-statue {
             width: 7.5rem;
             height: 10.5rem;
             filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
-            object-fit: contain;
-            transition: transform 0.3s ease;
-            display: block; /* Asegura que se muestre */
         }
-        
+
         .guardian-shisa {
             width: 9rem;
             height: 10.5rem;
             filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
-            object-fit: contain;
-            transition: transform 0.3s ease;
-            display: block;
-        }
-
-        .guardian-statue:hover, .guardian-shisa:hover {
-            transform: scale(1.05) translateY(-5px);
         }
 
         @media (min-width: 768px) {
@@ -106,63 +85,37 @@
                 width: 11rem;
                 height: 12rem;
             }
-            .header-center h1 {
-                font-size: 3rem;
-            }
         }
 
-        /* Ajuste para pantallas pequeñas: Se hace todo pequeño pero se ve */
-        @media (max-width: 992px) {
-            .header-title {
-                flex-wrap: wrap;
-                justify-content: center;
+        @media (max-width: 480px) {
+            .header-with-guardians {
+                flex-direction: column;
                 gap: 0.5rem;
             }
-            .guardians-left, .guardians-right {
-                order: -1; /* Pone imágenes arriba del título si se aprietan mucho */
-                transform: scale(0.7);
+            .guardian-statue {
+                width: 6rem;
+                height: 8.4rem;
             }
-            .guardian-statue, .guardian-shisa {
-                width: 5rem;
-                height: 6rem;
-            }
-            .header-center h1 {
-                font-size: 1.5rem;
-                white-space: normal;
-            }
-        }
-        
-        /* En móviles muy pequeños */
-        @media (max-width: 600px) {
-            .header-title {
-                flex-direction: column;
-            }
-            .guardians-left, .guardians-right {
-                order: 0;
-                transform: scale(0.6);
-                margin-bottom: 0.5rem;
-            }
-            .guardians-left { transform: scale(0.6) scaleX(-1); } /* Invertir orden visual si es necesario, o mantener */
-            .guardians-right { transform: scale(0.6); }
-            .header-center h1 {
-                font-size: 1.2rem;
+            .guardian-shisa {
+                width: 7.2rem;
+                height: 8.4rem;
             }
         }
 
         .search-filters {
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 0.75rem;
+            align-items: center;
         }
 
         .search-with-stars {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 0.75rem;
             width: 100%;
             max-width: 600px;
+            margin: 0 auto;
         }
 
         .search-star {
@@ -180,11 +133,16 @@
             color: #78350f;
             font-size: 1rem;
             width: 100%;
+            max-width: 300px;
         }
 
         .search-input:focus {
             outline: none;
             border-color: #f59e0b;
+        }
+
+        .search-input::placeholder {
+            color: #b45309;
         }
 
         .filter-label {
@@ -251,7 +209,6 @@
         /* Bookshelf */
         .bookshelf {
             margin-bottom: 1.5rem;
-            position: relative;
         }
 
         .bookshelf-bg {
@@ -272,10 +229,9 @@
             min-height: 160px;
             padding-bottom: 0.75rem;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 2;
         }
 
+        /* Alineación alternativa de estantes */
         .books-container.align-left {
             justify-content: flex-start;
             padding-left: 0.5rem;
@@ -291,8 +247,6 @@
             background: linear-gradient(to bottom, #92400e, #78350f);
             border-radius: 0.125rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            position: relative;
-            z-index: 3;
         }
 
         /* Book Button */
@@ -368,7 +322,7 @@
             margin-top: 0.125rem;
         }
 
-        /* Special Book (Enciclopedia) - Corrección de visualización */
+        /* Special Book (Enciclopedia) */
         .special-book {
             position: relative;
             width: 4rem;
@@ -378,7 +332,7 @@
             transform: translateY(0);
             transition: all 0.3s ease;
             cursor: pointer;
-            overflow: visible;
+            overflow: visible; /* Permite ver el texto */
             text-decoration: none;
             display: block;
         }
@@ -414,7 +368,7 @@
         .special-book-label {
             position: absolute;
             right: 0.5rem;
-            top: 15%; /* Corrección: movido hacia abajo */
+            top: 15%; /* Corrección visual */
             transform: rotate(-180deg);
             font-size: 0.75rem;
             color: white;
@@ -430,25 +384,37 @@
 
         /* Insectos (Bichos) */
         
-        /* Mariposa */
+        /* Mariposa - Grande y Colores */
         .butterfly {
             position: absolute;
             top: 10px;
             right: -5px;
-            width: 12px;
-            height: 10px;
+            /* Tamaño aumentado */
+            width: 24px;
+            height: 20px;
             z-index: 20;
             pointer-events: none;
         }
+
         .butterfly-wing {
             position: absolute;
             top: 0;
-            width: 6px;
-            height: 8px;
+            width: 12px;
+            height: 18px;
+            /* Color por defecto (morado) */
             background: rgba(147, 51, 234, 0.7);
             border-radius: 50% 50% 0 50%;
             animation: flutter 0.15s infinite alternate;
         }
+        
+        /* Variantes de color */
+        .butterfly.blue .butterfly-wing {
+            background: rgba(59, 130, 246, 0.7); /* Azul */
+        }
+        .butterfly.yellow .butterfly-wing {
+            background: rgba(234, 179, 8, 0.7); /* Amarillo */
+        }
+
         .butterfly-wing.left {
             left: 0;
             transform-origin: right center;
@@ -463,55 +429,89 @@
             100% { transform: rotateY(60deg); }
         }
 
-        /* Mariquita (en libro) */
-        .ladybug-on-book {
+        /* Mariquita (en libro) - Abierta 3D */
+        .ladybug-container {
             position: absolute;
-            top: 15px;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 14px;
+            z-index: 20;
+            transform-style: preserve-3d;
+            perspective: 50px;
+        }
+
+        .ladybug-head {
+            position: absolute;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 10px;
-            height: 10px;
-            background: radial-gradient(circle at 30% 30%, #ef4444, #b91c1c);
-            border-radius: 50%;
-            z-index: 20;
-            box-shadow: 0 2px 2px rgba(0,0,0,0.3);
-            animation: wobble 2s infinite ease-in-out;
-        }
-        .ladybug-on-book::before { /* Cabeza */
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: 2px;
-            width: 6px;
-            height: 4px;
+            height: 5px;
             background: black;
-            border-radius: 50%;
+            border-radius: 5px;
+            z-index: 30;
         }
-        .ladybug-on-book::after { /* Línea negra */
-            content: '';
+
+        /* Alas inferiores */
+        .ladybug-wing-under {
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            width: 40%;
+            background: rgba(0, 0, 0, 0.5); 
+            border-radius: 50%;
+            z-index: 10; 
+            animation: flutterWings 0.1s infinite alternate;
+        }
+        .ladybug-wing-under.left { left: 10%; transform-origin: right center; }
+        .ladybug-wing-under.right { right: 10%; transform-origin: left center; }
+
+        @keyframes flutterWings {
+            0% { transform: rotateY(-10deg); }
+            100% { transform: rotateY(10deg); }
+        }
+
+        /* Caparachón (Alas rojas superiores) */
+        .ladybug-shell {
             position: absolute;
             top: 0;
-            left: 50%;
-            height: 100%;
-            width: 1px;
-            background: black;
+            bottom: 0;
+            width: 50%;
+            background: radial-gradient(circle at 30% 30%, #ef4444, #b91c1c);
+            z-index: 20;
+            animation: openShell 1.5s infinite ease-in-out alternate;
         }
-        .ladybug-spot {
+        .ladybug-shell.left { 
+            left: 0; 
+            border-radius: 8px 0 0 0; 
+            transform-origin: right center; 
+        }
+        .ladybug-shell.right { 
+            right: 0; 
+            border-radius: 0 8px 0 0; 
+            transform-origin: left center; 
+        }
+
+        /* Manchas caparachón */
+        .ladybug-spot-shell {
             position: absolute;
             width: 2px;
             height: 2px;
             background: black;
             border-radius: 50%;
         }
-        .spot-1 { top: 2px; left: 1px; }
-        .spot-2 { top: 6px; left: 1px; }
-        .spot-3 { top: 2px; right: 1px; }
-        .spot-4 { top: 6px; right: 1px; }
+        .ls-1 { top: 2px; right: 2px; }
+        .ls-2 { top: 5px; right: 4px; }
+        .ls-3 { top: 2px; left: 2px; }
+        .ls-4 { top: 5px; left: 4px; }
 
-        @keyframes wobble {
-            0%, 100% { transform: translateX(-50%) rotate(-3deg); }
-            50% { transform: translateX(-50%) rotate(3deg); }
+        @keyframes openShell {
+            0% { transform: rotateY(0deg); } 
+            100% { transform: rotateY(-70deg); } 
         }
+
 
         /* Mariquita Caminando (en estante) */
         .ladybug-walking {
@@ -523,7 +523,7 @@
             z-index: 4;
             box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-        .ladybug-walking::before { /* Cabeza */
+        .ladybug-walking::before {
             content: '';
             position: absolute;
             top: -2px;
@@ -533,7 +533,7 @@
             background: black;
             border-radius: 50%;
         }
-        .ladybug-walking::after { /* Línea */
+        .ladybug-walking::after {
             content: '';
             position: absolute;
             top: 0;
@@ -554,7 +554,6 @@
         .lw-s3 { top: 1px; right: 1px; }
         .lw-s4 { top: 5px; right: 1px; }
 
-        /* Patas animadas (simuladas con pseudo elementos o box shadow) */
         .ladybug-walking-legs {
             position: absolute;
             bottom: -1px;
@@ -606,7 +605,6 @@
             border: 4px solid #78350f;
             max-height: 90vh;
             overflow-y: auto;
-            position: relative;
         }
 
         .modal-header {
@@ -759,7 +757,7 @@
                 height: 7rem;
             }
             .special-book-label {
-                font-size: 0.6rem;
+                font-size: 0.75rem;
                 top: 10%;
             }
             .bookshelf-bg {
@@ -769,11 +767,23 @@
             .shelf-board {
                 height: 1rem;
             }
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
             .modal-content {
                 padding: 1rem;
             }
             .modal-title {
                 font-size: 1.25rem;
+            }
+            /* Bichos más pequeños en móviles */
+            .butterfly { width: 16px; height: 14px; }
+            .ladybug-container { width: 12px; height: 10px; }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem 0.5rem 1rem;
             }
         }
     </style>
@@ -782,78 +792,81 @@
     <header>
         <div class="header-content">
             <div class="header-title">
-                <!-- Guardianes Izquierdos -->
-                <div class="guardians-left">
-                    <!-- Shisa Izquierda -->
-                    <img class="guardian-shisa"
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMOuhV-r33EeG4zUxRL3zGHfM4dSlG4YDrTg&s" 
-                        alt="Shisa Izquierda" />
-                    <!-- Maneki Neko -->
+                <!-- Estructura Header "Antigua" solicitada -->
+                <div class="header-with-guardians">
+                    <!-- Guardianes Izquierdos: Shisa -->
+                    <div class="guardians-container">
+                        <!-- Shisa Izquierda -->
+                        <img class="guardian-shisa"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMOuhV-r33EeG4zUxRL3zGHfM4dSlG4YDrTg&s" 
+                            alt="Shisa Izquierda" />
+                    </div>
+
+                    <!-- Maneki Neko - Gato de la Suerte (en el centro) -->
                     <img class="guardian-statue" 
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxJHUlDF4_7mwDAtfC5hLyENEtVIXyFE4FDg&s" 
                         alt="Maneki Neko" />
-                </div>
 
-                <!-- Centro: Título y Buscador -->
-                <div class="header-center">
                     <h1>BibliotecApp</h1>
 
-                    <div class="search-filters">
-                        <div class="search-with-stars">
-                            <!-- Estrella dorada -->
-                            <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                                        <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
-                                    </linearGradient>
-                                </defs>
-                                <polygon
-                                    points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                                    fill="url(#goldStar)"
-                                    stroke="#B8860B"
-                                    stroke-width="2"
-                                />
-                            </svg>
+                    <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
+                    <div class="guardians-container">
+                        <!-- Kitsune de Inari -->
+                        <img class="guardian-statue" 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8AyBlti_G6jkGC1lKWl3dNU1aqPrQyryoxg&s" 
+                            alt="Zorro Kitsune" />
 
-                            <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
-
-                            <!-- Estrella roja -->
-                            <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
-                                    </linearGradient>
-                                </defs>
-                                <polygon
-                                    points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                                    fill="url(#redStar)"
-                                    stroke="#7F1D1D"
-                                    stroke-width="2"
-                                />
-                            </svg>
-                        </div>
-
-                        <label class="filter-label">
-                            <input type="checkbox" id="availableFilter" class="filter-checkbox">
-                            <span>Solo disponibles</span>
-                        </label>
+                        <!-- Shisa Derecha -->
+                        <img class="guardian-shisa" 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" 
+                            alt="Shisa Derecha" />
                     </div>
                 </div>
+            </div>
 
-                <!-- Guardianes Derechos -->
-                <div class="guardians-right">
-                    <!-- Zorro de Inari -->
-                    <img class="guardian-statue" 
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8AyBlti_G6jkGC1lKWl3dNU1aqPrQyryoxg&s" 
-                        alt="Zorro Kitsune" />
-                    <!-- Shisa Derecha -->
-                    <img class="guardian-shisa" 
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" 
-                        alt="Shisa Derecha" />
+            <div class="search-filters">
+                <div class="search-with-stars">
+                    <!-- Estrella dorada -->
+                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#goldStar)"
+                            stroke="#B8860B"
+                            stroke-width="2"
+                        />
+                    </svg>
+
+                    <!-- Input de búsqueda -->
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
+
+                    <!-- Estrella roja -->
+                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#redStar)"
+                            stroke="#7F1D1D"
+                            stroke-width="2"
+                        />
+                    </svg>
                 </div>
+
+                <label class="filter-label">
+                    <input type="checkbox" id="availableFilter" class="filter-checkbox">
+                    <span>Solo disponibles</span>
+                </label>
             </div>
         </div>
     </header>
@@ -893,7 +906,7 @@
         // DATOS DE LIBROS - ACTUALIZADOS
         // ========================================
         const books = [
-            { id: 1, title: 'Tao Te King', author: 'Lao-Tse', year: -500, status: 'available', color: '#8B4513', pdfUrl: 'https://www.perlego.com/es/book/2562805/tao-te-ching-un-libro-sobre-el-camino-y-la-virtud-pdf' },
+            { id: 1, title: 'Tao Te King', author: 'Lao-Tse', year: -500, status: 'available', color: '#8B4513', pdfUrl: 'https://teots.org/wp-content/uploads/2021/08/Tao-Te-Ching-traduccion-de-Stephen-Mitchell-espanol.pdf' },
             { id: 2, title: 'I Ching', author: 'Anónimo', year: -1000, status: 'available', color: '#A0522D', pdfUrl: 'https://laventanaazulblog.com/wp-content/uploads/2016/12/i_ching-1.pdf' },
             { id: 3, title: 'Así habló Zaratustra', author: 'Friedrich Nietzsche', year: 1883, status: 'available', color: '#CD853F', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/Resources/T70781/AsiHabloZaratustraManga.pdf' },
             { id: 4, title: 'El mundo como voluntad...', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
@@ -1035,11 +1048,48 @@
         function createBug(type) {
             const bug = document.createElement('div');
             if (type === 'butterfly') {
-                bug.className = 'butterfly';
+                // Variante de color para mariposas
+                const randColor = Math.random();
+                let colorClass = '';
+                if (randColor > 0.66) {
+                    colorClass = 'blue';
+                } else if (randColor > 0.33) {
+                    colorClass = 'yellow';
+                }
+
+                bug.className = `butterfly ${colorClass}`;
                 bug.innerHTML = '<div class="butterfly-wing left"></div><div class="butterfly-wing right"></div>';
             } else if (type === 'ladybug') {
-                bug.className = 'ladybug-on-book';
-                bug.innerHTML = '<div class="ladybug-spot spot-1"></div><div class="ladybug-spot spot-2"></div><div class="ladybug-spot spot-3"></div><div class="ladybug-spot spot-4"></div>';
+                bug.className = 'ladybug-container';
+                
+                // Alas inferiores (oscurecidas)
+                const wingUL = document.createElement('div');
+                wingUL.className = 'ladybug-wing-under left';
+                bug.appendChild(wingUL);
+                
+                const wingUR = document.createElement('div');
+                wingUR.className = 'ladybug-wing-under right';
+                bug.appendChild(wingUR);
+
+                // Cabeza
+                const head = document.createElement('div');
+                head.className = 'ladybug-head';
+                bug.appendChild(head);
+
+                // Alas rojas superiores (Caparachón)
+                const shellL = document.createElement('div');
+                shellL.className = 'ladybug-shell left';
+                // Manchas shell izquierdo
+                const sl1 = document.createElement('div'); sl1.className = 'ladybug-spot-shell ls-1'; shellL.appendChild(sl1);
+                const sl2 = document.createElement('div'); sl2.className = 'ladybug-spot-shell ls-2'; shellL.appendChild(sl2);
+                bug.appendChild(shellL);
+
+                const shellR = document.createElement('div');
+                shellR.className = 'ladybug-shell right';
+                // Manchas shell derecho
+                const sr1 = document.createElement('div'); sr1.className = 'ladybug-spot-shell ls-3'; shellR.appendChild(sr1);
+                const sr2 = document.createElement('div'); sr2.className = 'ladybug-spot-shell ls-4'; shellR.appendChild(sr2);
+                bug.appendChild(shellR);
             }
             return bug;
         }
@@ -1351,7 +1401,7 @@
             }
         });
 
-        // ======================================
+        // =======================================
         // INICIALIZACIÓN
         // =======================================
         function init() {
