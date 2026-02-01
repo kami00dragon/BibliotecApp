@@ -36,7 +36,7 @@
 
         .header-title {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem; /* Margen reducido para acercar buscador */
         }
 
         .header-title h1 {
@@ -48,9 +48,10 @@
             letter-spacing: 2px;
         }
 
+        /* Flex container principal de la fila superior */
         .header-with-guardians {
             display: flex;
-            align-items: flex-end; /* Alinea todo abajo */
+            align-items: flex-end; /* Alinea todo al fondo (baseline de Maneki) */
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
@@ -58,7 +59,7 @@
 
         .guardians-container {
             display: flex;
-            align-items: flex-end; /* Alinea imágenes al fondo */
+            align-items: flex-end; /* Alinea las imágenes al fondo */
             gap: 0.25rem;
         }
 
@@ -105,7 +106,7 @@
             flex-direction: column;
             gap: 0.75rem;
             align-items: center;
-            margin-top: 0; /* Justo debajo del título */
+            margin-top: 0; /* Elimina margen extra para acercar al título */
         }
 
         .search-with-stars {
@@ -260,13 +261,11 @@
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
-            border: none;
         }
 
         .book:hover {
             transform: translateY(-4px) scale(1.05);
             box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
-            z-index: 10;
         }
 
         .book-spine {
@@ -300,11 +299,25 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Libros sin URL no tienen etiqueta (estilo simple) */
-        .book.no-label {
-            /* Opcional: Estilo diferente para libros sin PDF */
-            background: linear-gradient(to right, #8B4513, #6d3617);
-            opacity: 0.7;
+        .book-label {
+            position: absolute;
+            right: 0.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+        }
+
+        .book-label-text {
+            font-size: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .book-label-author {
+            font-size: 0.4rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.125rem;
         }
 
         /* Special Book (Enciclopedia) */
@@ -325,7 +338,6 @@
         .special-book:hover {
             transform: translateY(-4px) scale(1.05);
             box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
-            z-index: 10;
         }
 
         .special-book-texture {
@@ -369,7 +381,7 @@
 
         /* Insectos (Bichos) */
         
-        /* Mariposa */
+        /* Mariposa - Grande y Colores */
         .butterfly {
             position: absolute;
             top: 10px;
@@ -437,7 +449,7 @@
             z-index: 30;
         }
 
-        /* Alas inferiores */
+        /* Alas inferiores (visibles cuando se abren las de arriba) */
         .ladybug-wing-under {
             position: absolute;
             top: 2px;
@@ -477,7 +489,7 @@
             transform-origin: left center; 
         }
 
-        /* Manchas caparachón */
+        /* Manchas negras (hijas del caparachón) */
         .ladybug-spot-shell {
             position: absolute;
             width: 2px;
@@ -492,7 +504,7 @@
 
         @keyframes openShell {
             0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(-70deg); } 
+            100% { transform: rotateY(-70deg); } /* Abierto (hacia arriba) */
         }
 
 
@@ -506,7 +518,7 @@
             z-index: 4;
             box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-        .ladybug-walking::before { /* Cabeza */
+        .ladybug-walking::before {
             content: '';
             position: absolute;
             top: -2px;
@@ -516,7 +528,7 @@
             background: black;
             border-radius: 50%;
         }
-        .ladybug-walking::after { /* Línea */
+        .ladybug-walking::after {
             content: '';
             position: absolute;
             top: 0;
@@ -588,6 +600,7 @@
             border: 4px solid #78350f;
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
         }
 
         .modal-header {
@@ -740,7 +753,7 @@
                 height: 7rem;
             }
             .special-book-label {
-                font-size: 0.6rem;
+                font-size: 0.75rem;
                 top: 10%;
             }
             .bookshelf-bg {
@@ -763,19 +776,12 @@
             .butterfly { width: 16px; height: 14px; }
             .ladybug-container { width: 12px; height: 10px; }
         }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 1.5rem 1rem 0.5rem 1rem;
-            }
-        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
             <div class="header-title">
-                <!-- Estructura Header "Antigua" solicitada -->
                 <div class="header-with-guardians">
                     <!-- Guardianes Izquierdos: Shisa -->
                     <div class="guardians-container">
@@ -805,51 +811,52 @@
                             alt="Shisa Derecha" />
                     </div>
                 </div>
+            </div>
 
-                <div class="search-filters">
-                    <div class="search-with-stars">
-                        <!-- Estrella dorada -->
-                        <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <polygon
-                                points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                                fill="url(#goldStar)"
-                                stroke="#B8860B"
-                                stroke-width="2"
-                            />
-                        </svg>
+            <div class="search-filters">
+                <div class="search-with-stars">
+                    <!-- Estrella dorada -->
+                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#goldStar)"
+                            stroke="#B8860B"
+                            stroke-width="2"
+                        />
+                    </svg>
 
-                        <!-- Input de búsqueda -->
-                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
+                    <!-- Input de búsqueda -->
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
 
-                        <!-- Estrella roja -->
-                        <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <polygon
-                                points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                                fill="url(#redStar)"
-                                stroke="#7F1D1D"
-                                stroke-width="2"
-                            />
-                        </svg>
-                    </div>
-
-                    <label class="filter-label">
-                        <input type="checkbox" id="availableFilter" class="filter-checkbox">
-                        <span>Solo disponibles</span>
-                    </label>
+                    <!-- Estrella roja -->
+                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#redStar)"
+                            stroke="#7F1D1D"
+                            stroke-width="2"
+                        />
+                    </svg>
                 </div>
+
+                <label class="filter-label">
+                    <input type="checkbox" id="availableFilter" class="filter-checkbox">
+                    <span>Solo disponibles</span>
+                </label>
+            </div>
         </div>
     </header>
 
@@ -861,7 +868,8 @@
                 <div id="bookshelvesContainer"></div>
                 <div class="library-molding bottom"></div>
             </div>
-        </main>
+        </div>
+    </main>
 
     <footer>
         <div class="footer-content">
@@ -887,62 +895,126 @@
         // DATOS DE LIBROS - ACTUALIZADOS
         // ========================================
         const books = [
-            // --- Marxismo ---
-            { id: 1, title: 'El Capital', author: 'Karl Marx', year: 1867, status: 'available', color: '#8B4513', pdfUrl: 'https://www.marxists.org/archive/marx/works/1867-Capital-Volume-I/' },
-            { id: 2, title: 'El Estado y la Revolución', author: 'Vladimir Lenin', year: 1917, status: 'available', color: '#A0522D', pdfUrl: 'https://www.marxists.org/archive/lenin/works/1917-State-Revolution/' },
-            { id: 3, title: 'La Historia de la Revolución Rusa', author: 'León Trotsky', year: 1930, status: 'available', color: '#CD853F', pdfUrl: 'https://www.marxists.org/archive/trotsky/works/1930-History-Russian-Revolution-V1/' },
-            { id: 4, title: 'La Condición de la Clase Obrera en Inglaterra', author: 'Friedrich Engels', year: 1848, status: 'available', color: '#D2691E', pdfUrl: 'https://www.marxists.org/archive/engels/works/1848-Condition-Working-Class-England/' },
-            { id: 5, title: 'Gravedad y Gracia', author: 'Simone Weil', year: 1940, status: 'available', color: '#B8860B', pdfUrl: 'https://archive.org/details/GravityGrav00weil' },
-            { id: 6, title: 'Los Cuadernos de la Prisión', author: 'Antonio Gramsci', year: 1929, status: 'available', color: '#556B2F', pdfUrl: 'https://www.marxists.org/archive/gramsci/works/1929-Prison-Notebooks/' },
-            { id: 7, title: 'La Acumulación del Capital', author: 'Rosa Luxemburgo', year: 1867, status: 'available', color: '#9932CC', pdfUrl: 'https://www.marxists.org/archive/luxemburg/works/1867-Capital-Volume-I/' },
-            { id: 8, title: 'El Príncipe', author: 'Nicolás Maquiavelo', year: 1532, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.gutenberg.org/files/7405/0-hdr/Principe-Maquavelo.html' },
-            { id: 9, title: 'Biografía del Che Guevara', author: 'Che Guevara', year: 1952, status: 'available', color: '#D2691E', pdfUrl: 'https://www.marxists.org/guevara/works/1952-Motorcycle-Diaries/' },
-            { id: 10, title: 'Evangelii Gaudium', author: 'Papa Francisco', year: 2013, status: 'available', color: '#B8860B', pdfUrl: 'https://www.vatican.va/content/francesco-apostolico/papa-francisco/encyclicas/quadrages-evangelii-gaudium.html' },
-            { id: 11, title: 'Pedro Páramo', author: 'Álvaro García Márquez', year: 1967, status: 'available', color: '#CD853F', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/scholarship/T64701/CienAnosDeSoledadLibroCompleto.pdf' },
-
-            // --- Otras ---
-            { id: 12, title: 'La Ilíada', author: 'Homero', year: -750, status: 'available', color: '#D2691E', pdfUrl: 'https://colegiolospensamientos.cl/wp-content/uploads/2023/09/Octubre-I%C2%B0M-La-Iliada-Homero.pdf' },
-            { id: 13, title: '1984', author: 'George Orwell', year: 1949, status: 'available', color: '#B8860B', pdfUrl: 'https://www.philosophia.cl/biblioteca/orwell/1984.pdf' },
-            { id: 14, title: 'Crimen y Castigo', author: 'Fiódor Dostoyevski', year: 1866, status: 'available', color: '#8FBC8F', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Fedor%20Dostoievski%20-%20Crimen%20y%20castigo.pdf' },
-            { id: 15, title: 'Guerra y Paz', author: 'León Tolstói', year: 1869, status: 'available', color: '#9932CC', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Le%C3%B3n%20Tolstoi%20Guerra%20y%20Paz.pdf' },
-            { id: 16, title: 'La Divina Comedia', author: 'Dante Alighieri', year: 1320, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dante%20Alighieri%20Divina%20comedia.pdf' },
-            { id: 17, title: 'La Odisea', author: 'Homero', year: -700, status: 'available', color: '#C71585', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
-            { id: 18, title: 'Moby Dick', author: 'Herman Melville', year: 1851, status: 'available', color: '#DB7093', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
-            { id: 19, title: 'Ana Karenina', author: 'León Tolstói', year: 1877, status: 'available', color: '#A0522D', pdfUrl: 'https://www.agr-tc.pt/bibliotecadigital/aetc/download/674/Ana%20Karenina%20-%20Leon%20Tolstoi.pdf' },
-            { id: 20, title: 'Fahrenheit 451', author: 'Ray Bradbury', year: 1953, status: 'available', color: '#556B2F', pdfUrl: 'https://lexiconic.net/english/F451.pdf' },
-            { id: 21, title: 'Neuromante', author: 'William Gibson', year: 1984, status: 'available', color: '#9932CC', pdfUrl: 'https://dn720006.ca.archive.org/0/items/neuromancer_202209/neuromancer.pdf' },
-            { id: 22, title: 'Fundación', author: 'Isaac Asimov', year: 1951, status: 'available', color: '#C71585', pdfUrl: 'https://www.mercaba.org/SANLUIS/ALiteratura/Literatura%20contempor%C3%A1nea/Asimov,%20Issac/Fundaci%C3%B3n.PDF' },
-            { id: 23, title: 'Don Juan Tenorio', author: 'José Zorrilla', year: 1844, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Jos%C3%A9%20Zorrilla%20Don%20Juan%20Tenorio.pdf' },
-            { id: 24, title: 'Casa de los Espíritus', author: 'Isabel Allende', year: 1982, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Isabel%20Allende%20La%20Casa%20de%20los%20Esp%C3%ADritus.pdf' },
-            { id: 25, title: 'Rayuela', author: 'Julio Cortázar', year: 1963, status: 'available', color: '#CD853F', pdfUrl: 'https://seduc.edomex.gob.mx/sites/seduc.edomex.gob.mx/files/padres_familia/fomento_lectura/Julio%20Cortazar%20-%20Rayuela.pdf' },
-            { id: 26, title: 'El Nombre de la Rosa', author: 'Umberto Eco', year: 1980, status: 'available', color: '#556B2F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Umberto%20Eco%20El%20Nombre%20de%20la%20Rosa.pdf' },
-            { id: 27, title: 'Viento en los Sauces', author: 'Kenneth Grahame', year: 1908, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Grahame-Viento-Sauces.pdf' },
-            { id: 28, title: 'Siddhartha', author: 'Hermann Hesse', year: 1922, status: 'available', color: '#BA55D3', pdfUrl: 'https://cpcglobal.org/publications/Siddhartha%20by%20Hermann%20Hesse.pdf' },
-            { id: 29, title: 'Demián', author: 'Hermann Hesse', year: 1919, status: 'available', color: '#C71585', pdfUrl: 'https://www.holybooks.com/wp-content/uploads/DemianBy-Hermann-Hesse.pdf' },
-            { id: 30, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' },
-
-            // --- Nuevos Agregados (Marxismo, Filosofía Occidental, Buddhism) ---
-            { id: 31, title: 'El Capital', author: 'Karl Marx', year: 1867, status: 'available', color: '#8B4513', pdfUrl: 'https://www.marxists.org/archive/marx/works/1867-Capital-Volume-I/' },
-            { id: 32, title: 'El Estado y la Revolución', author: 'Vladimir Lenin', year: 1917, status: 'available', color: '#A0522D', pdfUrl: 'https://www.marxists.org/archive/lenin/works/1917-State-Revolution/' },
-            { id: 33, title: 'La Condición de la Clase Obrera', author: 'Friedrich Engels', year: 1848, status: 'available', color: '#D2691E', pdfUrl: 'https://www.marxists.org/archive/engels/works/1848-Condition-Working-Class-England/' },
-            { id: 34, title: 'Revolución Traída', author: 'Leon Trotsky', year: 1930, status: 'available', color: '#CD853F', pdfUrl: 'https://www.marxists.org/archive/trotsky/works/1930-History-Russian-Revolution-V1/' },
-            { id: 35, title: 'Gravedad y Gracia', author: 'Simone Weil', year: 1940, status: 'available', color: '#B8860B', pdfUrl: 'https://archive.org/details/GravityGrav00weil' },
-            { id: 36, title: 'Los Cuadernos de la Prisión', author: 'Antonio Gramsci', year: 1929, status: 'available', color: '#556B2F', pdfUrl: 'https://www.marxists.org/archive/gramsci/works/1929-Prison-Notebooks/' },
-            { id: 37, title: 'La Acumulación del Capital', author: 'Rosa Luxemburgo', year: 1867, status: 'available', color: '#9932CC', pdfUrl: 'https://www.marxists.org/archive/luxemburg/works/1867-Capital-Volume-I/' },
-            { id: 38, title: 'El Príncipe', author: 'Nicolás Maquiavelo', year: 1532, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.gutenberg.org/files/7405/0-hdr/Principe-Maquavelo.html' },
-
-            // --- Religión/Arte ---
-            { id: 39, title: 'El Viento en los Sauces', author: 'Kenneth Grahame', year: 1908, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Grahame-Viento-Sauces.pdf' },
-            { id: 40, title: 'Siddhartha', author: 'Hermann Hesse', year: 1922, status: 'available', color: '#BA55D3', pdfUrl: 'https://cpcglobal.org/publications/Siddhartha%20by%20Hermann%20Hesse.pdf' },
-            { id: 41, title: 'Demián', author: 'Hermann Hesse', year: 1919, status: 'available', color: '#C71585', pdfUrl: 'https://www.holybooks.com/wp-content/uploads/DemianBy-Hermann-Hesse.pdf' },
-            { id: 42, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' },
-
-            // --- Buddhism ---
-            { id: 43, title: 'Sutra del Diamante', author: 'Buda', year: -400, status: 'available', color: '#D2691E', pdfUrl: 'https://www.o-vob.com/books/Sutra_del_Diamante.pdf' },
-            { id: 44, title: 'Sutra del Corazón', author: 'Buda', year: -500, status: 'available', color: '#556B2F', pdfUrl: 'https://www.o-vob.com/books/Sutra_del_Corazon.pdf' },
-            { id: 45, title: 'Las Enseñanzas de Buda', author: 'Buda', year: -500, status: 'available', color: '#3CB371', pdfUrl: 'https://www.o-vob.com/books/Las_Ensenanzas.pdf' },
-            { id: 46, title: 'Sutra de la Perfecta Comprensión', author: 'Vimalakirti', year: 500, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.o-vob.com/books/Vimalakirti_Sutra_Perfecta_Comprension.pdf' },
-            { id: 47, title: 'Sutras comentados por Osho', author: 'Osho', year: 2014, status: 'available', color: '#CD853F', pdfUrl: 'https://www.o-vob.com/books/Sutras_Comentados_por_Osho.pdf' }
+            { id: 1, title: 'Tao Te King', author: 'Lao-Tse', year: -500, status: 'available', color: '#8B4513', pdfUrl: 'https://teots.org/wp-content/uploads/2021/08/Tao-Te-Ching-traduccion-de-Stephen-Mitchell-espanol.pdf' },
+            { id: 2, title: 'I Ching', author: 'Anónimo', year: -1000, status: 'available', color: '#A0522D', pdfUrl: 'https://laventanaazulblog.com/wp-content/uploads/2016/12/i_ching-1.pdf' },
+            { id: 3, title: 'Así habló Zaratustra', author: 'Friedrich Nietzsche', year: 1883, status: 'available', color: '#CD853F', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/Resources/T70781/AsiHabloZaratustraManga.pdf' },
+            { id: 4, title: 'El mundo como voluntad...', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
+            { id: 5, title: 'Libro Tibetano de los Muertos', author: 'Anónimo', year: 800, status: 'available', color: '#B8860B', pdfUrl: 'https://budismo.org.mx/material/estudio/talleresespeciales/06-libro-tibetano-de-los-muertos.pdf' },
+            { id: 6, title: 'Matemáticas Básicas', author: 'Stewart', year: 2005, status: 'available', color: '#556B2F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_matematicas_basicas-_completo-_09-15.pdf' },
+            { id: 7, title: 'Álgebra Lineal', author: 'Sheldon Axler', year: 2015, status: 'available', color: '#8FBC8F', pdfUrl: 'https://linear.axler.net/LADR4e.pdf' },
+            { id: 8, title: 'Geometría Analítica', author: 'Lehmann', year: 2007, status: 'available', color: '#2E8B57', pdfUrl: 'https://bdigital.uncu.edu.ar/objetos_digitales/7224/librogeoing.pdf' },
+            { id: 9, title: 'Cálculo Diferencial', author: 'Larson', year: 2008, status: 'available', color: '#3CB371', pdfUrl: 'https://www.cimat.mx/ciencia_para_jovenes/bachillerato/libros/Wooton.pdf' },
+            { id: 10, title: 'Historia de las Matemáticas', author: 'Carl Boyer', year: 2009, status: 'available', color: '#20B2AA', pdfUrl: '' }, 
+            { id: 11, title: 'Pensamiento Matemático', author: 'Mason', year: 2010, status: 'available', color: '#4682B4', pdfUrl: '' }, 
+            { id: 12, title: 'La República', author: 'Platón', year: -375, status: 'available', color: '#5F9EA0', pdfUrl: 'http://bibliotecadigital.econ.uba.ar/download/Pe/180266.pdf' },
+            { id: 13, title: 'Poética', author: 'Aristóteles', year: -335, status: 'available', color: '#6495ED', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/poetica_aristoteles.pdf' },
+            { id: 14, title: 'Historia de la Filosofía', author: 'Giovanni Reale', year: 1980, status: 'available', color: '#7B68EE', pdfUrl: '' }, 
+            { id: 15, title: 'Filosofía Antigua', author: 'Friedrich Ueberweg', year: 2014, status: 'available', color: '#483D8B', pdfUrl: 'http://www.unl.edu.ar/ingreso/cursos/filosoficos/wp-content/uploads/sites/11/2016/11/05-Plat%C3%B3nRep%C3%BAblica.pdf' },
+            { id: 16, title: 'Humano, Demasiado Humano', author: 'Friedrich Nietzsche', year: 1878, status: 'available', color: '#8B008B', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.140/pr.140.pdf' },
+            { id: 17, title: 'Filosofía en México', author: 'Zeferino González', year: 2016, status: 'available', color: '#9932CC', pdfUrl: 'https://perio.unlp.edu.ar/catedras/lecturayescritura/wp-content/uploads/sites/16/2020/03/1-La-Rep%C3%BAblica-de-Plat%C3%B3n-Libro-IV-Cap%C3%ADtulo-I-a-VII_compressed.pdf' },
+            { id: 18, title: 'Teoría de la Música', author: 'Adolfo Salazar', year: 2017, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 19, title: 'Armonía Musical', author: 'Arnold Schoenberg', year: 2018, status: 'available', color: '#C71585', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.8871/pr.8871.pdf' },
+            { id: 20, title: 'Teoría del Arte', author: 'Tatarkiewicz', year: 2019, status: 'available', color: '#DB7093', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/libros/pm.416/pm.416.pdf' },
+            { id: 21, title: 'Historia del Arte', author: 'Ernst Gombrich', year: 2020, status: 'available', color: '#A0522D', pdfUrl: '' }, 
+            { id: 22, title: 'Arte en Chile', author: 'Antonio Romera', year: 2021, status: 'available', color: '#CD853F', pdfUrl: '' },
+            { id: 23, title: 'Artes Plásticas', author: 'Paul Klee', year: 2022, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 24, title: 'Astronomía Básica', author: 'Carl Sagan', year: 2023, status: 'available', color: '#B8860B', pdfUrl: '' }, 
+            { id: 25, title: 'Sistema Solar', author: 'NASA', year: 2024, status: 'available', color: '#9932CC', pdfUrl: '' },
+            { id: 26, title: 'Conceptos de Astronomía', author: 'Stephen Hawking', year: 2025, status: 'available', color: '#BA55D3', pdfUrl: '' },
+            { id: 27, title: 'Astrónomos', author: 'Varios', year: 2026, status: 'available', color: '#2F4F4F', pdfUrl: '' },
+            { id: 28, title: 'Astronomía en la Escuela', author: 'Varios', year: 2027, status: 'available', color: '#5F9EA0', pdfUrl: '' },
+            { id: 29, title: 'Mitología Griega', author: 'Robert Graves', year: 2028, status: 'available', color: '#6495ED', pdfUrl: '' },
+            { id: 30, title: 'Dioses y Héroes', author: 'Karl Kerényi', year: 2029, status: 'available', color: '#7B68EE', pdfUrl: '' },
+            { id: 31, title: 'Historia Mundial', author: 'H.G. Wells', year: 2010, status: 'available', color: '#483D8B', pdfUrl: '' },
+            { id: 32, title: 'Historia Contemporánea', author: 'Eric Hobsbawm', year: 2011, status: 'available', color: '#8FBC8F', pdfUrl: '' },
+            { id: 33, title: 'Historia de México', author: 'Meyer', year: 2012, status: 'available', color: '#2E8B57', pdfUrl: '' },
+            { id: 34, title: 'Viaje por México', author: 'Octavio Paz', year: 2013, status: 'available', color: '#3CB371', pdfUrl: '' },
+            { id: 35, title: 'Arte en México', author: 'Teresa del Conde', year: 2014, status: 'available', color: '#20B2AA', pdfUrl: '' },
+            { id: 36, title: 'Che Guevara', author: 'Che Guevara', year: 2015, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 37, title: 'José de San Martín', author: 'Bartolomé Mitre', year: 2016, status: 'available', color: '#556B2F', pdfUrl: '' },
+            { id: 38, title: 'Simón Bolívar', author: 'John Lynch', year: 2017, status: 'available', color: '#8FBC8F', pdfUrl: '' },
+            { id: 39, title: 'San Martín', author: 'Horacio Salas', year: 2018, status: 'available', color: '#2E8B57', pdfUrl: '' },
+            { id: 40, title: 'Bolívar Libertador', author: 'Gerardo Molina', year: 2019, status: 'available', color: '#3CB371', pdfUrl: '' },
+            { id: 41, title: 'Física General', author: 'Serway', year: 2020, status: 'available', color: '#9932CC', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_fisica_general.pdf' },
+            { id: 42, title: 'Fundamentos de Física', author: 'Halliday', year: 2021, status: 'available', color: '#BA55D3', pdfUrl: '' }, 
+            { id: 43, title: 'Física Universitaria', author: 'Young', year: 2022, status: 'available', color: '#C71585', pdfUrl: '' }, 
+            { id: 44, title: 'Física para Ingenieros', author: 'Giancoli', year: 2023, status: 'available', color: '#DB7093', pdfUrl: '' }, 
+            { id: 45, title: 'Química Básica', author: 'Brown', year: 2024, status: 'available', color: '#A0522D', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_quimica_basica.pdf' },
+            { id: 46, title: 'Química General', author: 'Petrucci', year: 2025, status: 'available', color: '#CD853F', pdfUrl: '' }, 
+            { id: 47, title: 'Química Orgánica', author: 'Morrison', year: 2026, status: 'available', color: '#D2691E', pdfUrl: '' }, 
+            { id: 48, title: 'Conceptos Químicos', author: 'Chang', year: 2027, status: 'available', color: '#B8860B', pdfUrl: '' }, 
+            { id: 49, title: 'Química I', author: 'Whitten', year: 2028, status: 'available', color: '#9932CC', pdfUrl: '' }, 
+            { id: 50, title: 'Informática Básica', author: 'Joyane', year: 2009, status: 'available', color: '#BA55D3', pdfUrl: '' }, 
+            { id: 51, title: 'Computación Básica', author: 'Tanenbaum', year: 2010, status: 'available', color: '#2E8B57', pdfUrl: '' }, 
+            { id: 52, title: 'Python: Aprende', author: 'Eric Matthes', year: 2011, status: 'available', color: '#3CB371', pdfUrl: '' },
+            { id: 53, title: 'Tutorial Python 3', author: 'Guido van Rossum', year: 2012, status: 'available', color: '#20B2AA', pdfUrl: '' },
+            { id: 54, title: 'Python Junior', author: 'Jason Briggs', year: 2013, status: 'available', color: '#4682B4', pdfUrl: '' },
+            { id: 55, title: 'Bases de Datos', author: 'Date', year: 2014, status: 'available', color: '#5F9EA0', pdfUrl: '' },
+            { id: 56, title: 'Permacultura', author: 'Bill Mollison', year: 2015, status: 'available', color: '#6495ED', pdfUrl: '' },
+            { id: 57, title: 'Esencia Permacultura', author: 'David Holmgren', year: 2016, status: 'available', color: '#7B68EE', pdfUrl: '' },
+            { id: 58, title: 'Hidroponía', author: 'Howard Resh', year: 2017, status: 'available', color: '#8FBC8F', pdfUrl: '' },
+            { id: 59, title: 'ABC Hidroponía', author: 'Brenda Little', year: 2018, status: 'available', color: '#2F4F4F', pdfUrl: '' },
+            { id: 60, title: 'Manual Hidroponía', author: 'FAO', year: 2019, status: 'available', color: '#3CB371', pdfUrl: '' },
+            { id: 61, title: 'Sistema Hidropónico', author: 'Douglas', year: 2020, status: 'available', color: '#20B2AA', pdfUrl: '' },
+            { id: 62, title: 'Piscicultura', author: 'Lovshin', year: 2021, status: 'available', color: '#4682B4', pdfUrl: '' },
+            { id: 63, title: 'Piscicultura Práctica', author: 'Landau', year: 2022, status: 'available', color: '#5F9EA0', pdfUrl: '' },
+            { id: 64, title: 'Construcción Tierra', author: 'Minke', year: 2023, status: 'available', color: '#6495ED', pdfUrl: '' },
+            { id: 65, title: 'Bioconstrucción', author: 'Gernot Minke', year: 2024, status: 'available', color: '#7B68EE', pdfUrl: '' },
+            { id: 66, title: 'Taller Bioconstrucción', author: 'Laura Berardi', year: 2025, status: 'available', color: '#483D8B', pdfUrl: '' },
+            { id: 67, title: 'Carpintería', author: 'Peters', year: 2026, status: 'available', color: '#8FBC8F', pdfUrl: '' },
+            { id: 68, title: 'Muebles Madera', author: 'Spielman', year: 2027, status: 'available', color: '#9932CC', pdfUrl: '' },
+            { id: 69, title: 'Apicultura', author: 'Bonney', year: 2028, status: 'available', color: '#BA55D3', pdfUrl: '' },
+            { id: 70, title: 'Guía Apicultor', author: 'Root', year: 2029, status: 'available', color: '#C71585', pdfUrl: '' },
+            { id: 71, title: 'Manual Apicultura', author: 'Friedrich Ruttner', year: 2030, status: 'available', color: '#DB7093', pdfUrl: '' },
+            { id: 72, title: 'Abeja Reina', author: 'Huber', year: 2031, status: 'available', color: '#A0522D', pdfUrl: '' },
+            { id: 73, title: 'Mecatrónica', author: ' Bolton', year: 2032, status: 'available', color: '#CD853F', pdfUrl: '' },
+            { id: 74, title: 'Electrónica Mecatrónica', author: 'Boylestad', year: 2033, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 75, title: 'Robótica Aplicada', author: 'Spong', year: 2034, status: 'available', color: '#B8860B', pdfUrl: '' },
+            { id: 76, title: 'Neurociencia', author: 'Kandel', year: 2035, status: 'available', color: '#9932CC', pdfUrl: '' },
+            { id: 77, title: 'Economía Solidaria', author: 'Razeto', year: 2036, status: 'available', color: '#BA55D3', pdfUrl: '' },
+            { id: 78, title: 'Libro Muertos Egipcio', author: 'Anónimo', year: -1500, status: 'available', color: '#556B2F', pdfUrl: '' },
+            { id: 79, title: 'Textos Budistas', author: 'Daisaku Ikeda', year: 2038, status: 'available', color: '#8FBC8F', pdfUrl: '' },
+            { id: 80, title: 'Sutras Budismo', author: 'Thich Nhat Hanh', year: 2039, status: 'available', color: '#2E8B57', pdfUrl: '' },
+            { id: 81, title: 'Vedanta', author: 'Swami Vivekananda', year: 2040, status: 'available', color: '#3CB371', pdfUrl: '' },
+            { id: 82, title: 'Vedas', author: 'Anónimo', year: -1500, status: 'available', color: '#20B2AA', pdfUrl: '' },
+            { id: 83, title: 'Lingüística', author: 'Saussure', year: 2042, status: 'available', color: '#4682B4', pdfUrl: '' },
+            { id: 84, title: 'Historia Lenguaje', author: 'Steven Pinker', year: 2043, status: 'available', color: '#5F9EA0', pdfUrl: '' },
+            { id: 85, title: 'Lingüística General', author: 'Ferdinand de Saussure', year: 2044, status: 'available', color: '#6495ED', pdfUrl: '' },
+            { id: 86, title: 'Análisis Discurso', author: 'Van Dijk', year: 2045, status: 'available', color: '#7B68EE', pdfUrl: '' },
+            { id: 87, title: 'Fonología', author: 'Chomsky', year: 2046, status: 'available', color: '#483D8B', pdfUrl: '' },
+            { id: 88, title: 'Teoría Literatura', author: 'Wellek', year: 2047, status: 'available', color: '#8FBC8F', pdfUrl: '' },
+            { id: 89, title: 'Historia Literatura', author: 'Méndez Platero', year: 2048, status: 'available', color: '#9932CC', pdfUrl: '' },
+            { id: 90, title: 'Análisis Literario', author: 'Spivak', year: 2049, status: 'available', color: '#BA55D3', pdfUrl: '' },
+            { id: 91, title: 'Crítica Literaria', author: 'Northrop Frye', year: 2050, status: 'available', color: '#C71585', pdfUrl: '' },
+            { id: 92, title: 'Literatura Comparada', author: 'Auerbach', year: 2051, status: 'available', color: '#DB7093', pdfUrl: '' },
+            { id: 93, title: 'Diseño Arquitectónico', author: 'Ching', year: 2052, status: 'available', color: '#A0522D', pdfUrl: '' },
+            { id: 94, title: 'Historia Arquitectura', author: 'Kostof', year: 2053, status: 'available', color: '#CD853F', pdfUrl: '' },
+            { id: 95, title: 'Urbanismo', author: 'Jane Jacobs', year: 2054, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 96, title: 'Arquitectura Sostenible', author: 'Yeang', year: 2055, status: 'available', color: '#B8860B', pdfUrl: '' },
+            { id: 97, title: 'Teoría Arquitectura', author: 'Vitruvio', year: 2056, status: 'available', color: '#9932CC', pdfUrl: '' },
+            { id: 98, title: 'Cien Años de Soledad', author: 'Gabriel García Márquez', year: 1967, status: 'available', color: '#8B4513', pdfUrl: 'https://app.pulsar.uba.ar/fetch.php/scholarship/T64701/CienAnosDeSoledadLibroCompleto.pdf' },
+            { id: 99, title: 'Don Quijote', author: 'Miguel de Cervantes', year: 1605, status: 'available', color: '#A0522D', pdfUrl: 'https://sedici.unlp.edu.ar/bitstream/handle/10915/61575/Documento_completo__.pdf?sequence=1&isAllowed=y' },
+            { id: 100, title: 'La Ilíada', author: 'Homero', year: -750, status: 'available', color: '#CD853F', pdfUrl: 'https://colegiolospensamientos.cl/wp-content/uploads/2023/09/Octubre-I%C2%B0M-La-Iliada-Homero.pdf' },
+            { id: 101, title: '1984', author: 'George Orwell', year: 1949, status: 'available', color: '#B8860B', pdfUrl: 'https://www.philosophia.cl/biblioteca/orwell/1984.pdf' },
+            { id: 102, title: 'Orgullo y Prejuicio', author: 'Jane Austen', year: 1813, status: 'available', color: '#556B2F', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/orgullo_y_prejuicio_austen.pdf' },
+            { id: 103, title: 'Crimen y Castigo', author: 'Fiódor Dostoyevski', year: 1866, status: 'available', color: '#8FBC8F', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Fedor%20Dostoievski%20-%20Crimen%20y%20castigo.pdf' },
+            { id: 104, title: 'Guerra y Paz', author: 'León Tolstói', year: 1869, status: 'available', color: '#9932CC', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Le%C3%B3n%20Tolstoi%20Guerra%20y%20Paz.pdf' },
+            { id: 105, title: 'La Divina Comedia', author: 'Dante Alighieri', year: 1320, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dante%20Alighieri%20Divina%20comedia.pdf' },
+            { id: 106, title: 'La Odisea', author: 'Homero', year: -700, status: 'available', color: '#C71585', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
+            { id: 107, title: 'Moby Dick', author: 'Herman Melville', year: 1851, status: 'available', color: '#DB7093', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
+            { id: 108, title: 'Ana Karenina', author: 'León Tolstói', year: 1877, status: 'available', color: '#A0522D', pdfUrl: 'https://www.agr-tc.pt/bibliotecadigital/aetc/download/674/Ana%20Karenina%20-%20Leon%20Tolstoi.pdf' },
+            { id: 109, title: 'Fahrenheit 451', author: 'Ray Bradbury', year: 1953, status: 'available', color: '#556B2F', pdfUrl: 'https://lexiconic.net/english/F451.pdf' },
+            { id: 110, title: 'Neuromante', author: 'William Gibson', year: 1984, status: 'available', color: '#9932CC', pdfUrl: 'https://dn720006.ca.archive.org/0/items/neuromancer_202209/neuromancer.pdf' },
+            { id: 111, title: 'Pedro Páramo', author: 'Juan Rulfo', year: 1955, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Juan%20Rulfo%20-%20Pedro%20P%C3%A1ramo.pdf' },
+            { id: 112, title: 'Fundación', author: 'Isaac Asimov', year: 1951, status: 'available', color: '#C71585', pdfUrl: 'https://www.mercaba.org/SANLUIS/ALiteratura/Literatura%20contempor%C3%A1nea/Asimov,%20Issac/Fundaci%C3%B3n.PDF' },
+            { id: 113, title: 'Don Juan Tenorio', author: 'José Zorrilla', year: 1844, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Jos%C3%A9%20Zorrilla%20Don%20Juan%20Tenorio.pdf' },
+            { id: 114, title: 'Casa de los Espíritus', author: 'Isabel Allende', year: 1982, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Isabel%20Allende%20La%20Casa%20de%20los%20Esp%C3%ADritus.pdf' },
+            { id: 115, title: 'Rayuela', author: 'Julio Cortázar', year: 1963, status: 'available', color: '#CD853F', pdfUrl: 'https://seduc.edomex.gob.mx/sites/seduc.edomex.gob.mx/files/padres_familia/fomento_lectura/Julio%20Cortazar%20-%20Rayuela.pdf' },
+            { id: 116, title: 'Nombre de la Rosa', author: 'Umberto Eco', year: 1980, status: 'available', color: '#556B2F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Umberto%20Eco%20El%20Nombre%20de%20la%20Rosa.pdf' },
+            { id: 117, title: 'Viento en los Sauces', author: 'Kenneth Grahame', year: 1908, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Grahame-Viento-Sauces.pdf' },
+            { id: 118, title: 'Siddhartha', author: 'Hermann Hesse', year: 1922, status: 'available', color: '#BA55D3', pdfUrl: 'https://cpcglobal.org/publications/Siddhartha%20by%20Hermann%20Hesse.pdf' },
+            { id: 119, title: 'Demián', author: 'Hermann Hesse', year: 1919, status: 'available', color: '#C71585', pdfUrl: 'https://www.holybooks.com/wp-content/uploads/DemianBy-Hermann-Hesse.pdf' },
+            { id: 120, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' }
         ];
 
         // ========================================
@@ -965,7 +1037,6 @@
         function createBug(type) {
             const bug = document.createElement('div');
             if (type === 'butterfly') {
-                // Variante de color para mariposas
                 const randColor = Math.random();
                 let colorClass = '';
                 if (randColor > 0.66) {
@@ -973,7 +1044,6 @@
                 } else if (randColor > 0.33) {
                     colorClass = 'yellow';
                 }
-
                 bug.className = `butterfly ${colorClass}`;
                 bug.innerHTML = '<div class="butterfly-wing left"></div><div class="butterfly-wing right"></div>';
             } else if (type === 'ladybug') {
@@ -1011,7 +1081,6 @@
 
         function createBookElement(book) {
             const bookDiv = document.createElement('button');
-            // Clase estándar
             bookDiv.className = 'book';
             bookDiv.style.backgroundColor = book.color;
             bookDiv.title = `${book.title} - ${book.author}`;
@@ -1036,21 +1105,18 @@
             }
             bookDiv.appendChild(decoration);
 
-            // LOGICA DE ETIQUETAS SIN PDF (BORRAR TÍTULO Y AUTOR)
-            // Solo se crea la etiqueta si existe una URL válida
-            if (book.pdfUrl && book.pdfUrl.trim() !== '' && book.pdfUrl !== 'undefined') {
-                const label = document.createElement('div');
-                label.className = 'book-label';
-                const labelText = document.createElement('div');
-                labelText.className = 'book-label-text';
-                labelText.textContent = book.title.slice(0, 10);
-                const labelAuthor = document.createElement('div');
-                labelAuthor.className = 'book-label-author';
-                labelAuthor.textContent = getAuthorLastName(book.author);
-                label.appendChild(labelText);
-                label.appendChild(labelAuthor);
-                bookDiv.appendChild(label);
-            }
+            // Etiqueta del libro
+            const label = document.createElement('div');
+            label.className = 'book-label';
+            const labelText = document.createElement('div');
+            labelText.className = 'book-label-text';
+            labelText.textContent = book.title.slice(0, 10);
+            const labelAuthor = document.createElement('div');
+            labelAuthor.className = 'book-label-author';
+            labelAuthor.textContent = getAuthorLastName(book.author);
+            label.appendChild(labelText);
+            label.appendChild(labelAuthor);
+            bookDiv.appendChild(label);
 
             // Insectos
             if (book.pdfUrl && book.pdfUrl.trim() !== '' && book.pdfUrl !== 'undefined') {
@@ -1064,7 +1130,6 @@
                 }
             }
 
-            // Event listener
             bookDiv.addEventListener('click', () => openBookModal(book));
 
             return bookDiv;
@@ -1079,12 +1144,10 @@
             link.style.backgroundColor = color;
             link.title = title;
 
-            // Textura
             const texture = document.createElement('div');
             texture.className = 'special-book-texture';
             link.appendChild(texture);
 
-            // Decoración
             const decoration = document.createElement('div');
             decoration.className = 'special-book-decoration';
             for (let i = 0; i < 5; i++) {
@@ -1094,7 +1157,6 @@
             }
             link.appendChild(decoration);
 
-            // Etiqueta
             const label = document.createElement('div');
             label.className = 'special-book-label';
             label.textContent = title;
@@ -1114,13 +1176,11 @@
             const container = document.createElement('div');
             container.className = 'ladybug-walking';
             
-            // Manchas
             const s1 = document.createElement('div'); s1.className = 'spot lw-s1'; container.appendChild(s1);
             const s2 = document.createElement('div'); s2.className = 'spot lw-s2'; container.appendChild(s2);
             const s3 = document.createElement('div'); s3.className = 'spot lw-s3'; container.appendChild(s3);
             const s4 = document.createElement('div'); s4.className = 'spot lw-s4'; container.appendChild(s4);
             
-            // Patas (contenedor animado)
             const legs = document.createElement('div');
             legs.className = 'ladybug-walking-legs';
             container.appendChild(legs);
@@ -1128,7 +1188,7 @@
             const direction = Math.random() > 0.5 ? 1 : -1;
             const startX = direction === 1 ? -10 : 110;
             const endX = direction === 1 ? 110 : -10;
-            const duration = 10000 + Math.random() * 5000; // 10-15s
+            const duration = 10000 + Math.random() * 5000;
             
             container.style.left = startX + '%';
             container.style.bottom = '5px';
@@ -1162,7 +1222,6 @@
                 booksContainer.classList.add('align-right');
             }
 
-            // Libros especiales (En la fila superior)
             if (isFirstShelf) {
                 const nihongoBook = createSpecialBook(
                     'NihongoApp',
@@ -1186,13 +1245,8 @@
                 booksContainer.appendChild(gramaticBook);
             }
 
-            // Libros normales
             books.forEach(book => {
-                // Si el libro no tiene URL, agregamos clase especial 'no-label' y estilo simple
                 const bookElement = createBookElement(book);
-                if (!book.pdfUrl || book.pdfUrl === 'undefined') {
-                     bookElement.className = 'book no-label';
-                }
                 booksContainer.appendChild(bookElement);
             });
 
@@ -1238,9 +1292,6 @@
             }
         }
 
-        // ========================================
-        // FILTRAR LIBROS
-        // ========================================
         function filterBooks() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const availableOnly = document.getElementById('availableFilter').checked;
@@ -1256,9 +1307,6 @@
             renderLibrary();
         }
 
-        // ========================================
-        // MODAL
-        // ========================================
         function openBookModal(book) {
             const modal = document.getElementById('bookModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -1298,9 +1346,6 @@
             document.getElementById('bookModal').classList.remove('active');
         }
 
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
         document.getElementById('searchInput').addEventListener('input', filterBooks);
         document.getElementById('availableFilter').addEventListener('change', filterBooks);
         document.getElementById('modalClose').addEventListener('click', closeBookModal);
@@ -1317,9 +1362,6 @@
             }
         });
 
-        // =======================================
-        // INICIALIZACIÓN
-        // =======================================
         function init() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             renderLibrary();
