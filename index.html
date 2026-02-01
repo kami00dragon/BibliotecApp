@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BibliotecApp - Biblioteca Digital</title>
+    <title>BibliotecApp</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,9 @@
             background: linear-gradient(to bottom, #451a03, #78350f, #451a03);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             padding: 2rem 1rem 1rem 1rem;
-            border-bottom: 4px solid #451a03;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .header-content {
@@ -39,13 +41,14 @@
 
         .header-title h1 {
             font-size: 2.5rem;
-            font-weight: 900;
             margin-bottom: 0.25rem;
+            font-weight: 900;
+            font-family: 'Georgia', serif, sans-serif;
             color: #fcd34d;
             letter-spacing: 2px;
         }
 
-        .header-guardians {
+        .header-with-guardians {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -53,11 +56,49 @@
             flex-wrap: wrap;
         }
 
-        .guardian-img {
-            width: 6rem;
-            height: 8rem;
-            object-fit: contain;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        .guardians-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.25rem;
+            height: 3.5rem;
+        }
+
+        .guardian-statue {
+            width: 7.5rem;
+            height: 10.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .guardian-shisa {
+            width: 9rem;
+            height: 10.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        @media (min-width: 768px) {
+            .guardian-statue {
+                width: 9rem;
+                height: 12rem;
+            }
+            .guardian-shisa {
+                width: 11rem;
+                height: 12rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-with-guardians {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .guardian-statue {
+                width: 6rem;
+                height: 8.4rem;
+            }
+            .guardian-shisa {
+                width: 7.2rem;
+                height: 8.4rem;
+            }
         }
 
         .search-filters {
@@ -65,7 +106,6 @@
             flex-direction: column;
             gap: 0.75rem;
             align-items: center;
-            margin-top: 1rem;
         }
 
         .search-with-stars {
@@ -85,19 +125,23 @@
         }
 
         .search-input {
-            flex: 1;
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
-            border: 2px solid #92400e;
+            border: 2px solid #f59e0b;
             background: white;
             color: #78350f;
             font-size: 1rem;
-            min-width: 200px;
+            width: 100%;
+            max-width: 300px;
         }
 
         .search-input:focus {
             outline: none;
             border-color: #f59e0b;
+        }
+
+        .search-input::placeholder {
+            color: #b45309;
         }
 
         .filter-label {
@@ -119,9 +163,10 @@
         /* Main Content */
         main {
             flex: 1;
-            padding: 2rem 1rem;
             max-width: 1400px;
             margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
         }
 
         .library-frame {
@@ -137,54 +182,74 @@
             position: relative;
             background: linear-gradient(to bottom right, #fef9c3, #fde68a);
             border-radius: 0.75rem;
-            padding: 2rem 1.5rem;
+            padding: 1.5rem;
             box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 100%;
         }
 
+        .library-molding {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1rem;
+            background: linear-gradient(to bottom, #92400e, #78350f);
+        }
+
+        .library-molding.top {
+            top: 0;
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+
+        .library-molding.bottom {
+            bottom: 0;
+            border-radius: 0 0 0.75rem 0.75rem;
+        }
+
+        /* Bookshelf */
         .bookshelf {
             margin-bottom: 1.5rem;
-            width: 100%;
         }
 
         .bookshelf-bg {
             background: linear-gradient(to bottom, #92400e, #78350f);
             border-radius: 0.5rem;
             padding: 1.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            width: 100%;
-        }
-
-        .bookshelf-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .bookshelf-number {
-            color: #fef3c7;
-            font-size: 0.875rem;
-            font-weight: 600;
+            min-height: 200px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .books-container {
             display: flex;
             align-items: flex-end;
-            gap: 0.5rem;
+            justify-content: center;
+            gap: 0.25rem;
+            min-height: 160px;
+            padding-bottom: 0.75rem;
             flex-wrap: wrap;
-            min-height: 120px;
         }
 
-        #bookshelvesContainer {
-            width: 100%;
-            min-height: 200px;
+        /* Alineación alternativa de estantes */
+        .books-container.align-left {
+            justify-content: flex-start;
+            padding-left: 0.5rem;
         }
 
-        /* Book */
+        .books-container.align-right {
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        .shelf-board {
+            height: 1.5rem;
+            background: linear-gradient(to bottom, #92400e, #78350f);
+            border-radius: 0.125rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Book Button */
         .book {
             position: relative;
-            width: 3rem;
+            width: 2.5rem;
             height: 10rem;
             border-radius: 0.125rem;
             background: #8B4513;
@@ -205,7 +270,7 @@
             left: 0;
             top: 0;
             bottom: 0;
-            width: 0.25rem;
+            width: 0.5rem;
             background: rgba(0, 0, 0, 0.2);
         }
 
@@ -240,56 +305,74 @@
         }
 
         .book-label-text {
-            font-size: 0.375rem;
+            font-size: 0.5rem;
             color: rgba(255, 255, 255, 0.8);
             font-weight: bold;
             line-height: 1.2;
         }
 
-        /* Special Books */
+        .book-label-author {
+            font-size: 0.4rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.125rem;
+        }
+
+        /* Special Book (Enciclopedia) */
         .special-book {
             position: relative;
             width: 4rem;
             height: 10rem;
             border-radius: 0.125rem;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
             transform: translateY(0);
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
             text-decoration: none;
-            color: white;
+            display: block;
         }
 
         .special-book:hover {
             transform: translateY(-4px) scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .special-book .book-decoration {
+        .special-book-texture {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        }
+
+        .special-book-decoration {
+            position: absolute;
             left: 0.25rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .special-book .book-label {
-            font-size: 0.5rem;
+        .special-book-line {
+            width: 0.25rem;
+            height: 0.125rem;
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Footer */
-        footer {
-            background: linear-gradient(to right, #991b1b, #dc2626, #b91c1c);
-            color: white;
-            padding: 1.5rem;
-            margin-top: auto;
-            text-align: center;
-        }
-
-        .footer-content p {
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-content small {
+        .special-book-label {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
             font-size: 0.75rem;
-            opacity: 0.8;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            line-height: 1.2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(-180deg);
         }
 
         /* Modal */
@@ -297,7 +380,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -363,6 +446,10 @@
             font-size: 1rem;
         }
 
+        .modal-info strong {
+            font-weight: bold;
+        }
+
         .modal-status-available {
             color: #16a34a;
             font-weight: bold;
@@ -382,7 +469,7 @@
             color: white;
             padding: 1rem 1.5rem;
             border-radius: 0.5rem;
-            font-weight: 600;
+            font-weight: bold;
             text-decoration: none;
             margin-top: 1rem;
             transition: all 0.2s ease;
@@ -403,22 +490,64 @@
 
         .no-pdf-message p {
             color: #78350f;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-pdf-message small {
+            color: #b45309;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .no-results h2 {
+            font-size: 1.5rem;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results p {
+            color: #92400e;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #78350f, #92400e, #78350f);
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: #fef3c7;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-content small {
+            color: #fcd34d;
             font-size: 0.875rem;
         }
 
         /* Responsive */
         @media (max-width: 640px) {
             .book {
-                width: 2.25rem;
+                width: 1.8rem;
                 height: 7rem;
             }
 
-            .book-label {
-                width: 1rem;
-            }
-
-            .book-label-text {
-                font-size: 0.3125rem;
+            .books-container {
+                gap: 0.125rem;
+                min-height: 110px;
             }
 
             .special-book {
@@ -426,8 +555,8 @@
                 height: 7rem;
             }
 
-            .special-book .book-label {
-                font-size: 0.4375rem;
+            .special-book-label {
+                font-size: 0.75rem;
             }
 
             .bookshelf-bg {
@@ -435,55 +564,68 @@
                 min-height: 140px;
             }
 
-            .header-title h1 {
-                font-size: 1.8rem;
+            .shelf-board {
+                height: 1rem;
             }
 
-            .search-star {
-                width: 2rem;
-                height: 2rem;
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
             }
         }
 
-        @media (min-width: 768px) {
+        @media (max-width: 768px) {
             header {
                 padding: 1.5rem 1rem 0.5rem 1rem;
-            }
-
-            .search-filters {
-                margin-top: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-content">
-            <!-- Título con guardianes -->
-            <div class="header-guardians">
-                <!-- Guardianes izquierdos -->
-                <div class="header-guardians">
-                    <img class="guardian-img" src="https://tabimaniajapan.com/wp-content/uploads/2020/04/Identity-shisa-840x1024.jpg" alt="Shisa Okinawense">
-                    <img class="guardian-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGIIXQQbKEMEY4_D-4LPmTKyi1TaTNXKbABA&s" alt="Maneki Neko">
-                </div>
+            <div class="header-title">
+                <div class="header-with-guardians">
+                    <!-- Guardianes izquierdos: Shisa -->
+                    <div class="guardians-container">
+                        <!-- Shisa Okinawense - Imagen real -->
+                        <img class="guardian-shisa"
+                            src="https://tabimaniajapan.com/wp-content/uploads/2020/04/Identity-shisa-840x1024.jpg" 
+                            alt="Shisa Okinawense" />
+                    </div>
 
-                <!-- Título -->
-                <div class="header-title">
+                    <!-- Maneki Neko - Gato de la Suerte (en el centro) -->
+                    <img class="guardian-statue" 
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGIIXQQbKEMEY4_D-4LPmTKyi1TaTNXKbABA&s" 
+                        alt="Maneki Neko" />
+
                     <h1>BibliotecApp</h1>
-                </div>
 
-                <!-- Guardianes derechos -->
-                <div class="header-guardians">
-                    <img class="guardian-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLSZ0VAv8l4o2GJqzpbSUi1sg3ei4IX3S6-A&s" alt="Zorro Kitsune">
-                    <img class="guardian-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" alt="Shisa Okinawense">
+                    <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
+                    <div class="guardians-container">
+                        <!-- Kitsune de Inari - Imagen real -->
+                        <img class="guardian-statue" 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLSZ0VAv8l4o2GJqzpbSUi1sg3ei4IX3S6-A&s" 
+                            alt="Zorro Kitsune" />
+
+                        <!-- Shisa Okinawense - Imagen real -->
+                        <img class="guardian-shisa" 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyPcpMaQW_90WDRnqapKezhV8HAMJsOnbZPA&s" 
+                            alt="Shisa Okinawense" />
+                    </div>
                 </div>
             </div>
 
-            <!-- Barra de búsqueda -->
             <div class="search-filters">
                 <div class="search-with-stars">
-                    <!-- Estrella dorada izquierda -->
+                    <!-- Estrella dorada de 5 puntas - izquierda del input -->
                     <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -492,22 +634,31 @@
                                 <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
                             </linearGradient>
                         </defs>
-                        <polygon points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40" fill="url(#goldStar)" stroke="#B8860B" stroke-width="2" />
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#goldStar)"
+                            stroke="#B8860B"
+                            stroke-width="2"
+                        />
                     </svg>
 
                     <!-- Input de búsqueda -->
                     <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
 
-                    <!-- Estrella roja derecha -->
+                    <!-- Estrella roja de 5 puntas - derecha del input -->
                     <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#B91C1C;stop-opacity:1" />
                                 <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
                             </linearGradient>
                         </defs>
-                        <polygon points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40" fill="url(#redStar)" stroke="#7F1D1D" stroke-width="2" />
+                        <polygon
+                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                            fill="url(#redStar)"
+                            stroke="#7F1D1D"
+                            stroke-width="2"
+                        />
                     </svg>
                 </div>
 
@@ -519,16 +670,17 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main>
         <div class="library-frame">
             <div class="library-inner">
+                <div class="library-molding top"></div>
+                <!-- Estantes de Libros -->
                 <div id="bookshelvesContainer"></div>
+                <div class="library-molding bottom"></div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <p>📚 BibliotecApp - Tu puerta al conocimiento universal 📚</p>
@@ -536,24 +688,22 @@
         </div>
     </footer>
 
-    <!-- Modal -->
+    <!-- Modal para detalles del libro -->
     <div id="bookModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle" class="modal-title"></h2>
                 <button id="modalClose" class="modal-close">×</button>
             </div>
-            <div class="modal-info">
-                <p><strong>Autor:</strong> <span id="modalAuthor"></span></p>
-                <p><strong>Año:</strong> <span id="modalYear"></span></p>
-                <p><strong>Estado:</strong> <span id="modalStatus"></span></p>
-            </div>
-            <div id="modalActions"></div>
+            <div id="modalInfo" class="modal-info"></div>
+            <div id="modalFormats" class="modal-formats"></div>
         </div>
     </div>
 
     <script>
-        // Base de datos de libros
+        // ========================================
+        // DATOS DE LIBROS - 120 LIBROS CON PDFs
+        // ========================================
         const books = [
             { id: 1, title: 'Tao Te King', author: 'Lao Tse', year: 1998, status: 'available', color: '#8B4513', pdfUrl: 'https://app.pulsar.uba.ar/default.aspx/Resources/T69768/LaoTseTaoTeKing.pdf' },
             { id: 2, title: 'I Ching', author: 'Anónimo', year: 2001, status: 'available', color: '#A0522D', pdfUrl: 'https://app.pulsar.uba.ar/default.aspx/libweb/T69769/RichardWilhelmIChing.pdf' },
@@ -660,11 +810,11 @@
             { id: 103, title: 'Crimen y Castigo', author: 'Fiódor Dostoyevski', year: 2062, status: 'available', color: '#8FBC8F', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Fedor%20Dostoievski%20-%20Crimen%20y%20castigo.pdf' },
             { id: 104, title: 'Guerra y Paz', author: 'León Tolstói', year: 2063, status: 'available', color: '#9932CC', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Le%C3%B3n%20Tolstoi%20Guerra%20y%20Paz.pdf' },
             { id: 105, title: 'La Divina Comedia', author: 'Dante Alighieri', year: 2064, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dante%20Alighieri%20Divina%20comedia.pdf' },
-            { id: 106, title: 'La Odisea', author: 'Homero', year: 2065, status: 'available', color: '#D2691E', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
-            { id: 107, title: 'Moby Dick', author: 'Herman Melville', year: 2066, status: 'available', color: '#C71585', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
-            { id: 108, title: 'Ana Karenina', author: 'León Tolstói', year: 2067, status: 'available', color: '#DB7093', pdfUrl: 'https://www.agr-tc.pt/bibliotecadigital/aetc/download/674/Ana%20Karenina%20-%20Leon%20Tolstoi.pdf' },
+            { id: 106, title: 'La Odisea', author: 'Homero', year: 2065, status: 'available', color: '#C71585', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
+            { id: 107, title: 'Moby Dick', author: 'Herman Melville', year: 2066, status: 'available', color: '#DB7093', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
+            { id: 108, title: 'Ana Karenina', author: 'León Tolstói', year: 2067, status: 'available', color: '#A0522D', pdfUrl: 'https://www.agr-tc.pt/bibliotecadigital/aetc/download/674/Ana%20Karenina%20-%20Leon%20Tolstoi.pdf' },
             { id: 109, title: 'Fahrenheit 451', author: 'Ray Bradbury', year: 2068, status: 'available', color: '#556B2F', pdfUrl: 'https://lexiconic.net/english/F451.pdf' },
-            { id: 110, title: 'Neuromante', author: 'William Gibson', year: 2069, status: 'available', color: '#9932CC', pdfUrl: ' 'https://dn720006.ca.archive.org/0/items/neuromancer_202209/neuromancer.pdf' },
+            { id: 110, title: 'Neuromante', author: 'William Gibson', year: 2069, status: 'available', color: '#9932CC', pdfUrl: 'https://dn720006.ca.archive.org/0/items/neuromancer_202209/neuromancer.pdf' },
             { id: 111, title: 'Pedro Páramo', author: 'Juan Rulfo', year: 2070, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Juan%20Rulfo%20-%20Pedro%20P%C3%A1ramo.pdf' },
             { id: 112, title: 'Fundación', author: 'Isaac Asimov', year: 2071, status: 'available', color: '#C71585', pdfUrl: 'https://www.mercaba.org/SANLUIS/ALiteratura/Literatura%20contempor%C3%A1nea/Asimov,%20Issac/Fundaci%C3%B3n.PDF' },
             { id: 113, title: 'Don Juan Tenorio', author: 'José Zorrilla', year: 2072, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Jos%C3%A9%20Zorrilla%20Don%20Juan%20Tenorio.pdf' },
@@ -677,33 +827,40 @@
             { id: 120, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 2079, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' }
         ];
 
-        // Variables de estado
+        // ========================================
+        // VARIABLES GLOBALES
+        // ========================================
         let allBooks = [...books];
         let filteredBooks = [...books];
 
-        // Función para crear elemento de libro
+        // ========================================
+        // FUNCIONES DE UTILIDAD
+        // ========================================
+        function getAuthorLastName(author) {
+            const parts = author.split(' ');
+            return parts[parts.length - 1];
+        }
+
+        // ========================================
+        // CREAR ELEMENTOS DE LIBROS
+        // ========================================
         function createBookElement(book) {
-            const height = 100 + Math.floor(Math.random() * 40);
-            const bookDiv = document.createElement('div');
+            const bookDiv = document.createElement('button');
             bookDiv.className = 'book';
-            bookDiv.style.height = `${height}px`;
-            bookDiv.onclick = () => openBookModal(book);
-            
-            // Color del libro
-            const innerDiv = document.createElement('div');
-            innerDiv.style.backgroundColor = book.color;
-            
-            // Efecto de lomo
+            bookDiv.style.backgroundColor = book.color;
+            bookDiv.title = `${book.title} - ${book.author}`;
+
+            // Lomo del libro
             const spine = document.createElement('div');
             spine.className = 'book-spine';
-            innerDiv.appendChild(spine);
-            
-            // Textura
+            bookDiv.appendChild(spine);
+
+            // Textura del libro
             const texture = document.createElement('div');
             texture.className = 'book-texture';
-            innerDiv.appendChild(texture);
-            
-            // Decoración
+            bookDiv.appendChild(texture);
+
+            // Decoración del lomo
             const decoration = document.createElement('div');
             decoration.className = 'book-decoration';
             for (let i = 0; i < 3; i++) {
@@ -711,204 +868,242 @@
                 line.className = 'book-line';
                 decoration.appendChild(line);
             }
-            innerDiv.appendChild(decoration);
-            
-            // Etiqueta del libro
+            bookDiv.appendChild(decoration);
+
+            // Etiqueta del libro (solo si está disponible)
             const label = document.createElement('div');
             label.className = 'book-label';
             const labelText = document.createElement('div');
             labelText.className = 'book-label-text';
-            let titleText = book.title;
-            if (titleText.length > 12) {
-                titleText = titleText.substring(0, 12) + '...';
-            }
-            labelText.textContent = titleText;
+            labelText.textContent = book.title.slice(0, 10);
+            const labelAuthor = document.createElement('div');
+            labelAuthor.className = 'book-label-author';
+            labelAuthor.textContent = getAuthorLastName(book.author);
             label.appendChild(labelText);
-            innerDiv.appendChild(label);
-            
-            bookDiv.appendChild(innerDiv);
-            
+            label.appendChild(labelAuthor);
+            bookDiv.appendChild(label);
+
+            // Event listener
+            bookDiv.addEventListener('click', () => openBookModal(book));
+
             return bookDiv;
         }
 
-        // Función para crear libro especial
-        function createSpecialBook(title, url, color, specialClass) {
+        function createSpecialBook(title, url, color) {
             const link = document.createElement('a');
             link.href = url;
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
-            link.className = `special-book ${specialClass}`;
+            link.className = 'special-book';
             link.style.backgroundColor = color;
-            
+            link.title = title;
+
             // Textura
             const texture = document.createElement('div');
-            texture.className = 'book-texture';
+            texture.className = 'special-book-texture';
             link.appendChild(texture);
-            
+
             // Decoración
             const decoration = document.createElement('div');
-            decoration.className = 'book-decoration';
+            decoration.className = 'special-book-decoration';
             for (let i = 0; i < 5; i++) {
                 const line = document.createElement('div');
-                line.className = 'book-line';
+                line.className = 'special-book-line';
                 decoration.appendChild(line);
             }
             link.appendChild(decoration);
-            
+
             // Etiqueta
             const label = document.createElement('div');
-            label.className = 'book-label';
+            label.className = 'special-book-label';
             label.textContent = title;
             link.appendChild(label);
-            
+
             return link;
         }
 
-        // Función para crear estante
-        function createBookshelf(shelfBooks, shelfIndex, isFirstShelf) {
+        function createBookshelf(books, isFirstShelf, alignLeft) {
             const shelfDiv = document.createElement('div');
             shelfDiv.className = 'bookshelf';
-            
+
             const shelfBg = document.createElement('div');
             shelfBg.className = 'bookshelf-bg';
-            
-            const header = document.createElement('div');
-            header.className = 'bookshelf-header';
-            
-            const numberSpan = document.createElement('span');
-            numberSpan.className = 'bookshelf-number';
-            numberSpan.textContent = `Estante #${shelfIndex + 1}`;
-            header.appendChild(numberSpan);
-            shelfBg.appendChild(header);
-            
+
             const booksContainer = document.createElement('div');
             booksContainer.className = 'books-container';
-            
+
+            // Alinear según el parámetro - CORREGIDO: Usar clases CSS puras
+            if (alignLeft) {
+                booksContainer.classList.add('align-left');
+            } else {
+                booksContainer.classList.add('align-right');
+            }
+
             // Agregar libros especiales si es el primer estante
             if (isFirstShelf) {
-                booksContainer.appendChild(createSpecialBook('NihongoApp', 'https://kami00dragon.github.io/NihongoApp/index.html', '#8B0000'));
-                booksContainer.appendChild(createSpecialBook('AeternusApp', 'https://kami00dragon.github.io/AeternusApp/', '#5D4037'));
-                booksContainer.appendChild(createSpecialBook('GramaticApp', 'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas', '#424242'));
+                const nihongoBook = createSpecialBook(
+                    'NihongoApp',
+                    'https://kami00dragon.github.io/NihongoApp/index.html',
+                    '#8B0000'
+                );
+                booksContainer.appendChild(nihongoBook);
+
+                const aeternusBook = createSpecialBook(
+                    'AeternusApp',
+                    'https://kami00dragon.github.io/AeternusApp/',
+                    '#5D4037'
+                );
+                booksContainer.appendChild(aeternusBook);
+
+                const gramaticBook = createSpecialBook(
+                    'GramaticApp',
+                    'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas',
+                    '#424242'
+                );
+                booksContainer.appendChild(gramaticBook);
             }
-            
+
             // Agregar libros normales
-            shelfBooks.forEach(book => {
-                booksContainer.appendChild(createBookElement(book));
+            books.forEach(book => {
+                const bookElement = createBookElement(book);
+                booksContainer.appendChild(bookElement);
             });
-            
+
+            const shelfBoard = document.createElement('div');
+            shelfBoard.className = 'shelf-board';
             shelfBg.appendChild(booksContainer);
+            shelfBg.appendChild(shelfBoard);
             shelfDiv.appendChild(shelfBg);
-            
+
             return shelfDiv;
         }
 
-        // Función para renderizar biblioteca
+        // ========================================
+        // RENDERIZAR BIBLIOTECA
+        // ========================================
         function renderLibrary() {
             const container = document.getElementById('bookshelvesContainer');
             container.innerHTML = '';
-            
+
             if (filteredBooks.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem;">
-                        <h2 style="color: #78350f; margin-bottom: 0.5rem;">No se encontraron libros</h2>
-                        <p style="color: #92400e;">Intente con otra búsqueda o desactive el filtro</p>
-                    </div>
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <h2>No se encontraron libros</h2>
+                    <p>Intente con otra búsqueda o desactive el filtro</p>
                 `;
+                container.appendChild(noResults);
                 return;
             }
-            
-            // Distribuir libros en estantes
+
+            // Distribuir libros uniformemente en 50 estantes
             const totalShelves = 50;
-            const booksPerShelf = Math.ceil(filteredBooks.length / totalShelves);
+            const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves);
             const extraBooks = filteredBooks.length % totalShelves;
-            
+
             for (let i = 0; i < totalShelves; i++) {
-                const startIdx = i * booksPerShelf;
-                const endIdx = startIdx + booksPerShelf + (i < extraBooks ? 1 : 0);
-                const shelfBooks = filteredBooks.slice(startIdx, endIdx);
-                const isFirstShelf = i === 0;
-                container.appendChild(createBookshelf(shelfBooks, i, isFirstShelf));
+                const booksThisShelf = baseBooksPerShelf + (i < extraBooks ? 1 : 0);
+                const startIdx = i * baseBooksPerShelf + Math.min(i, extraBooks);
+                const shelfBooks = filteredBooks.slice(startIdx, startIdx + booksThisShelf);
+                const shelfElement = createBookshelf(shelfBooks, i === 0, i % 2 === 0);
+                container.appendChild(shelfElement);
             }
         }
 
-        // Función para filtrar libros
+        // ========================================
+        // FILTRAR LIBROS
+        // ========================================
         function filterBooks() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const availableOnly = document.getElementById('availableFilter').checked;
-            
+
             filteredBooks = allBooks.filter(book => {
-                const matchesSearch = book.title.toLowerCase().includes(searchTerm) ||
-                                     book.author.toLowerCase().includes(searchTerm);
+                const matchesSearch =
+                    book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm);
                 const matchesAvailability = !availableOnly || book.status === 'available';
                 return matchesSearch && matchesAvailability;
             });
-            
+
             renderLibrary();
         }
 
-        // Función para abrir modal
+        // ========================================
+        // MODAL
+        // ========================================
         function openBookModal(book) {
             const modal = document.getElementById('bookModal');
             const modalTitle = document.getElementById('modalTitle');
-            const modalAuthor = document.getElementById('modalAuthor');
-            const modalYear = document.getElementById('modalYear');
-            const modalStatus = document.getElementById('modalStatus');
-            const modalActions = document.getElementById('modalActions');
-            
+            const modalInfo = document.getElementById('modalInfo');
+            const modalFormats = document.getElementById('modalFormats');
+
             modalTitle.textContent = book.title;
-            modalAuthor.textContent = book.author;
-            modalYear.textContent = book.year;
-            
+
             const statusClass = book.status === 'available' ? 'modal-status-available' : 'modal-status-unavailable';
             const statusText = book.status === 'available' ? 'Disponible' : 'No disponible';
-            modalStatus.textContent = statusText;
-            modalStatus.className = statusClass;
-            
-            if (book.pdfUrl) {
-                modalActions.innerHTML = `
+
+            modalInfo.innerHTML = `
+                <p><strong>Autor:</strong> ${book.author}</p>
+                <p><strong>Año:</strong> ${book.year}</p>
+                <p><strong>Estado:</strong> <span class="${statusClass}">${statusText}</span></p>
+            `;
+
+            if (book.status === 'available' && book.pdfUrl) {
+                modalFormats.innerHTML = `
                     <a href="${book.pdfUrl}" target="_blank" rel="noopener noreferrer" class="read-pdf-btn">
                         📄 LEER PDF
                     </a>
                 `;
             } else {
-                modalActions.innerHTML = `
+                modalFormats.innerHTML = `
                     <div class="no-pdf-message">
                         <p>📚 Este libro aún no tiene un enlace directo a PDF disponible</p>
+                        <small>Los PDFs se están agregando continuamente</small>
                     </div>
                 `;
             }
-            
+
             modal.classList.add('active');
         }
 
-        // Función para cerrar modal
         function closeBookModal() {
-            const modal = document.getElementById('bookModal');
-            modal.classList.remove('active');
+            document.getElementById('bookModal').classList.remove('active');
         }
 
-        // Event listeners
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
         document.getElementById('searchInput').addEventListener('input', filterBooks);
         document.getElementById('availableFilter').addEventListener('change', filterBooks);
         document.getElementById('modalClose').addEventListener('click', closeBookModal);
-        document.getElementById('bookModal').addEventListener('click', (e) => {
-            if (e.target.id === 'bookModal') {
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
                 closeBookModal();
             }
         });
 
-        // Cerrar modal con tecla ESC
-        document.addEventListener('keydown', (e) => {
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeBookModal();
             }
         });
 
-        // Año actual en footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        // ========================================
+        // INICIALIZACIÓN
+        // ========================================
+        function init() {
+            // Establecer año actual en el footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Renderizar inicialmente
-        renderLibrary();
+            // Renderizar biblioteca
+            renderLibrary();
+        }
+
+        // Iniciar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
