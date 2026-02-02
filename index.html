@@ -49,13 +49,13 @@
         }
 
         /* Flex container principal de la fila superior */
-        .header-with-guardians {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
+	.header-with-guardians {
+	    display: flex;
+	    align-items: flex-end;
+	    justify-content: space-between; /* <--- CAMBIO AQUÍ */
+	    gap: 1rem;
+	    flex-wrap: wrap;
+	}
 
         .guardians-container {
             display: flex;
@@ -904,7 +904,7 @@
         // ========================================
         const books = [
             // Actualizados y Enlaces
-            { id: 121, title: 'Sutra del Diamante', author: 'Siddhartha Gautama', year: -400, status: 'available', color: '#9acd32', pdfUrl: 'https://www.lastelladelmattino.org/wp-content/uploads/2010/04/El-diamante_parte-budista-completa_F.pdf' },
+          { id: 121, title: 'Sutra del Diamante', author: 'Siddhartha Gautama', year: -400, status: 'available', color: '#9acd32', pdfUrl: 'https://www.lastelladelmattino.org/wp-content/uploads/2010/04/El-diamante_parte-budista-completa_F.pdf' },
             { id: 122, title: 'Sutra del Corazón', author: 'Thich Nhat Hanh', year: 1998, status: 'available', color: '#ba55d3', pdfUrl: 'https://cdn.bookey.app/files/book/es/el-sutra-del-corazon.pdf' },
             
             { id: 4, title: 'El mundo como voluntad y representación', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
@@ -1022,8 +1022,51 @@
             { id: 117, title: 'El legado de San Martín', author: 'Instituto Sanmartiniano', year: 1908, status: 'available', color: '#8FBC8F', pdfUrl: 'https://sanmartiniano.cultura.gob.ar/media/uploads/site-31/multimedia/PDFs/el-legado-de-san-martin.pdf' },
             { id: 118, title: 'Siddhartha', author: 'Hermann Hesse', year: 1922, status: 'available', color: '#BA55D3', pdfUrl: 'https://cpcglobal.org/publications/Siddhartha%20by%20Hermann%20Hesse.pdf' },
             { id: 119, title: 'La voz del Gran Jefe. San Martín', author: 'Felipe Pigna', year: 1919, status: 'available', color: '#C71585', pdfUrl: 'http://eet485.com.ar/Archivos/Felipe%20Pigna%20-%20La%20voz%20del%20Gran%20Jefe_b8x.pdf' },
-            { id: 120, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' }
-        ];
+            { id: 120, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' },
+            { id: 121, title: 'La metamorfosis', author: 'Franz Kafka', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://www.ucm.es/data/cont/docs/119-2014-02-11-Kafka.La%20metamorfosis.pdf' },
+            { id: 4, title: 'Cuentos Completos, vol I', author: 'Silvina Ocampo', year: 1999, status: 'available', color: '#D2691E', pdfUrl: 'https://airenuestro.com/wp-content/uploads/2015/01/cuentos_1.pdf' },
+            { id: 4, title: 'Cuentos completos II', author: 'Silvina Ocampo', year: 1999, status: 'available', color: '#D2691E', pdfUrl: 'https://airenuestro.com/wp-content/uploads/2015/01/cuentos_2.pdf' },
+            { id: 4, title: 'Poemas breves de Silvina Ocampo', author: 'Silvina Ocampo', year: 2018, status: 'available', color: '#D2691E', pdfUrl: 'https://digitalcommons.usf.edu/cgi/viewcontent.cgi?article=1263&context=surcosur' },
+            { id: 4, title: 'Historias de cronopios y de famas', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca.choapa.cl/Libros/Historias-de-Cronopios-y-de-Famas%20-%20Julio%20Cortazar.pdf' },
+            { id: 4, title: 'https://ddooss.org/libros/Lucas_Julio_Cortazar.pdf', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://ddooss.org/libros/Lucas_Julio_Cortazar.pdf' },
+            { id: 4, title: 'Poemas de Julio Cortazar', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'http://www.elrincondedebbie.com/sites/default/files/pdf/Poemas%20de%20Julio%20Cort%C3%A1zar.pdf' },
+            { id: 4, title: 'Selección de textos de Katherine Mansfield', author: 'KATHERINE MANSFIELD', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://materialdelectura.unam.mx/images/stories/pdf5/katherine-mansfield-95.pdf' },
+            { id: 4, title: 'Felicidad', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/escritura1/wp-content/uploads/sites/119/2020/05/MANSFIELD-K-2003-%E2%80%9CFelicidad%E2%80%9D-en-Cuentos-completos-De-bolsillo-Buenos-Aires..pdf' },
+            { id: 4, title: 'Fiesta en el jardín', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/BIBLIOWEB/upload/Fiesta%20en%20el%20jard%C3%83%C2%ADn.pdf' },
+            { id: 4, title: 'Éxtasis', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://tallervirtualdeescritores.com/wp-content/uploads/2024/05/Mansfield_Extasis.pdf?srsltid=AfmBOoqPaoP-lS9wjOxgAWMd8HmbRT0NNk9_PMfYreDrYCFh9oDVKil5' },
+            { id: 4, title: 'La casa de muñecas', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.curriculumnacional.cl/614/articles-25888_recurso_pdf.pdf' },
+            { id: 4, title: 'Orlando', author: 'Virginia Woolf', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://elplacerdelalectura.com/wp-content/uploads/2020/02/orlando.pdf' },
+            { id: 4, title: 'Socialismo comunitario', author: 'Álvaro García Linera', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://www.vicepresidencia.gob.bo/IMG/pdf/socialismo_comunitario-2.pdf' },
+            { id: 4, title: 'EL Estado en transición. Bloque de poder y punto de bifurcación', author: 'Alvaro García Linera', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://bibliotecavirtual.clacso.org.ar/ar/libros/coedicion/linera/7.4.pdf' },
+            { id: 4, title: 'Forma valor y forma comunidad', author: 'Alvaro García Linera', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://traficantes.net/sites/default/files/pdfs/Forma%20valor%20y%20forma%20comunidad%20-%20Traficantes%20de%20Sue%C3%B1os.pdf' },
+            { id: 4, title: 'La potencia plebeya: acción colectiva e identidades indígenas, obreras y populares en Bolivia', author: 'Arthur Schopenhauer', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca-repositorio.clacso.edu.ar/bitstream/CLACSO/15717/1/La-potencia-plebeya.pdf' },
+            { id: 4, title: 'Las metamorfosis', author: 'Ovidio', year: 8, status: 'available', color: '#D2691E', pdfUrl: 'https://gaceta.cch.unam.mx/sites/default/files/libros/2022-05/las-metamorfosis-de-ovidio.pdf' },
+            { id: 4, title: 'Tragedias, de Euripides', author: 'Eurípides', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://hipermedula.org/wp-content/uploads/2018/04/Euripides.Tragedias-I.-El-Ciclope.-Alcestis.-Medea.-Los-Heraclidas.-Hipolito.-Andromaca.-Hecuba.pdf' },
+            { id: 4, title: 'Electra', author: 'Eurípides', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://literaturauvmsep.wordpress.com/wp-content/uploads/2014/05/euripides-electra-bilingue.pdf' },
+            { id: 4, title: 'Tragedias. Esquilo', author: 'Esquilo', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Esquilo%20-%20Tragedias.pdf' },
+            { id: 4, title: 'La orestiada', author: 'Esquilo', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'http://www.ctvteatro.com/Biblioteca/Esquilo/La.Orestiada.pdf' },
+            { id: 4, title: 'Las siete tragedias de Sófocles', author: 'Sófocles', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://ministeriodeeducacion.gob.do/docs/biblioteca-virtual/XxkQ-las-siete-tragedias-de-sofogles-jose-alemanypdf.pdf' },
+            { id: 4, title: 'El camarada', author: 'Takiji Kobayashi', year: 1932, status: 'available', color: '#D2691E', pdfUrl: 'https://elsudamericano.wordpress.com/wp-content/uploads/2019/06/161.el-camarada-takiji-kobayashi.pdf' },
+            { id: 4, title: 'Haikus y Tankas', author: 'Takahashi Mutsuo', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.canela.org.es/cuadernoscanela/canelapdf/cc3-4nivon.pdf' },
+            { id: 4, title: 'Filosofía mapuche: palabras arcaicas para despertar el Ser', author: 'Ziley Mora Penroz', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.folkloretradiciones.com.ar/literatura/Mora%20Penros%20Ziley%20-%20Filosofia%20Mapuche.pdf' },
+            { id: 4, title: 'Poesía contemporanea del Japón. Antología', author: 'Varios', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://gregoryzambrano.com/wp-content/uploads/2010/09/poesia_contemporanea_del_japon.pdf' },
+            { id: 4, title: 'Libélulas, luciérnagas y mariposas: 39 haikús japoneses', author: 'Varios', year: 2004, status: 'available', color: '#D2691E', pdfUrl: 'https://www.redalyc.org/pdf/586/58639306.pdf' },
+            { id: 4, title: 'Las mil y una noches', author: 'Varios', year: 800, status: 'available', color: '#D2691E', pdfUrl: 'https://0201.nccdn.net/1_2/000/000/17f/d54/Las-mil-y-una-noches.pdf' },
+            { id: 4, title: 'Qué es el budismo', author: 'JOrge Luis Borges y Alicia Jurado', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://worcel.com/archivos/6/Borges%20&%20Jurado-Que%20Es%20El%20Budismo.pdf' },
+            { id: 4, title: 'El libro de los seres imaginarios', author: 'Jorge Luis Borges', year: 1982, status: 'available', color: '#D2691E', pdfUrl: 'https://tuscriaturasarchivos.home.blog/wp-content/uploads/2020/03/el-libro-de-los-seres-imaginarios-por-jorge-luis-borges-alfabetico.pdf' },
+            { id: 4, title: 'Tractatus logico-filosophocus', author: 'Lugwig Wittgenstein', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.filosoficas.unam.mx/~tomasini/TRADUCCIONES/WITTGENSTEIN/Traduccion-TLP.pdf' },
+            { id: 4, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
+             { id: 4, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
+ { id: 4, title: 'Conferencia sobre Ética: Lugwig Wittgenstein', author: 'Lugwig Wittgenstein', year: 1965, status: 'available', color: '#D2691E', pdfUrl: 'https://www.philosophia.cl/biblioteca/Wittgenstein/conferencia.pdf' },
+ { id: 4, title: 'Investigaciones filosóficas', author: 'Lugwig Wittgenstein', year: 1967, status: 'available', color: '#D2691E', pdfUrl: 'https://educacion.uncuyo.edu.ar/upload/wittgenstein-investigaciones-filosoficas.pdf' },
+ { id: 4, title: 'Cuadernos azul y marrón', author: 'James Robinson', year: 1968, status: 'available', color: '#D2691E', pdfUrl: 'https://lenguajeyconocimiento.wordpress.com/wp-content/uploads/2014/03/wittgenstein-cuadernos-azul-y-marron.pdf' },
+ { id: 4, title: 'Seguir con el problema', author: 'Donna Haraway', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ivam.es/wp-content/uploads/intro_cap2_haraway_consonni-2.pdf' },
+ { id: 4, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://www.solidaridadobrera.org/ateneo_nacho/libros/Donna%20Haraway%20-%20Manifiesto%20Cyborg.pdf' },
+ { id: 4, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' }
+];
+
+
+
         // ========================================
         // VARIABLES GLOBALES
         // ========================================
