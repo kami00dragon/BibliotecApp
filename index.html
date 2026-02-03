@@ -24,43 +24,89 @@
             background: linear-gradient(to bottom, #451a03, #78350f, #451a03);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             padding: 2rem 1rem 1rem 1rem;
-            position: sticky;
-            top: 0;
+            position: relative;
+            width: 100%;
             z-index: 10;
         }
 
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
 
         .header-title {
-            text-align: center;
+            width: 100%;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
         }
 
         .header-title h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.25rem;
+            font-size: 2.5rem; /* <--- BASE PARA EL CÁLCULO DEL MARGEN */
             font-weight: 900;
             font-family: 'Georgia', serif, sans-serif;
             color: #fcd34d;
             letter-spacing: 2px;
+            margin: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* WRAPPER CENTRAL - UNIFICADO */
+        .center-wrapper {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            
+            /* Posicionamiento Absoluto para no molestar a los lados */
+            position: absolute;
+            bottom: 0;           /* Fondo del alineamiento */
+            left: 25rem;        /* Desplazamiento a la derecha */
+            z-index: 5;
+
+            /* Flexbox para apilar Título y Búsqueda verticalmente */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Título dentro del wrapper: Moverlo hacia arriba */
+        .center-wrapper h1 {
+            /* CÁLCULO SOLICITADO: 1.5 veces la altura de la letra (2.5rem * 1.5 = 3.75rem) */
+            margin-bottom: 3.75rem;
         }
 
         /* Flex container principal de la fila superior */
-	.header-with-guardians {
-	    display: flex;
-	    align-items: flex-end;
-	    justify-content: space-between; /* <--- CAMBIO AQUÍ */
-	    gap: 1rem;
-	    flex-wrap: wrap;
-	}
+        .header-with-guardians {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+            flex-wrap: wrap;
+            position: relative; /* Referencia para el wrapper absoluto */
+        }
 
+        /* Grupo Izquierdo */
+        .guardians-left-group {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Grupo derecho */
         .guardians-container {
             display: flex;
             align-items: flex-end;
-            gap: 0.25rem;
+            gap: 0;
+            position: relative;
+            z-index: 2;
         }
 
         .guardian-statue {
@@ -86,11 +132,33 @@
             }
         }
 
-        @media (max-width: 480px) {
+        /* CORRECCIÓN PARA MÓVILES */
+        @media (max-width: 900px) {
+            .center-wrapper {
+                position: static;
+                left: auto;
+                bottom: auto;
+                margin-top: 1rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .center-wrapper h1 {
+                margin-bottom: 0.5rem; /* Resetear margen para móviles */
+            }
+
             .header-with-guardians {
                 flex-direction: column;
+                align-items: center;
                 gap: 0.5rem;
             }
+
+            .guardians-left-group, .guardians-container {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
             .guardian-statue {
                 width: 6rem;
                 height: 8.4rem;
@@ -106,7 +174,7 @@
             flex-direction: column;
             gap: 0.75rem;
             align-items: center;
-            margin-top: 0;
+            width: 100%;
         }
 
         .search-with-stars {
@@ -114,7 +182,6 @@
             align-items: center;
             gap: 0.75rem;
             width: 100%;
-            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -133,7 +200,6 @@
             color: #78350f;
             font-size: 1rem;
             width: 100%;
-            max-width: 300px;
         }
 
         .search-input:focus {
@@ -231,7 +297,6 @@
             flex-wrap: wrap;
         }
 
-        /* Alineación alternativa de estantes */
         .books-container.align-left {
             justify-content: flex-start;
             padding-left: 0.5rem;
@@ -332,7 +397,7 @@
             transform: translateY(0);
             transition: all 0.3s ease;
             cursor: pointer;
-            overflow: visible; /* Permite ver el texto */
+            overflow: visible;
             text-decoration: none;
             display: block;
         }
@@ -367,7 +432,7 @@
         .special-book-label {
             position: absolute;
             right: 0.5rem;
-            top: 15%; /* Corrección visual */
+            top: 15%;
             transform: rotate(-180deg);
             font-size: 0.75rem;
             color: white;
@@ -791,22 +856,71 @@
         <div class="header-content">
             <div class="header-title">
                 <div class="header-with-guardians">
-                    <!-- Guardianes Izquierdos: Shisa -->
-                    <div class="guardians-container">
+                    
+                    <!-- Guardianes Izquierdos (Agrupados) -->
+                    <div class="guardians-left-group">
                         <!-- Shisa Izquierda -->
-                        <img class="guardian-shisa"
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMOuhV-r33EeG4zUxRL3zGHfM4dSlG4YDrTg&s" 
-                            alt="Shisa Izquierda" />
+                        <div class="guardians-container">
+                            <img class="guardian-shisa"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMOuhV-r33EeG4zUxRL3zGHfM4dSlG4YDrTg&s" 
+                                alt="Shisa Izquierda" />
+                        </div>
+                        <!-- Maneki Neko -->
+                        <img class="guardian-statue" 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxJHUlDF4_7mwDAtfC5hLyENEtVIXyFE4FDg&s" 
+                            alt="Maneki Neko" />
                     </div>
 
-                    <!-- Maneki Neko -->
-                    <img class="guardian-statue" 
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxJHUlDF4_7mwDAtfC5hLyENEtVIXyFE4FDg&s" 
-                        alt="Maneki Neko" />
+                    <!-- WRAPPER CENTRAL: Título y Buscador en UN SOLO bloque -->
+                    <div class="center-wrapper">
+                        <h1>BibliotecApp</h1>
+                        <div class="search-filters">
+                            <div class="search-with-stars">
+                                <!-- Estrella dorada -->
+                                <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon
+                                        points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                                        fill="url(#goldStar)"
+                                        stroke="#B8860B"
+                                        stroke-width="2"
+                                    />
+                                </svg>
 
-                    <h1>BibliotecApp</h1>
+                                <!-- Input de búsqueda -->
+                                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
 
-                    <!-- Guardianes derechos: Zorro y Shisa (orden invertido) -->
+                                <!-- Estrella roja -->
+                                <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon
+                                        points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
+                                        fill="url(#redStar)"
+                                        stroke="#7F1D1D"
+                                        stroke-width="2"
+                                    />
+                                </svg>
+                            </div>
+
+                            <label class="filter-label">
+                                <input type="checkbox" id="availableFilter" class="filter-checkbox">
+                                <span>Solo repositorios digitales</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Guardianes derechos: Zorro y Shisa -->
                     <div class="guardians-container">
                         <!-- Kitsune de Inari -->
                         <img class="guardian-statue" 
@@ -819,51 +933,6 @@
                             alt="Shisa Derecha" />
                     </div>
                 </div>
-            </div>
-
-            <div class="search-filters">
-                <div class="search-with-stars">
-                    <!-- Estrella dorada -->
-                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="goldStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <polygon
-                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                            fill="url(#goldStar)"
-                            stroke="#B8860B"
-                            stroke-width="2"
-                        />
-                    </svg>
-
-                    <!-- Input de búsqueda -->
-                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por título o autor...">
-
-                    <!-- Estrella roja -->
-                    <svg class="search-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="redStar" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#991B1B;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <polygon
-                            points="50,5 61,40 98,40 69,55 80,90 50,75 20,90 31,55 2,40 39,40"
-                            fill="url(#redStar)"
-                            stroke="#7F1D1D"
-                            stroke-width="2"
-                        />
-                    </svg>
-                </div>
-
-                <label class="filter-label">
-                    <input type="checkbox" id="availableFilter" class="filter-checkbox">
-                    <span>Solo repositorios digitales</span>
-                </label>
             </div>
         </div>
     </header>
@@ -957,7 +1026,7 @@
             { id: 52, title: 'Full Stack con React.js', author: 'UTN', year: 2022, status: 'available', color: '#3CB371', pdfUrl: 'https://www.capacitacioninclusiva.com/wp-content/uploads/2022/04/18-Introduccio%CC%81n-a-React.pptx.pdf' },
             { id: 53, title: 'HTML5 y CSS', author: 'Autentia', year: 2012, status: 'available', color: '#20B2AA', pdfUrl: 'https://ahorasomos.izertis.com/autentia//wp-content/uploads/libros/Front_HTMLyCSS-Autentia.pdf' },
             { id: 54, title: 'Introducción a Javascript', author: 'UTN', year: 2022, status: 'available', color: '#4682B4', pdfUrl: 'https://www.capacitacioninclusiva.com/wp-content/uploads/2022/04/4-JavaScript-CONCEPTOS-GENERALES-SINTAXIS-Y-VARIABLES.pptx.pdf' },
-            { id: 55, title: 'Che lector', author: 'Varios', year: 2017, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/510be7e1f0d3d75c245c1f87e95a102c.pdf' },
+            { id: 55, title: 'Che lector', author: 'Varios', year: 2017, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/510be7e1f0d5d0208517d4f76ae036f.pdf' },
             { id: 56, title: 'Permacultura en Cuba', author: 'Varios', year: 2015, status: 'available', color: '#6495ED', pdfUrl: 'https://www.cospe.org/wp-content/uploads/2012/10/PERMACULTURA-EN-CUBA-imprenta-vf.pdf' },
             { id: 57, title: 'La huerta hidropónica popular', author: 'FAO', year: 2016, status: 'available', color: '#7B68EE', pdfUrl: 'https://www.fao.org/4/ah501s/ah501s.pdf' },
             { id: 58, title: 'Lo que el pájaro bebe y no es el agua', author: 'Chantal Maillard', year: 2022, status: 'available', color: '#8FBC8F', pdfUrl: 'https://traficantes.net/sites/default/files/pdfs//9788418807633.pdf' },
@@ -1057,7 +1126,7 @@
             { id: 152, title: 'Tractatus logico-filosophocus', author: 'Lugwig Wittgenstein', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.filosoficas.unam.mx/~tomasini/TRADUCCIONES/WITTGENSTEIN/Traduccion-TLP.pdf' },
             { id: 153, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
             { id: 154, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
-	    { id: 155, title: 'Conferencia sobre Ética: Lugwig Wittgenstein', author: 'Lugwig Wittgenstein', year: 1965, status: 'available', color: '#D2691E', pdfUrl: 'https://www.philosophia.cl/biblioteca/Wittgenstein/conferencia.pdf' },
+        { id: 155, title: 'Conferencia sobre Ética: Lugwig Wittgenstein', author: 'Lugwig Wittgenstein', year: 1965, status: 'available', color: '#D2691E', pdfUrl: 'https://www.philosophia.cl/biblioteca/Wittgenstein/conferencia.pdf' },
             { id: 156, title: 'Investigaciones filosóficas', author: 'Lugwig Wittgenstein', year: 1967, status: 'available', color: '#D2691E', pdfUrl: 'https://educacion.uncuyo.edu.ar/upload/wittgenstein-investigaciones-filosoficas.pdf' },
             { id: 157, title: 'Cuadernos azul y marrón', author: 'James Robinson', year: 1968, status: 'available', color: '#D2691E', pdfUrl: 'https://lenguajeyconocimiento.wordpress.com/wp-content/uploads/2014/03/wittgenstein-cuadernos-azul-y-marron.pdf' },
             { id: 158, title: 'Seguir con el problema', author: 'Donna Haraway', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ivam.es/wp-content/uploads/intro_cap2_haraway_consonni-2.pdf' },
@@ -1067,7 +1136,7 @@
             { id: 162, title: 'Eso no estaba en mi libro de botánica', author: 'Rosa Porcel', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'https://info-biblioteca.mincyt.gob.ve/wp-content/uploads/2024/09/Eso-no-estaba-en-mi-libro-de-Botanica-Rosa-Porcel.pdf' },
             { id: 163, title: 'Manual de plantas medicinales de la región chaqueña', author: 'INTA', year: 2024, status: 'available', color: '#D2691E', pdfUrl: 'https://editorial.uncaus.edu.ar/wp-content/uploads/2024/11/UNCAUS_Manual-de-plantas-medicinales.pdf' },
             { id: 164, title: 'Manual de plantas medicinales de las sierras de Córdoba', author: 'Donna Haraway', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://www.sib.gob.ar/portal/wp-content/uploads/2023/03/Manual-Entre-Hierbas-y-Yuyos-serranos.pdf' },
-            { id: 165, title: 'Usos tradicionales de las plantas medicinales de la región patagónica', author: 'INTA', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://cenpat.conicet.gov.ar/wp-content/uploads/sites/91/2016/03/USOS-TRADICIONALES-DE-LAS-PLANTAS-DE-LA-MESETA-PATAG%C3%93NICA.pdf' },
+            { id: 165, title: 'Usos tradicionales de las plantas medicinales de la región patagónica', author: 'INTA', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://cenpat.conicet.gov.ar/wp-content/uploads/sites/91/2016/03/USOS-TRADICIONALES-DE-LAS-PLANTAS-DE-LA-MESETA-PATAG%C3%B3NICA.pdf' },
             { id: 166, title: 'Manual de microbiología general', author: 'Varios', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://www.unirioeditora.com.ar/wp-content/uploads/2018/10/978-987-688-124-1.pdf' },
             { id: 167, title: 'Ecología Urbana', author: 'UNGS', year: 2012, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ungs.edu.ar/wp-content/uploads/pdfs_ediciones/Ecolog%C3%ADa_Urbana-completo.pdf' },
             { id: 168, title: 'Fundamentos de ecología y ambiente', author: 'UNLU', year: 2017, status: 'available', color: '#D2691E', pdfUrl: 'https://ri.unlu.edu.ar/xmlui/bitstream/handle/rediunlu/1367/Ecologia%20y%20ambiente_DIGITAL.pdf?sequence=1&isAllowed=y' },
@@ -1101,9 +1170,6 @@
             { id: 195, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' }
             
 ];
-
-
-
 
         // ========================================
         // VARIABLES GLOBALES
