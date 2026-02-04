@@ -318,7 +318,7 @@
             cursor: pointer;
             overflow: hidden;
             border: none;
-            z-index: 5; /* Libros debajo del gato */
+            z-index: 5; 
         }
 
         .book:hover {
@@ -629,66 +629,31 @@
            ========================================= */
         .cat-container {
             position: fixed;
-            /* Posición inicial fuera de pantalla */
             left: -300px; 
             bottom: 2rem;
-            width: 150px; /* Base size */
+            width: 150px; 
             height: 110px;
-            z-index: 1000; /* Arriba de los estantes y libros */
-            transition: left 0.1s linear, bottom 0.2s ease-out;
-            /* Importante: pointer-events auto para detectar click */
+            z-index: 1000; 
             pointer-events: auto; 
-            cursor: pointer;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
             will-change: transform, left;
+            cursor: pointer; 
         }
 
-        /* Variante para el segundo gato (más pequeño) */
         .cat-container.small-cat {
             width: 120px;
             height: 88px;
         }
 
-        /* Contenedor interno para la animación de rebote (separa el volteo del rebote) */
-        .cat-inner-anim {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Clases de Estado para el JS (Control de dirección en el contenedor PADRE) */
-        .cat-container.facing-left {
+        /* IMPORTANTE: Transform debe ser inmediato, sin transición por defecto */
+        .facing-left {
             transform: scaleX(-1);
         }
 
-        .cat-container.facing-right {
-            transform: scaleX(1);
-        }
-        
-        /* Asegurar que el segundo gato respete las escalas de volteo */
-        .cat-container.small-cat.facing-left {
-            transform: scaleX(-1);
-        }
-        .cat-container.small-cat.facing-right {
+        .facing-right {
             transform: scaleX(1);
         }
 
-        .cat-container.running {
-            /* La animación de carrera se maneja via JS para posicionar en estantes */
-        }
-
-        /* Animación de rebote al correr (Aplicada al contenedor HIJO) */
-        @keyframes runBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .cat-inner-anim.is-running-anim {
-            animation: runBounce 0.3s infinite alternate;
-        }
-        
         .cat-svg {
             width: 100%;
             height: 100%;
@@ -748,7 +713,6 @@
             animation: blinkAnim 5s infinite;
         }
 
-        /* Animación de la pata al tocar bicho */
         .cat-paw.swiping {
             animation: swipeAnim 0.2s ease-out;
         }
@@ -757,6 +721,31 @@
             0% { transform: rotate(0deg); }
             50% { transform: rotate(-45deg) translateX(-10px); }
             100% { transform: rotate(0deg); }
+        }
+
+        /* =========================================
+           CSS DEL ZORRO BEBÉ (CLASE)
+           ========================================= */
+        .baby-fox {
+            position: fixed;
+            width: 130px; /* Más grande */
+            height: 95px; /* Más alto */
+            z-index: 1001; 
+            pointer-events: none;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3));
+            /* El transform (espejo) se aplica vía JS para evitar conflictos */
+        }
+
+        /* Colores del Zorro */
+        .fox-fur-main { fill: #E65100; }
+        .fox-fur-light { fill: #FFF3E0; }
+        .fox-fur-dark { fill: #BF360C; }
+        .fox-nose { fill: #3E2723; }
+        .fox-eye-closed { 
+            fill: none; 
+            stroke: #3E2723; 
+            stroke-width: 2; 
+            stroke-linecap: round;
         }
 
         /* Modal */
@@ -902,7 +891,7 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
             padding: 1.5rem;
             margin-top: auto;
-            margin-bottom: 50px; /* Espacio por si el gato corre por abajo */
+            margin-bottom: 50px; 
         }
 
         .footer-content {
@@ -1070,125 +1059,75 @@
 
     <!-- Gato Tricolor 1 -->
     <div id="tricolorCat" class="cat-container facing-right">
-        <!-- Wrapper interno para animación de rebote -->
-        <div class="cat-inner-anim">
-            <svg class="cat-svg" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-                <!-- Cola (negra) - Detrás de todo -->
-                <path class="cat-tail" d="M30,90 Q5,70 15,50" fill="none" />
-
-                <!-- Cuerpo (blanco base) -->
-                <ellipse class="cat-body" cx="100" cy="100" rx="60" ry="35" />
-                
-                <!-- Mancha negra en el cuerpo (silla) -->
-                <path class="patch-black" d="M60,75 Q80,65 110,75 Q120,85 100,125 Q70,130 60,100 Z" opacity="0.9" />
-
-                <!-- Cabeza (blanca base) -->
-                <circle class="cat-head" cx="150" cy="60" r="35" />
-
-                <!-- Manchas en la cara -->
-                <!-- Mancha Naranja parte superior -->
-                <path class="patch-orange" d="M125,40 Q150,20 175,45 Q180,60 160,65 Q130,60 125,40 Z" />
-                
-                <!-- NUEVA: Mancha negra en la parte superior de la cabeza (entre orejas) -->
-                <path class="patch-black" d="M140,30 Q150,15 160,30 Q155,40 145,35 Z" opacity="0.8" />
-                
-                <!-- NUEVA: Mancha negra en la parte trasera de la cabeza (perfil izquierdo) -->
-                <path class="patch-black" d="M115,45 Q110,60 125,70" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-                
-                <!-- ELIMINADO: Mancha Negra ojo izquierdo (borrada) -->
-
-                <!-- Orejas -->
-                <path d="M120,40 L110,10 L140,30 Z" fill="#e67e22" stroke="#d35400" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M160,40 L175,10 L150,30 Z" fill="#fffbf0" stroke="#ccc" stroke-width="2" stroke-linejoin="round"/>
-
-                <!-- Ojos -->
-                <g id="eyeLeft" transform="translate(135, 60)">
-                    <circle r="5" class="cat-eye" />
-                    <circle cy="1" r="2" class="cat-pupil" />
-                    <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
-                </g>
-                <g id="eyeRight" transform="translate(165, 60)">
-                    <circle r="5" class="cat-eye" />
-                    <circle cy="1" r="2" class="cat-pupil" />
-                    <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
-                </g>
-
-                <!-- Nariz y Boca -->
-                <path d="M148,72 L152,72 L150,78 Z" class="cat-nose" />
-                <path d="M150,78 Q145,85 140,78 M150,78 Q155,85 160,78" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
-
-                <!-- Bigotes -->
-                <g stroke="#2c3e50" stroke-width="1" fill="none">
-                    <path d="M140,75 L120,70" />
-                    <path d="M140,80 L120,80" />
-                    <path d="M160,75 L180,70" />
-                    <path d="M160,80 L180,80" />
-                </g>
-
-                <!-- Patas (blancas) -->
-                <ellipse id="frontPaw" class="cat-paw" cx="130" cy="125" rx="12" ry="8" /> <!-- Pata delantera -->
-                <ellipse class="cat-paw" cx="150" cy="125" rx="12" ry="8" /> <!-- Otra pata -->
-            </svg>
-        </div>
+        <svg class="cat-svg" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <path class="cat-tail" d="M30,90 Q5,70 15,50" fill="none" />
+            <ellipse class="cat-body" cx="100" cy="100" rx="60" ry="35" />
+            <path class="patch-black" d="M60,75 Q80,65 110,75 Q120,85 100,125 Q70,130 60,100 Z" opacity="0.9" />
+            <circle class="cat-head" cx="150" cy="60" r="35" />
+            <path class="patch-orange" d="M125,40 Q150,20 175,45 Q180,60 160,65 Q130,60 125,40 Z" />
+            <path class="patch-black" d="M140,30 Q150,15 160,30 Q155,40 145,35 Z" opacity="0.8" />
+            <path class="patch-black" d="M115,45 Q110,60 125,70" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+            <path d="M120,40 L110,10 L140,30 Z" fill="#e67e22" stroke="#d35400" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M160,40 L175,10 L150,30 Z" fill="#fffbf0" stroke="#ccc" stroke-width="2" stroke-linejoin="round"/>
+            <g id="eyeLeft" transform="translate(135, 60)">
+                <circle r="5" class="cat-eye" />
+                <circle cy="1" r="2" class="cat-pupil" />
+                <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
+            </g>
+            <g id="eyeRight" transform="translate(165, 60)">
+                <circle r="5" class="cat-eye" />
+                <circle cy="1" r="2" class="cat-pupil" />
+                <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
+            </g>
+            <path d="M148,72 L152,72 L150,78 Z" class="cat-nose" />
+            <path d="M150,78 Q145,85 140,78 M150,78 Q155,85 160,78" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+            <g stroke="#2c3e50" stroke-width="1" fill="none">
+                <path d="M140,75 L120,70" />
+                <path d="M140,80 L120,80" />
+                <path d="M160,75 L180,70" />
+                <path d="M160,80 L180,80" />
+            </g>
+            <ellipse id="frontPaw" class="cat-paw" cx="130" cy="125" rx="12" ry="8" />
+            <ellipse class="cat-paw" cx="150" cy="125" rx="12" ry="8" />
+        </svg>
     </div>
 
-    <!-- Gato Tricolor 2 (Pequeño y con mancha en la nariz grande y negra) -->
+    <!-- Gato Tricolor 2 -->
     <div id="tricolorCat2" class="cat-container small-cat facing-right">
-        <div class="cat-inner-anim">
-            <svg class="cat-svg" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-                <!-- Cola (negra) -->
-                <path class="cat-tail" d="M30,90 Q5,70 15,50" fill="none" />
-                <!-- Cuerpo -->
-                <ellipse class="cat-body" cx="100" cy="100" rx="60" ry="35" />
-                <!-- Mancha negra cuerpo -->
-                <path class="patch-black" d="M60,75 Q80,65 110,75 Q120,85 100,125 Q70,130 60,100 Z" opacity="0.9" />
-                <!-- Cabeza -->
-                <circle class="cat-head" cx="150" cy="60" r="35" />
-                <!-- Manchas cara -->
-                <path class="patch-orange" d="M125,40 Q150,20 175,45 Q180,60 160,65 Q130,60 125,40 Z" />
-                <!-- Mancha superior cabeza -->
-                <path class="patch-black" d="M140,30 Q150,15 160,30 Q155,40 145,35 Z" opacity="0.8" />
-                <!-- Mancha trasera cabeza -->
-                <path class="patch-black" d="M115,45 Q110,60 125,70" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-                
-                <!-- Orejas -->
-                <path d="M120,40 L110,10 L140,30 Z" fill="#e67e22" stroke="#d35400" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M160,40 L175,10 L150,30 Z" fill="#fffbf0" stroke="#ccc" stroke-width="2" stroke-linejoin="round"/>
-
-                <!-- Ojos -->
-                <g id="eyeLeft2" transform="translate(135, 60)">
-                    <circle r="5" class="cat-eye" />
-                    <circle cy="1" r="2" class="cat-pupil" />
-                    <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
-                </g>
-                <g id="eyeRight2" transform="translate(165, 60)">
-                    <circle r="5" class="cat-eye" />
-                    <circle cy="1" r="2" class="cat-pupil" />
-                    <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
-                </g>
-
-                <!-- Nariz y Boca -->
-                <!-- NUEVO: Nariz negra grande cubriendo toda la nariz -->
-                <path d="M146,70 L154,70 L150,80 Z" fill="black" />
-                
-                <path d="M150,80 Q145,87 140,80 M150,80 Q155,87 160,80" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
-
-                <!-- Bigotes -->
-                <g stroke="#2c3e50" stroke-width="1" fill="none">
-                    <path d="M140,75 L120,70" />
-                    <path d="M140,80 L120,80" />
-                    <path d="M160,75 L180,70" />
-                    <path d="M160,80 L180,80" />
-                </g>
-
-                <!-- Patas -->
-                <ellipse id="frontPaw2" class="cat-paw" cx="130" cy="125" rx="12" ry="8" />
-                <ellipse class="cat-paw" cx="150" cy="125" rx="12" ry="8" />
-            </svg>
-        </div>
+        <svg class="cat-svg" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <path class="cat-tail" d="M30,90 Q5,70 15,50" fill="none" />
+            <ellipse class="cat-body" cx="100" cy="100" rx="60" ry="35" />
+            <path class="patch-black" d="M60,75 Q80,65 110,75 Q120,85 100,125 Q70,130 60,100 Z" opacity="0.9" />
+            <circle class="cat-head" cx="150" cy="60" r="35" />
+            <path class="patch-orange" d="M125,40 Q150,20 175,45 Q180,60 160,65 Q130,60 125,40 Z" />
+            <path class="patch-black" d="M140,30 Q150,15 160,30 Q155,40 145,35 Z" opacity="0.8" />
+            <path class="patch-black" d="M115,45 Q110,60 125,70" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+            <path d="M120,40 L110,10 L140,30 Z" fill="#e67e22" stroke="#d35400" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M160,40 L175,10 L150,30 Z" fill="#fffbf0" stroke="#ccc" stroke-width="2" stroke-linejoin="round"/>
+            <g id="eyeLeft2" transform="translate(135, 60)">
+                <circle r="5" class="cat-eye" />
+                <circle cy="1" r="2" class="cat-pupil" />
+                <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
+            </g>
+            <g id="eyeRight2" transform="translate(165, 60)">
+                <circle r="5" class="cat-eye" />
+                <circle cy="1" r="2" class="cat-pupil" />
+                <path d="M-6,0 Q0,5 6,0 L6,8 L-6,8 Z" class="eyelid" />
+            </g>
+            <path d="M148,72 L152,72 L150,78 Z" fill="black" />
+            <path d="M150,78 Q145,85 140,78 M150,78 Q155,85 160,78" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+            <g stroke="#2c3e50" stroke-width="1" fill="none">
+                <path d="M140,75 L120,70" />
+                <path d="M140,80 L120,80" />
+                <path d="M160,75 L180,70" />
+                <path d="M160,80 L180,80" />
+            </g>
+            <ellipse id="frontPaw2" class="cat-paw" cx="130" cy="125" rx="12" ry="8" />
+            <ellipse class="cat-paw" cx="150" cy="125" rx="12" ry="8" />
+        </svg>
     </div>
 
-    <!-- Modal para detalles del libro -->
+    <!-- Modal -->
     <div id="bookModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1202,14 +1141,12 @@
 
     <script>
         // ========================================
-        // DATOS DE LIBROS (LISTA COMPLETA)
+        // DATOS DE LIBROS
         // ========================================
         const books = [
-           { id: 196, title: 'Sutra del Diamante', author: 'Siddhartha Gautama', year: -400, status: 'available', color: '#9acd32', pdfUrl: 'https://www.lastelladelmattino.org/wp-content/uploads/2010/04/El-diamante_parte-budista-completa_F.pdf' },
+            { id: 196, title: 'Sutra del Diamante', author: 'Siddhartha Gautama', year: -400, status: 'available', color: '#9acd32', pdfUrl: 'https://www.lastelladelmattino.org/wp-content/uploads/2010/04/El-diamante_parte-budista-completa_F.pdf' },
             { id: 197, title: 'Sutra del Corazón', author: 'Thich Nhat Hanh', year: 1998, status: 'available', color: '#ba55d3', pdfUrl: 'https://cdn.bookey.app/files/book/es/el-sutra-del-corazon.pdf' },
-            
             { id: 4, title: 'El mundo como voluntad y representación', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
-
             { id: 6, title: 'Matemáticas Básicas', author: 'Varios Autores', year: 2005, status: 'available', color: '#556B2F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_matematicas_basicas-_completo-_09-15.pdf' },
             { id: 7, title: 'Reforma y disolución de los imperios ibéricos 1750-1850', author: 'Tulio Halperín Donghi', year: 2006, status: 'available', color: '#8FBC8F', pdfUrl: 'https://rodrigomorenog.wordpress.com/wp-content/uploads/2018/03/halperin-reforma-y-disolucic3b3n-de-los-imperios-ibc3a9ricos.pdf' },
             { id: 8, title: 'Geometría Analítica', author: 'Varios Autores', year: 2007, status: 'available', color: '#2E8B57', pdfUrl: 'https://bdigital.uncu.edu.ar/objetos_digitales/7224/librogeoing.pdf' },
@@ -1223,7 +1160,7 @@
             { id: 16, title: 'Sobre el fascismo', author: 'Antonio Gramsci', year: 1878, status: 'available', color: '#8B008B', pdfUrl: 'https://arxiujosepserradell.cat/wp-content/uploads/2021/12/GRAMSCI-ANTONIO-Sobre-el-Fascismo-OCR-por-Ganz1912.pdf' },
             { id: 17, title: 'Cartas desde la Cárcel', author: 'Antonio Gramsci', year: 2016, status: 'available', color: '#9932CC', pdfUrl: 'https://www.marxists.org/espanol/gramsci/cartas-de-la-carcel/cartas-de-la-carcel-gramsci.pdf' },
             { id: 18, title: 'El libro de la almohada', author: 'Sei Shonagón', year: 2017, status: 'available', color: '#BA55D3', pdfUrl: 'https://isaimoreno.com/wp-content/uploads/2015/04/el-libro-de-la-almohada-sei-shonagon.pdf' },
-            { id: 19, title: 'Militarizacion Revolucionaria En Buenos Aires, 1806-1815', author: 'Tulio Halperin Donghi', year: 2018, status: 'available', color: '#C71585', pdfUrl: 'https://materiales.untrefvirtual.edu.ar/documentos_extras/0435_Historia_Argentina/U3_Halperin_Donghi.pdf' },
+            { id: 19, title: 'Militarizacion Revolucionaria En Buenos Aires, 1806-1815', author: 'Tulio Halperin Donghi', year: 2018, status: 'available', color: '#C71585', pdfUrl: 'https://materiales.untrefvirtual.edu.ar/documentos_extras/0435_Historia_Argentina/U3_Halperin%20Donghi.pdf' },
             { id: 20, title: 'Proyecto y construcción de una nación (1846-1880)', author: 'Tulio Halperín Donghi', year: 2019, status: 'available', color: '#DB7093', pdfUrl: 'https://ens9004-infd.mendoza.edu.ar/sitio/upload/02-%20HALPERIN%20DONGHI%20-%20Tomo%202%20-%20Proyecto%20Y%20Construccion%20De%20Una%20Nacion%20(1846%20-%201880).pdf' },
             { id: 21, title: 'Laudato Si', author: 'Papá Francisco', year: 2020, status: 'available', color: '#A0522D', pdfUrl: 'https://www.oas.org/es/sg/casacomun/docs/papa-francesco-enciclica-laudato-si-sp.pdf' }, 
             { id: 22, title: 'Vedanta', author: 'India', year: 2021, status: 'available', color: '#CD853F', pdfUrl: 'https://www.vedantaadvaita.com/wp-content/uploads/2020/06/Vedanta-Advaita-Sesha-Abril-2015.pdf' },
@@ -1258,7 +1195,7 @@
             { id: 52, title: 'Full Stack con React.js', author: 'UTN', year: 2022, status: 'available', color: '#3CB371', pdfUrl: 'https://www.capacitacioninclusiva.com/wp-content/uploads/2022/04/18-Introduccio%CC%81n-a-React.pptx.pdf' },
             { id: 53, title: 'HTML5 y CSS', author: 'Autentia', year: 2012, status: 'available', color: '#20B2AA', pdfUrl: 'https://ahorasomos.izertis.com/autentia//wp-content/uploads/libros/Front_HTMLyCSS-Autentia.pdf' },
             { id: 54, title: 'Introducción a Javascript', author: 'UTN', year: 2022, status: 'available', color: '#4682B4', pdfUrl: 'https://www.capacitacioninclusiva.com/wp-content/uploads/2022/04/4-JavaScript-CONCEPTOS-GENERALES-SINTAXIS-Y-VARIABLES.pptx.pdf' },
-            { id: 55, title: 'Che lector', author: 'Varios', year: 2017, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/510be7e1f0d3d75c245c1f87e95a102c.pdf' },
+            { id: 55, title: 'Che lector', author: 'Varios', year: 2017, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/510be7e1f0d5d0208517d4f76ae036f.pdf' },
             { id: 56, title: 'Permacultura en Cuba', author: 'Varios', year: 2015, status: 'available', color: '#6495ED', pdfUrl: 'https://www.cospe.org/wp-content/uploads/2012/10/PERMACULTURA-EN-CUBA-imprenta-vf.pdf' },
             { id: 57, title: 'La huerta hidropónica popular', author: 'FAO', year: 2016, status: 'available', color: '#7B68EE', pdfUrl: 'https://www.fao.org/4/ah501s/ah501s.pdf' },
             { id: 58, title: 'Lo que el pájaro bebe y no es el agua', author: 'Chantal Maillard', year: 2022, status: 'available', color: '#8FBC8F', pdfUrl: 'https://traficantes.net/sites/default/files/pdfs//9788418807633.pdf' },
@@ -1270,7 +1207,7 @@
             { id: 64, title: 'Construcción en Tierra', author: 'Gernot Minke', year: 2001, status: 'available', color: '#6495ED', pdfUrl: 'https://d1.capsf.ar/wp-content/uploads/sites/3/2021/10/Manual_de_construccion_en_tierra_-_Gernot_Minke_-1.pdf' },
             { id: 65, title: 'Bioconstrucción, pedagofgía Waldorf', author: 'UNLP', year: 2023, status: 'available', color: '#7B68EE', pdfUrl: 'http://bdzalba.fau.unlp.edu.ar/greenstone/download/ens/pfc/pfc1157/GardellaMartina.pdf' },
             { id: 66, title: 'Química Inorgánica', author: 'UnCuyo', year: 2018, status: 'available', color: '#483D8B', pdfUrl: 'https://fcai.uncuyo.edu.ar/catedras/material-teorico-2018-qi.pdf' },
-            { id: 67, title: 'Química General, Chang, 7a ed.', author: 'Chang', year: 2002, status: 'available', color: '#8FBC8F', pdfUrl: 'https://sacaba.gob.bo/images/wsacaba/pdf/libros/quimica/Chang-QuimicaGeneral7thedicion.pdf' },
+            { id: 67, title: 'Química. Conceptos básicos', author: 'Varios', year: 2021, status: 'available', color: '#8FBC8F', pdfUrl: 'https://sacaba.gob.bo/images/wsacaba/pdf/libros/quimica/Chang-QuimicaGeneral7thedicion.pdf' },
             { id: 68, title: 'Química. Conceptos básicos', author: 'Varios', year: 2021, status: 'available', color: '#9932CC', pdfUrl: 'https://downloads.editoracientifica.com.br/books/978-65-87196-79-4.pdf' },
             { id: 69, title: 'Cuentos completos de Philip k Dick, vol II', author: 'Philip K Dick', year: 2050, status: 'available', color: '#BA55D3', pdfUrl: 'http://bibliotecadigital.tamaulipas.gob.mx/archivos/descargas/ec3e49fe8_aquiyaceelwub.pdf' },
             { id: 70, title: 'Los Elementos. Euclides. Libro I', author: 'Euclides', year: 500, status: 'available', color: '#C71585', pdfUrl: 'https://www.matem.unam.mx/~ilan/2019/fundamentos/axiomas-euclides.pdf' },
@@ -1301,7 +1238,7 @@
             { id: 95, title: 'Historias de la Historia de la Arquitectura Argentina', author: 'Daniel Schavelzon', year: 2054, status: 'available', color: '#D2691E', pdfUrl: 'https://www.danielschavelzon.com.ar/ebooks/Historias_hist_arq_1_2.pdf' },
             { id: 96, title: 'Pequeña Historia del Arte', author: 'Yeang', year: 2055, status: 'available', color: '#B8860B', pdfUrl: 'http://www.minedu.gob.pe/pdf/ed/historia-del-arte-arquitectura-escultura.pdf' },
             { id: 97, title: 'El castillo', author: 'Franz Kafka', year: 1922, status: 'available', color: '#9932CC', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/el_castillo_kafka.pdf' },
-            { id: 98, title: 'Cien Años de Soledad', author: 'Gabriel García Márquez', year: 1967, status: 'available', color: '#8B4513', pdfUrl: 'https://www.secst.cl/upfiles/documentos/19072016_1207am_578dc39115fe9.pdf' },
+            { id: 98, title: 'Cien Años de Soledad', author: 'Gabriel García Márquez', year: 1967, status: 'available', color: '#8B4513', pdfUrl: 'https://www.secst.cl/upfiles/documents/19072016_1207am_578dc39115fe9.pdf' },
             { id: 99, title: 'Don Quijote', author: 'Miguel de Cervantes', year: 1605, status: 'available', color: '#A0522D', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Miguel%20de%20Cervantes%20El%20Ingenioso%20Hidalgo%20Don%20Quijote%20de%20la%20Mancha.pdf' },
             { id: 100, title: 'La Ilíada', author: 'Homero', year: -750, status: 'available', color: '#CD853F', pdfUrl: 'https://colegiolospensamientos.cl/wp-content/uploads/2023/09/Octubre-I%C2%B0M-La-Iliada-Homero.pdf' },
             { id: 101, title: '1984', author: 'George Orwell', year: 1949, status: 'available', color: '#B8860B', pdfUrl: 'https://www.philosophia.cl/biblioteca/orwell/1984.pdf' },
@@ -1311,13 +1248,13 @@
             { id: 105, title: 'La Divina Comedia', author: 'Dante Alighieri', year: 1320, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dante%20Alighieri%20Divina%20comedia.pdf' },
             { id: 106, title: 'La Odisea', author: 'Homero', year: -700, status: 'available', color: '#C71585', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
             { id: 107, title: 'Moby Dick', author: 'Herman Melville', year: 1851, status: 'available', color: '#DB7093', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
-            { id: 108, title: 'Cuentos selectos', author: 'Antón Chéjov', year: 1877, status: 'available', color: '#A0522D', pdfUrl: 'https://ministeriodeeducacion.gob.do/docs/biblioteca-virtual/qYZY-anton-chejov-cuentos-imprescindiblespdf.pdf' },
+            { id: 108, title: 'Ana Karenina', author: 'León Tolstói', year: 1877, status: 'available', color: '#A0522D', pdfUrl: 'https://www.agr-tc.pt/bibliotecadigital/aetc/download/674/Ana%20Karenina%20-%20Leon%20Tolstoi.pdf' },
             { id: 109, title: 'Fahrenheit 451', author: 'Ray Bradbury', year: 1953, status: 'available', color: '#556B2F', pdfUrl: 'https://lexiconic.net/english/F451.pdf' },
             { id: 110, title: 'Así habló Zaratustra', author: 'Friedrich Nietzsche', year: 1984, status: 'available', color: '#9932CC', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/asi_hablo_zaratustra_nietzsche.pdf' },
             { id: 111, title: 'Pedro Páramo', author: 'Juan Rulfo', year: 1955, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Juan%20Rulfo%20-%20Pedro%20P%C3%A1ramo.pdf' },
             { id: 112, title: 'Fundación', author: 'Isaac Asimov', year: 1951, status: 'available', color: '#C71585', pdfUrl: 'https://www.mercaba.org/SANLUIS/ALiteratura/Literatura%20contempor%C3%A1nea/Asimov,%20Issac/Fundaci%C3%B3n.PDF' },
             { id: 113, title: 'San Martín y los libros', author: 'Varios autores', year: 1844, status: 'available', color: '#D2691E', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/e1cd48eeef8d5d0208517d4f76ae036f.pdf' },
-            { id: 114, title: 'Casa de los Espíritus', author: 'Isabel Allende', year: 1982, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Isabel%20Allende%20La%20Casa%20de%20los%20Esp%C3%ADritus.pdf' },
+            { id: 114, title: 'Casa de los Espíritus', author: 'Isabel Allende', year: 1982, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Isabel%20Allende%20La%20Casa%20de%20los%20Esp%C3%ADritos.pdf' },
             { id: 115, title: 'Rayuela', author: 'Julio Cortázar', year: 1963, status: 'available', color: '#CD853F', pdfUrl: 'https://seduc.edomex.gob.mx/sites/seduc.edomex.gob.mx/files/padres_familia/fomento_lectura/Julio%20Cortazar%20-%20Rayuela.pdf' },
             { id: 116, title: 'EL Nombre de la Rosa', author: 'Umberto Eco', year: 1980, status: 'available', color: '#556B2F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Umberto%20Eco%20El%20Nombre%20de%20la%20Rosa.pdf' },
             { id: 117, title: 'El legado de San Martín', author: 'Instituto Sanmartiniano', year: 1908, status: 'available', color: '#8FBC8F', pdfUrl: 'https://sanmartiniano.cultura.gob.ar/media/uploads/site-31/multimedia/PDFs/el-legado-de-san-martin.pdf' },
@@ -1330,9 +1267,9 @@
             { id: 124, title: 'Poemas breves de Silvina Ocampo', author: 'Silvina Ocampo', year: 2018, status: 'available', color: '#D2691E', pdfUrl: 'https://digitalcommons.usf.edu/cgi/viewcontent.cgi?article=1263&context=surcosur' },
             { id: 125, title: 'Historias de cronopios y de famas', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca.choapa.cl/Libros/Historias-de-Cronopios-y-de-Famas%20-%20Julio%20Cortazar.pdf' },
             { id: 126, title: 'https://ddooss.org/libros/Lucas_Julio_Cortazar.pdf', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://ddooss.org/libros/Lucas_Julio_Cortazar.pdf' },
-            { id: 127, title: 'Poemas de Julio Cortazar', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'http://www.elrincondedebbie.com/sites/default/files/pdf/Poemas%20de%20Julio%20Cort%C3%A1zar.pdf' },
+            { id: 127, title: 'Poemas de Julio Cortazar', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'http://www.elrincondedebbie.com/sites/default/files/pdf/Poemas%20de%20Julio%20Cort%C3%A1zor.pdf' },
             { id: 128, title: 'Selección de textos de Katherine Mansfield', author: 'KATHERINE MANSFIELD', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://materialdelectura.unam.mx/images/stories/pdf5/katherine-mansfield-95.pdf' },
-            { id: 129, title: 'Felicidad', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/escritura1/wp-content/uploads/sites/119/2020/05/MANSFIELD-K-2003-%E2%80%9CFelicidad%E2%80%9D-en-Cuentos-completos-De-bolsillo-Buenos-Aires..pdf' },
+            { id: 129, title: 'Felicidad', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/escritura1/wp-content/uploads/2020/05/MANSFIELD-K-2003-%E2%80%9CFelicidad%E2%80%9D-en-Cuentos-completos-De-bolsillo-Buenos-Aires..pdf' },
             { id: 130, title: 'Fiesta en el jardín', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/BIBLIOWEB/upload/Fiesta%20en%20el%20jard%C3%83%C2%ADn.pdf' },
             { id: 131, title: 'Éxtasis', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://tallervirtualdeescritores.com/wp-content/uploads/2024/05/Mansfield_Extasis.pdf?srsltid=AfmBOoqPaoP-lS9wjOxgAWMd8HmbRT0NNk9_PMfYreDrYCFh9oDVKil5' },
             { id: 132, title: 'La casa de muñecas', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.curriculumnacional.cl/614/articles-25888_recurso_pdf.pdf' },
@@ -1354,11 +1291,11 @@
             { id: 148, title: 'Libélulas, luciérnagas y mariposas: 39 haikús japoneses', author: 'Varios', year: 2004, status: 'available', color: '#D2691E', pdfUrl: 'https://www.redalyc.org/pdf/586/58639306.pdf' },
             { id: 149, title: 'Las mil y una noches', author: 'Varios', year: 800, status: 'available', color: '#D2691E', pdfUrl: 'https://0201.nccdn.net/1_2/000/000/17f/d54/Las-mil-y-una-noches.pdf' },
             { id: 150, title: 'Qué es el budismo', author: 'JOrge Luis Borges y Alicia Jurado', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://worcel.com/archivos/6/Borges%20&%20Jurado-Que%20Es%20El%20Budismo.pdf' },
-            { id: 151, title: 'El libro de los seres imaginarios', author: 'Jorge Luis Borges', year: 1982, status: 'available', color: '#D2691E', pdfUrl: 'https://tuscriaturasarchivos.home.blog/wp-content/uploads/2020/03/el-libro-de-los-seres-imaginarios-por-jorge-luis-borges-alfabetico.pdf' },
+            { id: 151, title: 'El libro de los seres imaginarios', author: 'Jorge Luis Borges', year: 1982, status: 'available', color: '#D2691E', pdfUrl: 'https://tuscriaturasarchivos.home.blog/wp-content/uploads/2020/03/el-libro-de-los-seres-imaginarios-por-jorge-luis-borges-alphabetico.pdf' },
             { id: 152, title: 'Tractatus logico-filosophocus', author: 'Lugwig Wittgenstein', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.filosoficas.unam.mx/~tomasini/TRADUCCIONES/WITTGENSTEIN/Traduccion-TLP.pdf' },
-            { id: 153, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
-            { id: 154, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
-	    { id: 155, title: 'Conferencia sobre Ética: Lugwig Wittgenstein', author: 'Lugwig Wittgenstein', year: 1965, status: 'available', color: '#D2691E', pdfUrl: 'https://www.philosophia.cl/biblioteca/Wittgenstein/conferencia.pdf' },
+            { id: 153, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.ar/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
+            { id: 154, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.ar/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
+            { id: 155, title: 'Conferencia sobre Ética: Lugwig Wittgenstein', author: 'Lugwig Wittgenstein', year: 1965, status: 'available', color: '#D2691E', pdfUrl: 'https://www.philosophia.cl/biblioteca/Wittgenstein/conferencia.pdf' },
             { id: 156, title: 'Investigaciones filosóficas', author: 'Lugwig Wittgenstein', year: 1967, status: 'available', color: '#D2691E', pdfUrl: 'https://educacion.uncuyo.edu.ar/upload/wittgenstein-investigaciones-filosoficas.pdf' },
             { id: 157, title: 'Cuadernos azul y marrón', author: 'James Robinson', year: 1968, status: 'available', color: '#D2691E', pdfUrl: 'https://lenguajeyconocimiento.wordpress.com/wp-content/uploads/2014/03/wittgenstein-cuadernos-azul-y-marron.pdf' },
             { id: 158, title: 'Seguir con el problema', author: 'Donna Haraway', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ivam.es/wp-content/uploads/intro_cap2_haraway_consonni-2.pdf' },
@@ -1392,78 +1329,67 @@
             { id: 185, title: 'El viejo y el mar', author: 'Ernest Hemingway', year: 1952, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ampf.org.ar/ampf/wp-content/uploads/2020/07/El-viejo-y-el-mar.pdf' },
             { id: 186, title: 'Por quién doblan las campanas', author: 'Ernest Hemingway', year: 1940, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Ernst%20Hemingway%20%20%20Por%20quien%20Doblan%20las%20Campanas.pdf' },
             { id: 187, title: 'El ruido y la furia', author: 'WILLIAM FAULKNER', year: 1929, status: 'available', color: '#D2691E', pdfUrl: 'https://www.taller-palabras.com/Datos/Cuentos_Bibliotec/ebooks/Faulkner%20William%20-%20El%20Sonido%20y%20la%20Furia.pdf' },
-            { id: 188, title: 'El congreso de literatura', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://israelleon.wordpress.com/wp-content/uploads/2011/09/aira-cesar-el-congreso-de-literatura.pdf' },
-            { id: 189, title: 'El carrito', author: 'Cesar Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/wp-content/uploads/sites/145/2020/06/26._el_carrito_c_aira.pdf' },
-            { id: 190, title: 'La confesión', author: 'César Aira', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://iedamagri.wordpress.com/wp-content/uploads/2019/07/aira-cesar-la-confesion.pdf' },
-            { id: 191, title: 'Perro', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://www.radiokermes.com/images/2020/CUENTOS_VERANO_2020-2021/81-_C%C3%A9sar_Aira_-_El_perro.pdf' },
-            { id: 192, title: 'Yo era una niña de siete años', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://interzonaeditora.com/admin/files/libros/233/AIRANiasieteaosMUESTRAW.pdf' },
-            { id: 193, title: 'La utilidad del arte', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://hamamarino.wordpress.com/wp-content/uploads/2018/12/aira-la-utilidad-del-arte.pdf' },
-            { id: 194, title: 'Cómo me hice monja', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://revistafractalario.wordpress.com/wp-content/uploads/2014/08/aira-cc3a9sar-cc3b3mo-me-hice-monja.pdf' },
-            { id: 195, title: 'Yo era una chica moderna', author: 'César Aira', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://interzonaeditora.com/admin/files/libros/232/AIRAYoeraunachicamodernaMUESTRAWEB.pdf' },
-            { id: 194, title: 'El té de Dios', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/wp-content/uploads/sites/145/2020/06/el_te_de_dios_c_aira.pdf' },
-            { id: 194, title: 'Cumbres Borrascosas', author: 'Emily Bronté', year: 1847, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Charlotte%20Bront%C3%A9%20Cumbres%20Borrascosas.pdf' },
+            { id: 188, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 189, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 190, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 191, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 192, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
+            { id: 193, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
             { id: 194, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
-            { id: 194, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' },
-            { id: 194, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' }
-];
+            { id: 195, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: '' }
+        ];
 
-
-
-        // ========================================
-        // VARIABLES GLOBALES
-        // ========================================
         let allBooks = [...books];
         let filteredBooks = [...books];
         let liveBugs = [];
 
-        // ========================================
-        // CLASE DEL GATO (MEJORADA Y FLEXIBLE)
-        // ========================================
-        class TricolorCat {
-            constructor(elementId) {
-                this.container = document.getElementById(elementId);
-                if (!this.container) return;
-
-                // Wrapper de animación interna
-                this.animWrapper = this.container.querySelector('.cat-inner-anim');
+        // =========================================
+        // CLASE DEL ZORRO BEBÉ (ACTIVA)
+        // =========================================
+        class BabyFox {
+            constructor() {
+                this.container = document.createElement('div');
+                this.container.className = 'baby-fox';
                 
-                // Buscar el elemento de la pata dentro de este gato específico
-                this.pawGroup = this.container.querySelector('.cat-paw');
-                this.width = parseInt(getComputedStyle(this.container).width);
+                // SVG del Zorro: Cuerpo más delgado (rx más bajo, ry similar o mayor)
+                this.container.innerHTML = `
+                    <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Cola Grande y Esponjosa -->
+                        <path d="M40,100 Q-10,70 10,40 Q20,20 40,30 Q50,40 45,60 Z" class="fox-fur-main" />
+                        <path d="M10,40 Q20,20 40,30 Q30,25 20,35 Z" class="fox-fur-light" /> <!-- Punta blanca -->
+                        
+                        <!-- Cuerpo: Más delgado (rx="40" en lugar de 50) -->
+                        <ellipse cx="110" cy="110" rx="40" ry="35" class="fox-fur-main" />
+                        <ellipse cx="110" cy="120" rx="20" ry="12" class="fox-fur-light" /> <!-- Pecho blanco -->
+
+                        <!-- Cabeza -->
+                        <circle cx="150" cy="80" r="35" class="fox-fur-main" />
+                        
+                        <!-- Mejillas Blancas -->
+                        <path d="M135,95 Q150,105 165,95 Q160,110 150,110 Q140,110 135,95" class="fox-fur-light" />
+
+                        <!-- Orejas -->
+                        <path d="M130,60 L115,25 L145,50 Z" class="fox-fur-main" />
+                        <path d="M170,60 L185,25 L155,50 Z" class="fox-fur-main" />
+                        <path d="M130,55 L120,35 L142,52 Z" class="fox-fur-light" /> 
+                        <path d="M170,55 L180,35 L158,52 Z" class="fox-fur-light" /> 
+
+                        <!-- Ojos (Cerrados) -->
+                        <path d="M140,75 Q145,80 150,75" class="fox-eye-closed" />
+                        <path d="M150,75 Q155,80 160,75" class="fox-eye-closed" />
+
+                        <!-- Nariz -->
+                        <circle cx="150" cy="90" r="4" class="fox-nose" />
+                    </svg>
+                `;
+                
+                document.body.appendChild(this.container);
+                this.width = 130;
                 this.state = 'HIDDEN';
                 this.timer = null;
-                this.isRunning = false;
+                this.isBusy = false;
 
-                // Agregar eventos de toque/clic para asustar al gato
-                this.setupTouchReaction();
-            }
-
-            setupTouchReaction() {
-                const handleInteract = (e) => {
-                    // Prevenir comportamientos por defecto si es necesario (doble tap zoom, etc)
-                    // e.preventDefault(); 
-                    this.scare();
-                };
-
-                this.container.addEventListener('click', handleInteract);
-                this.container.addEventListener('touchstart', handleInteract, {passive: true});
-            }
-
-            scare() {
-                // Cancelar cualquier timer pendiente
-                clearTimeout(this.timer);
-                clearTimeout(this.peekTimer);
-
-                // Quitar animaciones actuales
-                this.isRunning = false;
-                this.animWrapper.classList.remove('is-running-anim');
-                if (this.pawGroup) this.pawGroup.classList.remove('swiping');
-
-                // Esconder inmediatamente fuera de la pantalla
-                this.hideCompletely();
-
-                // Reprogramar la próxima aparición después de un momento
-                this.scheduleNextAction();
+                this.start();
             }
 
             start() {
@@ -1471,98 +1397,255 @@
             }
 
             scheduleNextAction() {
-                // Tiempo aleatorio entre acciones
-                const delay = 2000 + Math.random() * 4000;
+                const delay = 5000 + Math.random() * 10000; 
+                this.timer = setTimeout(() => {
+                    if (this.state !== 'BUSY') {
+                        this.decideAction();
+                    }
+                }, delay);
+            }
+
+            decideAction() {
+                const rand = Math.random();
+                if (rand < 0.7) {
+                    this.peek();
+                } else {
+                    this.runSolo();
+                }
+            }
+
+            peek() {
+                this.isBusy = true;
+                const side = Math.random() > 0.5 ? 'right' : 'left';
+                this.container.style.transition = 'none';
+
+                if (side === 'left') {
+                    this.container.style.transform = 'scaleX(1)'; // Mira derecha
+                    this.container.style.left = '-130px';
+                    this.container.style.bottom = '3rem';
+                } else {
+                    this.container.style.transform = 'scaleX(-1)'; // Mira izquierda
+                    this.container.style.left = '100vw';
+                    this.container.style.bottom = '3rem';
+                }
+
+                void this.container.offsetWidth;
+
+                this.container.style.transition = 'left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                
+                if (side === 'left') {
+                    this.container.style.left = '0px';
+                } else {
+                    this.container.style.left = 'calc(100vw - 130px)';
+                }
+
+                setTimeout(() => {
+                    this.hidePeek(side);
+                }, 1500);
+            }
+
+            hidePeek(side) {
+                this.container.style.transition = 'left 0.5s ease-in';
+                if (side === 'left') {
+                    this.container.style.left = '-150px';
+                } else {
+                    this.container.style.left = '100vw';
+                }
+                setTimeout(() => {
+                    this.isBusy = false;
+                    this.scheduleNextAction();
+                }, 500);
+            }
+
+            runSolo() {
+                this.isBusy = true;
+                const direction = Math.random() > 0.5 ? 'LtoR' : 'RtoL';
+                const shelfBottom = this.getShelfBottomPosition();
+                this.runAction(direction, shelfBottom, () => {
+                    this.isBusy = false;
+                    this.scheduleNextAction();
+                });
+            }
+
+            runAction(direction, bottomPos, callback) {
+                this.container.style.transition = 'none';
+                
+                if (direction === 'LtoR') {
+                    this.container.style.transform = 'scaleX(1)';
+                    this.container.style.left = '-250px';
+                } else {
+                    this.container.style.transform = 'scaleX(-1)';
+                    this.container.style.left = '100vw';
+                }
+                
+                this.container.style.bottom = `${bottomPos}px`;
+                void this.container.offsetWidth;
+
+                const duration = 3500;
+                this.container.style.transition = `left ${duration}ms linear`;
+
+                if (direction === 'LtoR') {
+                    this.container.style.left = '100vw';
+                } else {
+                    this.container.style.left = '-250px';
+                }
+
+                setTimeout(() => {
+                    if (callback) callback();
+                }, duration);
+            }
+
+            getShelfBottomPosition() {
+                const shelves = document.querySelectorAll('.shelf-board');
+                if (shelves.length === 0) return 3;
+                const randomShelf = shelves[Math.floor(Math.random() * shelves.length)];
+                return window.innerHeight - randomShelf.getBoundingClientRect().top;
+            }
+        }
+
+        // =========================================
+        // CLASE DEL GATO (LÓGICA DEFINITIVA)
+        // =========================================
+        class TricolorCat {
+            constructor(elementId) {
+                this.container = document.getElementById(elementId);
+                if (!this.container) return;
+
+                this.pawGroup = this.container.querySelector('.cat-paw');
+                this.width = parseInt(getComputedStyle(this.container).width);
+                this.state = 'HIDDEN';
+                this.timer = null;
+                this.isRunning = false;
+
+                this.setupInteractions();
+            }
+
+            setupInteractions() {
+                const reactToTouch = (e) => {
+                    this.hideCompletely();
+                    clearTimeout(this.timer);
+                    clearTimeout(this.peekTimer);
+                    this.scheduleNextAction();
+                };
+
+                this.container.addEventListener('click', reactToTouch);
+                this.container.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    reactToTouch(e);
+                });
+            }
+
+            start() {
+                this.scheduleNextAction();
+            }
+
+            scheduleNextAction() {
+                const delay = 2000 + Math.random() * 3000;
                 this.timer = setTimeout(() => {
                     this.decideAction();
                 }, delay);
             }
 
             decideAction() {
-                // Resetear estado
-                this.animWrapper.classList.remove('is-running-anim');
+                this.container.classList.remove('is-running-anim');
                 if (this.pawGroup) this.pawGroup.classList.remove('swiping');
                 
                 const rand = Math.random();
                 
-                if (rand < 0.5) {
-                    // 50% Probabilidad de Correr por los estantes
+                // Probabilidad de Persecución (10%)
+                if (rand < 0.10) {
+                    this.initiateChase();
+                } else if (rand < 0.6) {
                     this.runOnShelves();
                 } else {
-                    // 50% Probabilidad de Asomarse (Peek) por los lados
                     this.peek();
                 }
             }
 
-            // Método para encontrar la altura de un estante aleatorio
+            initiateChase() {
+                if (!window.foxInstance) {
+                    window.foxInstance = new BabyFox();
+                }
+
+                const direction = Math.random() > 0.5 ? 'LtoR' : 'RtoL';
+                const shelfBottom = this.getShelfBottomPosition();
+
+                // Zorro corre primero
+                window.foxInstance.runAction(direction, shelfBottom, null);
+
+                // Gato corre 400ms después
+                setTimeout(() => {
+                    this.runOnShelves(direction, shelfBottom);
+                }, 400);
+            }
+
             getShelfBottomPosition() {
                 const shelves = document.querySelectorAll('.shelf-board');
-                if (shelves.length === 0) return 2; // Fallback a rem
-
-                // Preferir estantes visibles
+                if (shelves.length === 0) return 2;
                 const visibleShelves = Array.from(shelves).filter(s => {
                     const r = s.getBoundingClientRect();
                     return r.top < window.innerHeight && r.bottom > 0;
                 });
-
                 const selectionPool = visibleShelves.length > 0 ? visibleShelves : shelves;
                 const randomShelf = selectionPool[Math.floor(Math.random() * selectionPool.length)];
-                
-                // Calcular posición 'bottom' para el gato
-                // El estante tiene una posición top. bottom = windowHeight - top
                 return window.innerHeight - randomShelf.getBoundingClientRect().top;
             }
 
-            runOnShelves() {
+            // Método corregido: TELEPORTAR -> VOLTEAR -> ANIMAR
+            runOnShelves(direction = null, bottomPos = null) {
                 this.isRunning = true;
                 
-                // Obtener altura exacta del estante
-                const shelfBottom = this.getShelfBottomPosition();
-                
-                // Determinar dirección
-                const direction = Math.random() > 0.5 ? 'LtoR' : 'RtoL';
-                
-                // Configurar orientación ANTES de mover
+                if (!direction) {
+                    direction = Math.random() > 0.5 ? 'LtoR' : 'RtoL';
+                }
+                if (!bottomPos) {
+                    bottomPos = this.getShelfBottomPosition();
+                }
+
+                // 1. DETENER TODAS LAS ANIMACIONES (TRANSITION: NONE)
+                this.container.style.transition = 'none';
+
+                // 2. TELETRANSPORTAR AL BORDE DE SALIDA Y DAR LA CARA AL DESTINO
                 if (direction === 'LtoR') {
+                    // Sale por izquierda, va a la derecha: MIRAR DERECHA
+                    this.container.style.transform = 'scaleX(1)'; 
                     this.container.classList.remove('facing-left');
                     this.container.classList.add('facing-right');
                     
-                    // Iniciar fuera de la izquierda
-                    this.container.style.transition = 'none';
-                    this.container.style.left = `-${this.width + 20}px`;
-                    this.container.style.bottom = `${shelfBottom}px`;
+                    this.container.style.left = '-200px'; // Fuera de pantalla izquierda
+                    this.container.style.right = 'auto';
                     
-                    this.container.offsetHeight; // Reflow
-
-                    // Animación de rebote (aplicada al wrapper interno ahora)
-                    this.animWrapper.classList.add('is-running-anim');
-
-                    // Correr hacia la derecha
-                    this.container.style.transition = 'left 3s linear';
-                    this.container.style.left = `100vw`;
                 } else {
+                    // Sale por derecha, va a la izquierda: MIRAR IZQUIERDA
+                    this.container.style.transform = 'scaleX(-1)'; 
                     this.container.classList.remove('facing-right');
                     this.container.classList.add('facing-left');
                     
-                    // Iniciar fuera de la derecha
-                    this.container.style.transition = 'none';
-                    this.container.style.left = `100vw`;
-                    this.container.style.bottom = `${shelfBottom}px`;
-
-                    this.container.offsetHeight; // Reflow
-
-                    this.animWrapper.classList.add('is-running-anim');
-
-                    // Correr hacia la izquierda
-                    this.container.style.transition = 'left 3s linear';
-                    this.container.style.left = `-${this.width + 20}px`;
+                    this.container.style.left = (window.innerWidth + 200) + 'px'; // Fuera de pantalla derecha
+                    this.container.style.right = 'auto';
                 }
 
-                // Al terminar de correr
-                const runTime = 3000;
+                this.container.style.bottom = `${bottomPos}px`;
+                
+                // 3. FORZAR REPAINT (Reflow) para asegurar que el navegador vea el estado inicial
+                void this.container.offsetWidth;
+
+                // 4. INICIAR ANIMACIÓN DE MOVIMIENTO
+                this.container.classList.add('is-running-anim');
+
+                const runTime = 3500; 
+                this.container.style.transition = `left ${runTime}ms linear`;
+
+                // 5. MOVER AL BORDE OPUESTO
+                if (direction === 'LtoR') {
+                    this.container.style.left = '100vw'; // Se esconde a la derecha
+                } else {
+                    this.container.style.left = '-200px'; // Se esconde a la izquierda
+                }
+
                 setTimeout(() => {
                     this.isRunning = false;
-                    this.animWrapper.classList.remove('is-running-anim');
+                    this.container.classList.remove('is-running-anim');
                     this.hideCompletely();
                     this.scheduleNextAction();
                 }, runTime);
@@ -1572,23 +1655,38 @@
                 this.isRunning = false;
                 const side = Math.random() > 0.5 ? 'right' : 'left';
 
+                // Setup
+                this.container.style.transition = 'none';
+
                 if (side === 'left') {
                     this.container.classList.remove('facing-left');
                     this.container.classList.add('facing-right');
-                    this.container.style.transition = 'left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                    this.container.style.left = `0px`;
-                    // Posición base para peek (suelo o cerca del header)
+                    
+                    this.container.style.left = `-${this.width}px`;
+                    this.container.style.right = 'auto';
                     this.container.style.bottom = `2rem`;
+
                 } else {
                     this.container.classList.remove('facing-right');
                     this.container.classList.add('facing-left');
-                    this.container.style.transition = 'right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    
+                    this.container.style.right = `-${this.width}px`;
                     this.container.style.left = 'auto';
-                    this.container.style.right = `0px`;
                     this.container.style.bottom = `2rem`;
                 }
 
-                const peekTime = 2000 + Math.random() * 3000;
+                void this.container.offsetHeight; 
+
+                // Animación de entrada
+                this.container.style.transition = 'left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                
+                if (side === 'left') {
+                    this.container.style.left = `0px`;
+                } else {
+                    this.container.style.right = `0px`;
+                }
+
+                const peekTime = 1500 + Math.random() * 2000;
                 this.peekTimer = setTimeout(() => {
                     this.hideCompletely();
                     this.scheduleNextAction();
@@ -1597,25 +1695,25 @@
 
             hideCompletely() {
                 clearTimeout(this.peekTimer);
-                this.container.style.transition = 'all 0.5s ease-in';
+                this.container.style.transition = 'all 0.3s ease-in';
                 
-                if (this.container.style.left !== 'auto') {
-                    this.container.style.left = `-${this.width + 50}px`;
-                } else {
+                if (this.container.style.right !== 'auto' && this.container.style.right !== '') {
                     this.container.style.right = `-${this.width + 50}px`;
                     setTimeout(() => {
-                        this.container.style.right = 'auto';
-                        this.container.style.left = `-${this.width}px`;
-                    }, 500);
+                         this.container.style.left = 'auto';
+                    }, 300);
+                } else {
+                    this.container.style.left = `-${this.width + 50}px`;
+                    setTimeout(() => {
+                         this.container.style.right = 'auto';
+                    }, 300);
                 }
             }
 
-            // Método público para intentar tocar bicho
             tryTouchBug() {
-                // Solo toca si no está escondido y si la pata no está animándose ya
                 if (this.state !== 'HIDDEN' && this.pawGroup) {
                     this.pawGroup.classList.remove('swiping');
-                    void this.pawGroup.offsetWidth; // Trigger reflow
+                    void this.pawGroup.offsetWidth; 
                     this.pawGroup.classList.add('swiping');
                 }
             }
@@ -1626,7 +1724,7 @@
         // ========================================
         function getAuthorLastName(author) {
             const parts = author.split(' ');
-            return parts[parts.length - 1];
+            return parts[parts.length -1];
         }
 
         // ========================================
@@ -1639,37 +1737,21 @@
             if (type === 'butterfly') {
                 const randColor = Math.random();
                 let colorClass = '';
-                if (randColor > 0.66) {
-                    colorClass = 'blue';
-                } else if (randColor > 0.33) {
-                    colorClass = 'yellow';
-                }
+                if (randColor > 0.66) colorClass = 'blue';
+                else if (randColor > 0.33) colorClass = 'yellow';
 
                 bug.className = `butterfly ${colorClass}`;
                 bug.innerHTML = '<div class="butterfly-wing left"></div><div class="butterfly-wing right"></div>';
             } else if (type === 'ladybug') {
                 bug.className = 'ladybug-container';
-                
-                const wingUL = document.createElement('div');
-                wingUL.className = 'ladybug-wing-under left';
-                bug.appendChild(wingUL);
-                
-                const wingUR = document.createElement('div');
-                wingUR.className = 'ladybug-wing-under right';
-                bug.appendChild(wingUR);
-
-                const head = document.createElement('div');
-                head.className = 'ladybug-head';
-                bug.appendChild(head);
-
-                const shellL = document.createElement('div');
-                shellL.className = 'ladybug-shell left';
+                const wingUL = document.createElement('div'); wingUL.className = 'ladybug-wing-under left'; bug.appendChild(wingUL);
+                const wingUR = document.createElement('div'); wingUR.className = 'ladybug-wing-under right'; bug.appendChild(wingUR);
+                const head = document.createElement('div'); head.className = 'ladybug-head'; bug.appendChild(head);
+                const shellL = document.createElement('div'); shellL.className = 'ladybug-shell left'; 
                 const sl1 = document.createElement('div'); sl1.className = 'ladybug-spot-shell ls-1'; shellL.appendChild(sl1);
                 const sl2 = document.createElement('div'); sl2.className = 'ladybug-spot-shell ls-2'; shellL.appendChild(sl2);
                 bug.appendChild(shellL);
-
-                const shellR = document.createElement('div');
-                shellR.className = 'ladybug-shell right';
+                const shellR = document.createElement('div'); shellR.className = 'ladybug-shell right'; 
                 const sr1 = document.createElement('div'); sr1.className = 'ladybug-spot-shell ls-3'; shellR.appendChild(sr1);
                 const sr2 = document.createElement('div'); sr2.className = 'ladybug-spot-shell ls-4'; shellR.appendChild(sr2);
                 bug.appendChild(shellR);
@@ -1878,7 +1960,6 @@
 
             liveBugs = [];
 
-            // RENDERIZAR 100 ESTANTES
             const totalShelves = 100;
             const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves);
             const extraBooks = filteredBooks.length % totalShelves;
@@ -1972,33 +2053,28 @@
 
             // Iniciar Gato 2
             const cat2 = new TricolorCat('tricolorCat2');
-            // Pequeño retraso para que no inicien exactamente a la vez
-            setTimeout(() => cat2.start(), 1500);
+            setTimeout(() => cat2.start(), 2000);
 
             // Loop global para interacción gato-bicho
             setInterval(() => {
                 const cat1Rect = document.getElementById('tricolorCat').getBoundingClientRect();
                 const cat2Rect = document.getElementById('tricolorCat2').getBoundingClientRect();
                 
-                // Array de gatos para chequear ambos
                 const cats = [{ rect: cat1Rect, instance: cat1 }, { rect: cat2Rect, instance: cat2 }];
 
                 cats.forEach(catObj => {
-                    // Si el gato es visible
                     if (catObj.rect.right > 0 && catObj.rect.left < window.innerWidth) {
                         liveBugs.forEach(bug => {
                             const bugRect = bug.getBoundingClientRect();
-                            // Calcular distancia (simple X-axis check + proximity)
                             const dist = Math.hypot(catObj.rect.x - bugRect.x, catObj.rect.y - bugRect.y);
                             
-                            // Si están muy cerca (< 150px)
                             if (dist < 150) {
                                 catObj.instance.tryTouchBug();
                             }
                         });
                     }
                 });
-            }, 500); // Chequear cada medio segundo
+            }, 500);
         }
 
         document.addEventListener('DOMContentLoaded', init);
