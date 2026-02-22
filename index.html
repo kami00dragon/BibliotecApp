@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BibliotecApp - Ultimate Wood Edition</title>
+    <!-- Librerías para generación de PDF e Imágenes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
         /* =========================================
            1. CSS BIBLIOTECA
@@ -25,6 +29,8 @@
             width: 100%;
             z-index: 10;
             border-bottom: 4px solid #281a16;
+            min-height: 80px;
+            display: flex; flex-direction: column; justify-content: center;
         }
         .header-content { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .header-title { width: 100%; margin-bottom: 0.5rem; display: flex; align-items: flex-end; justify-content: space-between; }
@@ -224,14 +230,13 @@
 
         /* TEXTURA DE MADERA IGUAL QUE BIBLIOTECA */
         .wood-panel {
-            background: linear-gradient(to bottom, #451a03, #78350f, #451a03); /* Mismo que header */
+            background: linear-gradient(to bottom, #451a03, #78350f, #451a03);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
             border-bottom: 4px solid #281a16;
             border-top: 1px solid #5d4037;
             position: relative;
             z-index: 100;
         }
-        /* Overlay de textura sutil para evitar que parezca plano/chocolate */
         .wood-panel::after {
             content: "";
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -241,7 +246,7 @@
 
         /* Barra de herramientas "Madera" */
         .reader-toolbar {
-            height: auto; min-height: 70px;
+            height: auto; min-height: 80px;
             padding: 0.75rem 1rem;
             display: flex; 
             align-items: center; 
@@ -256,31 +261,24 @@
         .tool-group { display: flex; align-items: center; gap: 5px; padding-right: 10px; margin-right: 10px; border-right: 1px solid rgba(40, 26, 22, 0.5); flex-wrap: wrap; }
         .tool-group:last-child { border: none; }
         
-        /* Campo de texto para selección manual */
-        .selection-input-wrapper {
+        /* Campo de búsqueda PDF nuevo */
+        .pdf-search-wrapper {
+            display: flex; align-items: center; gap: 5px;
             background: rgba(255,255,255,0.9);
             border: 2px solid #281a16;
             border-radius: 4px;
-            display: flex;
-            align-items: center;
             padding: 0 5px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
-        .selection-input {
-            border: none;
-            background: transparent;
-            padding: 6px;
-            font-family: 'Georgia', serif;
-            color: #3E2723;
-            width: 150px;
-            font-size: 0.9rem;
-            outline: none;
+        .pdf-search-input {
+            border: none; background: transparent; padding: 6px;
+            font-family: 'Georgia', serif; color: #3E2723; width: 120px; font-size: 0.9rem; outline: none;
         }
-        .selection-input::placeholder { color: #8D6E63; font-style: italic; font-size: 0.8rem; }
+        .pdf-search-input::placeholder { color: #8D6E63; font-style: italic; font-size: 0.8rem; }
 
         .tool-btn {
             background: #5d4037; border: 2px solid #281a16; color: #fcd34d;
-            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.95rem;
+            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem;
             font-family: 'Georgia', serif; font-weight: bold;
             transition: all 0.2s; display: flex; align-items: center; justify-content: center; min-width: 40px;
             box-shadow: 0 3px 5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
@@ -289,9 +287,10 @@
         .tool-btn:hover { background: #6d4c41; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.5); border-color: #fcd34d; }
         .tool-btn.active { background: #fcd34d; color: #3E2723; border-color: #fff; box-shadow: 0 0 10px rgba(252, 211, 93, 0.6); text-shadow: none; }
         
-        /* Botones de acción (Diccionario, Traducir, Wiki) */
+        /* Botones de acción */
         .tool-btn.action-btn {
             background: #281a16; color: #fcd34d; border-color: #5d4037;
+            font-size: 0.8rem; padding: 6px 10px;
         }
         .tool-btn.action-btn:hover { background: #3e2723; border-color: #fcd34d; }
 
@@ -313,15 +312,14 @@
             flex: 1;
             position: relative;
             background-color: #1a1a1a;
-            overflow: hidden;
+            /* IMPORTANTE: El scroll ocurre aquí */
+            overflow-y: auto;
             display: flex;
             justify-content: center;
-            align-items: center;
-            perspective: 1000px;
-            cursor: grab;
             padding: 20px;
             background: radial-gradient(circle, #2d1b15, #1a0f0a);
             box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
+            min-height: 0;
         }
 
         .reader-desk.mode-draw { cursor: crosshair; }
@@ -333,11 +331,12 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.7);
             width: 100%;
             max-width: 900px;
-            height: 100%;
-            min-height: 600px;
+            /* Altura fija grande para simular documento largo */
+            height: 5000px; 
             transform-origin: center center;
             transition: transform 0.2s ease;
             border: 1px solid #ccc;
+            flex-shrink: 0; 
         }
 
         /* Capas superpuestas */
@@ -347,22 +346,29 @@
             pointer-events: none; z-index: 5; opacity: 0.4; mix-blend-mode: multiply;
         }
 
+        /* ESTILOS CRÍTICOS PARA EL SCROLL SINCRONIZADO */
         #pdf-iframe {
             width: 100%; height: 100%; border: none;
             position: absolute; top: 0; left: 0; z-index: 1;
             background: white;
+            /* FORZAR QUE NO TENGA SCROLL INTERNO */
+            overflow: hidden !important; 
+            pointer-events: auto; 
         }
 
         #drawing-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
-            pointer-events: none;
+            pointer-events: none; 
         }
-
+        
+        /* En modo dibujo, el canvas captura eventos, el iframe queda pasivo */
         .reader-desk.mode-draw #drawing-layer { pointer-events: auto; }
+        .reader-desk.mode-draw #pdf-iframe { pointer-events: none; }
+
 
         /* Footer de Herramientas de Texto (Madera) */
         .reader-footer-panel {
-            height: 70px; /* Contraído por defecto */
+            height: 70px; 
             background: linear-gradient(to bottom, #451a03, #78350f, #451a03);
             border-top: 4px solid #5d4037;
             display: flex; flex-direction: column; padding: 0 20px; color: white; flex-shrink: 0; z-index: 20;
@@ -372,13 +378,11 @@
             position: relative;
         }
         
-        /* Estado expandido */
         .reader-footer-panel.expanded {
-            height: 75vh; 
+            height: calc(100vh - 85px); 
             padding: 20px;
         }
 
-        /* Cabecera del footer (visible siempre) */
         .reader-footer-header {
             height: 70px;
             width: 100%;
@@ -395,15 +399,14 @@
 
         .reader-footer-header:hover { background: linear-gradient(to bottom, #5d4037, #4e342e); }
 
-        /* Contenido interno */
         .reader-footer-content {
-            margin-top: 70px; /* Espacio para el header fijo */
+            margin-top: 70px; 
             height: 100%;
             display: flex;
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.3s ease 0.1s;
-            pointer-events: none; /* Desactivar clicks si está cerrado */
+            pointer-events: none; 
         }
 
         .reader-footer-panel.expanded .reader-footer-content {
@@ -442,7 +445,6 @@
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 350px; max-width: 90%;
             background: #451a03; 
-            /* Textura de vetas finas */
             background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.05), rgba(0,0,0,0.05) 2px, transparent 4px);
             border: 4px solid #281a16;
             border-radius: 8px; padding: 20px; z-index: 4000;
@@ -451,14 +453,8 @@
         }
         .dict-lang-modal.active { display: block; animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .dict-lang-header { text-align: center; margin-bottom: 15px; font-weight: bold; font-size: 1.3rem; border-bottom: 1px solid #5d4037; padding-bottom: 10px; text-shadow: 1px 1px 2px black;}
-        
-        .dict-input-group { margin-bottom: 15px; }
-        .dict-input-group input {
-            width: 100%; padding: 10px; border-radius: 4px; border: 2px solid #5d4037; background: #fff; color: #333; font-family: 'Georgia', serif; font-size: 1.1rem;
-        }
 
         .dict-lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; padding-right: 5px; }
-        /* Scrollbar styling for modal */
         .dict-lang-grid::-webkit-scrollbar { width: 8px; }
         .dict-lang-grid::-webkit-scrollbar-thumb { background: #5d4037; border-radius: 4px; }
 
@@ -630,14 +626,24 @@
                     <button class="tool-btn" onclick="resetZoom()" title="Restablecer">⟲</button>
                 </div>
 
-                <!-- Herramientas de Consulta -->
+                <!-- Herramientas de Consulta y Descarga -->
                 <div class="tool-group" style="margin-left: auto;">
-                    <div class="selection-input-wrapper" title="Copia texto del PDF (Ctrl+C) y pégalo aquí">
-                        <input type="text" id="selected-text-input" class="selection-input" placeholder="Palabra seleccionada...">
+                    
+                    <!-- NUEVO: Buscador PDF Integrado -->
+                    <div class="pdf-search-wrapper">
+                        <input type="text" id="pdf-search-input" class="pdf-search-input" placeholder="Buscar en texto...">
+                        <button class="tool-btn action-btn" onclick="searchInPdf()" title="Buscar y Resaltar">🔍</button>
                     </div>
-                    <button class="tool-btn action-btn" onclick="prepareDictionary()" title="Diccionario">📚</button>
-                    <button class="tool-btn action-btn" onclick="translateSelection()" title="Traducir">🌐</button>
-                    <button class="tool-btn action-btn" onclick="openWikipedia()" title="Wikipedia">🔍</button>
+
+                    <!-- Botones con Acción Automática de Portapapeles (FALLBACK INCLUIDO) -->
+                    <button class="tool-btn action-btn" onclick="processClipboardAction('wikipedia')" title="Wikipedia (Ctrl+C)">Wikipedia</button>
+                    
+                    <button class="tool-btn action-btn" onclick="processClipboardAction('dict')" title="Diccionario (Ctrl+C)">📚</button>
+                    <button class="botón de acción" onclick="processClipboardAction('translate')" title="Traducir (Ctrl+C)">🌐</button>
+                    
+                    <!-- Botones de Descarga en Header -->
+                    <button class="tool-btn action-btn" onclick="downloadOriginalPDF()" title="Descargar PDF Original">📥 PDF</button>
+                    <!-- BOTÓN FOTO ELIMINADO -->
                 </div>
             </div>
             <button id="closeReader" class="close-reader-btn">Cerrar</button>
@@ -687,9 +693,6 @@
     <div id="dictOverlay" class="dict-overlay" onclick="closeDictionaryModal()"></div>
     <div id="dictModal" class="dict-lang-modal">
         <div class="dict-lang-header">Elegir Diccionario</div>
-        <div class="dict-input-group">
-            <input type="text" id="dict-search-term-input" placeholder="Escribe la palabra aquí..." autofocus>
-        </div>
         <div class="dict-lang-grid">
             <button class="dict-lang-btn" onclick="searchDict('es')">🇪🇸 RAE (Español)</button>
             <button class="dict-lang-btn" onclick="searchDict('en')">🇺🇸 Merriam-Webster (Eng)</button>
@@ -715,272 +718,30 @@
         const books = [
             { id: 262, title: 'Sutra del Diamante', author: 'Siddhartha Gautama', year: -400, status: 'available', color: '#9acd32', pdfUrl: 'https://www.lastelladelmattino.org/wp-content/uploads/2010/04/El-diamante_parte-budista-completa_F.pdf' },
             { id: 263, title: 'Sutra del Corazón', author: 'Thich Nhat Hanh', year: 1998, status: 'available', color: '#ba55d3', pdfUrl: 'https://www.platform7x7.com/n/wp-content/uploads/2023/08/EL-SUTRA-DEL-CORAZON-OSHO.pdf' },
-            { id: 264, title: 'TaoScript', author: 'Sanchez, Hugo Silvestre', year: 2026, status: 'available', color: '#ba55d3', pdfUrl: 'https://kami00dragon.github.io/TaoScript/' },
-   
-            { id: 4, title: 'El mundo como voluntad y representación', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
-
+            { id: 4, title: 'El mundo como voluntad...', author: 'Arthur Schopenhauer', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/el_mundo_como_voluntad_y_representacion-arthur_schopenhauer.pdf' },
             { id: 6, title: 'Matemáticas Básicas', author: 'Varios Autores', year: 2005, status: 'available', color: '#556B2F', pdfUrl: 'https://www.utadeo.edu.co/sites/tadeo/files/node/publication/field_attached_file/pdf-_matematicas_basicas-_completo-_09-15.pdf' },
-            { id: 7, title: 'Reforma y disolución de los imperios ibéricos 1750-1850', author: 'Tulio Halperín Donghi', year: 2006, status: 'available', color: '#8FBC8F', pdfUrl: 'https://rodrigomorenog.wordpress.com/wp-content/uploads/2018/03/halperin-reforma-y-disolucic3b3n-de-los-imperios-ibc3a9ricos.pdf' },
-            { id: 8, title: 'Geometría Analítica', author: 'Varios Autores', year: 2007, status: 'available', color: '#2E8B57', pdfUrl: 'https://bdigital.uncu.edu.ar/objetos_digitales/7224/librogeoing.pdf' },
-            { id: 9, title: 'Geometría analítica moderna', author: 'Varios Autores', year: 1976, status: 'available', color: '#3CB371', pdfUrl: 'https://www.cimat.mx/ciencia_para_jovenes/bachillerato/libros/Wooton.pdf' },
-            { id: 10, title: 'Rosa Luxemburgo: Obras selectas', author: 'Rosa Luxemburgo', year: 2009, status: 'available', color: '#20B2AA', pdfUrl: 'https://www.elsoca.org/pdf/libreria/Rosa%20Luxemburgo%20-%20Obras%20escogidas.pdf' }, 
-            { id: 11, title: 'MANUSCRITOS ECONOMICOS y FILOSOFICOS DE 1844', author: 'Karl Marx', year: 2010, status: 'available', color: '#4682B4', pdfUrl: 'https://pensaryhacer.wordpress.com/wp-content/uploads/2008/06/manuscritos-filosoficos-y-economicos-1844karl-marx.pdf' }, 
             { id: 12, title: 'La República', author: 'Platón', year: -375, status: 'available', color: '#5F9EA0', pdfUrl: 'http://bibliotecadigital.econ.uba.ar/download/Pe/180266.pdf' },
-            { id: 13, title: 'Poética', author: 'Aristóteles', year: -335, status: 'available', color: '#6495ED', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/poetica_aristoteles.pdf' },
-            { id: 14, title: 'Cuadernos de la Cárcel', author: 'Antonio Gramsci', year: 1980, status: 'available', color: '#7B68EE', pdfUrl: 'https://gramscimexico.org/wp-content/uploads/2022/03/0802505.pdf' }, 
             { id: 15, title: 'Guenji Monogatari', author: 'Murasaki Shikibu', year: 2014, status: 'available', color: '#483D8B', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Murasaki%20Shikibu%20La%20Novela%20de%20Genji.pdf' },
-            { id: 16, title: 'Sobre el fascismo', author: 'Antonio Gramsci', year: 1878, status: 'available', color: '#8B008B', pdfUrl: 'https://arxiujosepserradell.cat/wp-content/uploads/2021/12/GRAMSCI-ANTONIO-Sobre-el-Fascismo-OCR-por-Ganz1912.pdf' },
-            { id: 17, title: 'Cartas desde la Cárcel', author: 'Antonio Gramsci', year: 2016, status: 'available', color: '#9932CC', pdfUrl: 'https://www.marxists.org/espanol/gramsci/cartas-de-la-carcel/cartas-de-la-carcel-gramsci.pdf' },
-            { id: 18, title: 'El libro de la almohada', author: 'Sei Shonagón', year: 2017, status: 'available', color: '#BA55D3', pdfUrl: 'https://isaimoreno.com/wp-content/uploads/2015/04/el-libro-de-la-almohada-sei-shonagon.pdf' },
-            { id: 19, title: 'Militarizacion Revolucionaria En Buenos Aires, 1806-1815', author: 'Tulio Halperin Donghi', year: 2018, status: 'available', color: '#C71585', pdfUrl: 'https://materiales.untrefvirtual.edu.ar/documentos_extras/0435_Historia_Argentina/U3_Halperin_Donghi.pdf' },
-            { id: 20, title: 'Proyecto y construcción de una nación (1846-1880)', author: 'Tulio Halperín Donghi', year: 2019, status: 'available', color: '#DB7093', pdfUrl: 'https://ens9004-infd.mendoza.edu.ar/sitio/upload/02-%20HALPERIN%20DONGHI%20-%20Tomo%202%20-%20Proyecto%20Y%20Construccion%20De%20Una%20Nacion%20(1846%20-%201880).pdf' },
-            { id: 21, title: 'Laudato Si', author: 'Papá Francisco', year: 2020, status: 'available', color: '#A0522D', pdfUrl: 'https://www.oas.org/es/sg/casacomun/docs/papa-francesco-enciclica-laudato-si-sp.pdf' }, 
-            { id: 22, title: 'Vedanta', author: 'India', year: 2021, status: 'available', color: '#CD853F', pdfUrl: 'https://www.vedantaadvaita.com/wp-content/uploads/2020/06/Vedanta-Advaita-Sesha-Abril-2015.pdf' },
-            { id: 23, title: 'Su moral y la nuestra', author: 'León Trotsky', year: 2022, status: 'available', color: '#D2691E', pdfUrl: 'https://centromarx.org/images/libros/pdf/trotsky-su-moral-y-la-nuestra.pdf' },
-            { id: 24, title: 'La Guerra y la Internacional', author: 'León Trotsky', year: 2023, status: 'available', color: '#B8860B', pdfUrl: 'https://fundacionfedericoengels.net/images/PDF/trotsky_guerra_internacional_interior.pdf' }, 
-            { id: 25, title: '¿Qué es la propiedad?', author: 'Pierre Joseph Proudhon', year: 2024, status: 'available', color: '#9932CC', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Proudhon,%20Pierre%20-%20Que%20Es%20La%20Propiedad.pdf' },
-            { id: 26, title: 'La libertad. Carta a Karl Marx', author: 'Mijail Bakunin', year: 2025, status: 'available', color: '#BA55D3', pdfUrl: 'https://circulosemiotico.wordpress.com/wp-content/uploads/2012/10/bakunin-la-libertad.pdf' },
-            { id: 27, title: 'Catecismo revolucionario', author: 'Mijail Bakunin', year: 2026, status: 'available', color: '#2F4F4F', pdfUrl: 'https://mirror.anarhija.net/es.theanarchistlibrary.org/mirror/m/mb/mijail-bakunin-catecismo-revolucionario.c109.pdf' },
-            { id: 29, title: 'La política y el Estado moderno', author: 'Antonio Gramsci', year: 2028, status: 'available', color: '#6495ED', pdfUrl: 'https://letrasindomitas.wordpress.com/wp-content/uploads/2018/10/gramsci-antonio-la-politica-y-el-estado-moderno-doc.pdf' },
-            { id: 30, title: 'Chamanismo. Visiones fuera del tiempo', author: 'Constantino Manuel Torres', year: 2022, status: 'available', color: '#7B68EE', pdfUrl: 'https://museo.precolombino.cl/wp-content/uploads/2023/01/Catalogo-Chamanismo-2022_PDF-WEB-MChAP-1.pdf' },
-            { id: 31, title: '¿Sueñan los androides con ovejas mecánicas?', author: 'Philip K Dick', year: 2050, status: 'available', color: '#483D8B', pdfUrl: 'https://www.philosophia.cl/biblioteca/dick/runner.pdf' },
-            { id: 32, title: 'El hombre en el castillo', author: 'Philip K Dick', year: 2050, status: 'available', color: '#8FBC8F', pdfUrl: 'https://ddooss.org/libros/Philip_Dick.pdf' },
-            { id: 33, title: 'I Ching', author: 'China', year: 0, status: 'available', color: '#2E8B57', pdfUrl: 'https://laventanaazulblog.com/wp-content/uploads/2016/12/i_ching-1.pdf' },
-            { id: 34, title: 'Tao Te King', author: 'Lao Tse', year: 500, status: 'available', color: '#3CB371', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/TaoTeKing_LaoTse.pdf' },
-            { id: 35, title: 'Seis piezas fáciles', author: 'Richard Feinman', year: 1994, status: 'available', color: '#20B2AA', pdfUrl: 'https://tavapy.gov.py/biblioteca/wp-content/uploads/2023/01/FeynmanR-Seis-piezas-faciles.pdf' },
-            { id: 36, title: 'Manifiesto Comunista', author: 'Karl Marx, Federico Engels', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://marxismocritico.com/wp-content/uploads/2013/11/127255.pdf' },
-            { id: 37, title: 'Lecciones de física, vol I', author: 'Richard Feynman', year: 1998, status: 'available', color: '#556B2F', pdfUrl: 'https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/04/lecciones-de-fc3adsica-de-feynman-volumen-1-en-espac3b1ol.pdf' },
-            { id: 38, title: 'Pueblos Libres vencen a imperios poderosos. Cartas de Simón Bolivar', author: 'Simón Bolivar', year: 2017, status: 'available', color: '#8FBC8F', pdfUrl: 'https://albaciudad.org/wp-content/uploads/2021/06/Coleccio%CC%81n-Bicentenario-Carabobo-16-Boli%CC%81var-Simo%CC%81n-Pueblos-libres-vencen-a-imperios-poderosos-.pdf' },
-            { id: 39, title: 'Manual de Huerta', author: 'Varios', year: 2018, status: 'available', color: '#2E8B57', pdfUrl: 'https://abc.gob.ar/secretarias/sites/default/files/2022-07/MANUAL%20DE%20HUERTA.pdf' },
-            { id: 40, title: 'Introducción a la Permacultura', author: 'Anónimo', year: 2007, status: 'available', color: '#3CB371', pdfUrl: 'https://latierraquepisamos.wordpress.com/wp-content/uploads/2014/10/curso-de-introduccion-a-la-permacultura.pdf' },
-            { id: 41, title: 'Una mirada a la oscuridad', author: 'Philip K Dick', year: 2050, status: 'available', color: '#9932CC', pdfUrl: 'https://substantinoimperator.wordpress.com/wp-content/uploads/2015/06/una-mirada-a-la-oscuridad-dick-philip-k.pdf' },
-            { id: 42, title: 'Decir el hambre', author: 'Chantal Maillard', year: 2021, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.nodo50.org/mlrs/weblog/images/decir_el_hambre-digital.pdf' }, 
-            { id: 43, title: 'Introducción al pensamiento sistémico', author: 'Varios', year: 2020, status: 'available', color: '#C71585', pdfUrl: 'https://www.uda.edu.ar/images/editorial/archivos/manual/MANUAL_DE_INTRODUCCIN_AL_PENSAMIENTO_SISTEMICO-DIGITAL.pdf' }, 
-            { id: 44, title: 'Teoría de la información, codificación y lenguajes', author: 'Cuevas', year: 1975, status: 'available', color: '#DB7093', pdfUrl: 'https://gc.scalahed.com/recursos/files/r161r/w25118w/semana3/recursos/Cuevas.pdf' }, 
-            { id: 45, title: 'Métodos matemáticos', author: 'Varios', year: 2011, status: 'available', color: '#A0522D', pdfUrl: 'https://teorica.fis.ucm.es/artemio/Notas%20de%20curso/MMI.pdf' },
-            { id: 46, title: 'Cibernética y sistemas cognitivos', author: 'FELIPE LARA ROSANO', year: 2002, status: 'available', color: '#CD853F', pdfUrl: 'https://conceptos.sociales.unam.mx/conceptos_final/514trabajo.pdf' }, 
-            { id: 47, title: 'Paradigmas de Programación', author: 'Varios', year: 2026, status: 'available', color: '#D2691E', pdfUrl: 'https://www.uv.mx/personal/aguerra/files/2024/08/plf-01.pdf' }, 
-            { id: 48, title: 'Paradigmas de programación', author: 'Varios', year: 2027, status: 'available', color: '#B8860B', pdfUrl: 'http://profesores.fi-b.unam.mx/karinagm/ParadigmasFP.pdf' }, 
-            { id: 49, title: 'El lenguaje de programación C', author: 'Varios', year: 1991, status: 'available', color: '#9932CC', pdfUrl: 'https://frrq.cvg.utn.edu.ar/pluginfile.php/13741/mod_resource/content/0/El-lenguaje-de-programacion-C-2-ed-kernighan-amp-ritchie.pdf' }, 
-            { id: 50, title: 'Algoritmos resueltos con python', author: 'Varios', year: 2020, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.editorialeidec.com/wp-content/uploads/2020/10/Algoritmos-resueltos-con-Python.pdf' }, 
-            { id: 51, title: 'Aprende a pensar como un programador con Python', author: 'Varios', year: 2002, status: 'available', color: '#2E8B57', pdfUrl: 'https://argentinaenpython.com/quiero-aprender-python/aprenda-a-pensar-como-un-programador-con-python.pdf' }, 
-            { id: 52, title: 'Full Stack con React.js', author: 'UTN', year: 2022, status: 'available', color: '#3CB371', pdfUrl: 'https://www.capacitacioninclusiva.com/wp-content/uploads/2022/04/18-Introduccio%CC%81n-a-React.pptx.pdf' },
-            { id: 53, title: 'HTML5 y CSS', author: 'Autentia', year: 2012, status: 'available', color: '#20B2AA', pdfUrl: 'https://ahorasomos.izertis.com/autentia//wp-content/uploads/libros/Front_HTMLyCSS-Autentia.pdf' },
-            { id: 54, title: 'Introducción a Javascript', author: 'UTN', year: 2022, status: 'available', color: '#4682B4', pdfUrl: 'https://www.capacitacioninclusiva.com/wp-content/uploads/2022/04/4-JavaScript-CONCEPTOS-GENERALES-SINTAXIS-Y-VARIABLES.pptx.pdf' },
-            { id: 55, title: 'Che lector', author: 'Varios', year: 2017, status: 'available', color: '#5F9EA0', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/510be7e1f0d3d75c245c1f87e95a102c.pdf' },
-            { id: 56, title: 'Permacultura en Cuba', author: 'Varios', year: 2015, status: 'available', color: '#6495ED', pdfUrl: 'https://www.cospe.org/wp-content/uploads/2012/10/PERMACULTURA-EN-CUBA-imprenta-vf.pdf' },
-            { id: 57, title: 'La huerta hidropónica popular', author: 'FAO', year: 2016, status: 'available', color: '#7B68EE', pdfUrl: 'https://www.fao.org/4/ah501s/ah501s.pdf' },
-            { id: 58, title: 'Lo que el pájaro bebe y no es el agua', author: 'Chantal Maillard', year: 2022, status: 'available', color: '#8FBC8F', pdfUrl: 'https://traficantes.net/sites/default/files/pdfs//9788418807633.pdf' },
-            { id: 59, title: 'Manual de Hidroponía', author: 'Gobierno de México', year: 2018, status: 'available', color: '#2F4F4F', pdfUrl: 'https://www.gob.mx/cms/uploads/attachment/file/232367/Manual_de_hidroponia.pdf' },
-            { id: 60, title: 'Acuicultura integrada y ecológica', author: 'INTA', year: 2019, status: 'available', color: '#3CB371', pdfUrl: 'https://www.produccion-animal.com.ar/produccion_peces/piscicultura/187-Acuicultura.pdf' },
-            { id: 61, title: 'Acuicultura Argentina. Recopilación histórica de su desarrollo', author: ' Dirección Nacional de ganadería y pesca', year: 2020, status: 'available', color: '#20B2AA', pdfUrl: 'https://www.magyp.gob.ar/sitio/areas/acuicultura/estadisticas/_archivos//000000_Acuicultura%20Argentina%20-%20Recopilaci%C3%B3n%20hist%C3%B3rica%20de%20su%20desarrollo%20.pdf' },
-            { id: 62, title: 'Química orgánica', author: 'Varios', year: 2024, status: 'available', color: '#4682B4', pdfUrl: 'https://librosdeconsultaparabachillerato.wordpress.com/wp-content/uploads/2018/08/quimica-organica-recio_4taed.pdf' },
-            { id: 63, title: 'Crónicas marcianas', author: 'Ray Brabury', year: 2035, status: 'available', color: '#5F9EA0', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Ray%20Bradbury%20-%20Cronicas%20Marcianas.pdf' },
-            { id: 64, title: 'Construcción en Tierra', author: 'Gernot Minke', year: 2001, status: 'available', color: '#6495ED', pdfUrl: 'https://d1.capsf.ar/wp-content/uploads/sites/3/2021/10/Manual_de_construccion_en_tierra_-_Gernot_Minke_-1.pdf' },
-            { id: 65, title: 'Bioconstrucción, pedagofgía Waldorf', author: 'UNLP', year: 2023, status: 'available', color: '#7B68EE', pdfUrl: 'http://bdzalba.fau.unlp.edu.ar/greenstone/download/ens/pfc/pfc1157/GardellaMartina.pdf' },
-            { id: 66, title: 'Química Inorgánica', author: 'UnCuyo', year: 2018, status: 'available', color: '#483D8B', pdfUrl: 'https://fcai.uncuyo.edu.ar/catedras/material-teorico-2018-qi.pdf' },
-            { id: 67, title: 'Química General, Chang, 7a ed.', author: 'Chang', year: 2002, status: 'available', color: '#8FBC8F', pdfUrl: 'https://sacaba.gob.bo/images/wsacaba/pdf/libros/quimica/Chang-QuimicaGeneral7thedicion.pdf' },
-            { id: 68, title: 'Química. Conceptos básicos', author: 'Varios', year: 2021, status: 'available', color: '#9932CC', pdfUrl: 'https://downloads.editoracientifica.com.br/books/978-65-87196-79-4.pdf' },
-            { id: 69, title: 'Cuentos completos de Philip k Dick, vol II', author: 'Philip K Dick', year: 2050, status: 'available', color: '#BA55D3', pdfUrl: 'http://bibliotecadigital.tamaulipas.gob.mx/archivos/descargas/ec3e49fe8_aquiyaceelwub.pdf' },
-            { id: 70, title: 'Los Elementos. Euclides. Libro I', author: 'Euclides', year: 500, status: 'available', color: '#C71585', pdfUrl: 'https://www.matem.unam.mx/~ilan/2019/fundamentos/axiomas-euclides.pdf' },
-            { id: 71, title: 'La Iliada o El Poema de la Fuerza', author: 'Simone Weil', year: 2030, status: 'available', color: '#DB7093', pdfUrl: 'https://institutosimoneweilediciones.wordpress.com/wp-content/uploads/2019/08/simone-weil-o-el-poema-de-la-fuerza..pdf' },
-            { id: 72, title: 'La Condición Obrera', author: 'Simone Weil', year: 2031, status: 'available', color: '#A0522D', pdfUrl: 'https://reconstruirelcomunal.suportmutu.org/wp-content/uploads/2021/10/Simone-Weil-La-condicion-obrera.pdf' },
-            { id: 73, title: 'La Persona y lo Sagrado', author: 'Simone Weil', year: 2032, status: 'available', color: '#CD853F', pdfUrl: 'https://crucecontemporaneo.org/wp-content/uploads/2013/03/simone-weil-la-persona-y-lo-sagrado.pdf' },
-            { id: 74, title: 'El Imperialismo, Fase Superior del Capitalismo', author: 'Vladimir Ilich Lenín', year: 2033, status: 'available', color: '#D2691E', pdfUrl: 'https://www.fundacionfedericoengels.net/images/PDF/lenin_imperialismo.pdf' },
-            { id: 75, title: '¿Qué hacer?', author: 'Vladimir Ilich Lenín', year: 2034, status: 'available', color: '#B8860B', pdfUrl: 'https://pcmml.org/wp-content/uploads/2017/11/que-hacer-lenin.pdf' },
-            { id: 76, title: 'El programa de transición', author: 'León Trotsky', year: 2035, status: 'available', color: '#9932CC', pdfUrl: 'https://traficantes.net/sites/default/files/pdfs/leontrotsky_programa_transicion_alta.pdf' },
-            { id: 77, title: 'La revolución permanente', author: 'León Trtostky', year: 2036, status: 'available', color: '#BA55D3', pdfUrl: 'https://www.fundacionfedericoengels.net/images/PDF/trotsky_revolucion_permanente.pdf' },
-            { id: 78, title: 'La revolución traicionada', author: 'León Trotsky', year: -1500, status: 'available', color: '#556B2F', pdfUrl: 'https://www.fundacionfedericoengels.net/images/PDF/La%20revolucion%20traicionada.pdf' },
-            { id: 79, title: 'Algunas peculiaridades de los ojos. Cuento', author: 'Philip K Dick', year: 2050, status: 'available', color: '#8FBC8F', pdfUrl: 'https://dev.guao.org/sites/default/files/biblioteca/Algunas%20peculiaridades%20de%20los%20ojos.pdf' },
-            { id: 80, title: 'El libro de arena', author: 'Jorge Luis Borges', year: 2039, status: 'available', color: '#2E8B57', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Jorge%20Luis%20Borges%20Libro%20de%20Arena.pdf' },
-            { id: 81, title: 'Jorge Luis Borges. Obras completas', author: 'Jorge Luis Borges', year: 2040, status: 'available', color: '#3CB371', pdfUrl: 'https://libraryofbabel.info/Borges/BorgesObrasCompletasII.pdf' },
-            { id: 82, title: 'El proceso', author: 'Franz Kafka', year: 1925, status: 'available', color: '#20B2AA', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Kafka,%20Franz%20-%20El%20Proceso.pdf' },
-            { id: 83, title: 'Poesía completa de Almafuerte', author: 'Pedro Bonifacio Flores (Almafuerte)', year: 2042, status: 'available', color: '#4682B4', pdfUrl: 'https://www.gba.gob.ar/sites/default/files/cultura/archivos/POESIA_COMPLETA_ALMAFUERTE.pdf' },
-            { id: 84, title: 'Cuentos completos', author: 'Abelardo Castillo', year: 1966, status: 'available', color: '#5F9EA0', pdfUrl: 'https://edupasion.ec/wp-content/uploads/2024/06/Abelardo_Castillo_Cuentos_completos-1.pdf' },
-            { id: 85, title: 'Argirópilis', author: 'Domingo Faustino Sarmiento', year: 1850, status: 'available', color: '#6495ED', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/argiropolis%20(1).pdf' },
-            { id: 86, title: 'Cuentos completos, vol I', author: 'Philip K Dick', year: 2050, status: 'available', color: '#7B68EE', pdfUrl: 'http://intranet.utvm.edu.mx/biblioteca/libros/Philip%20K.%20Dick%20-%20Cuentos%20completos%20II.pdf' },
-            { id: 87, title: 'Operación Masacre', author: 'Rodolfo Walsh', year: 1957, status: 'available', color: '#483D8B', pdfUrl: 'https://apsf.org.ar/wp-content/uploads/2010/10/Operacion-Masacre-Rodolfo-Walsh.pdf' },
-            { id: 88, title: 'Viajes en Europa, África y América, vol I', author: 'Domingo Faustino Sarmiento', year: 1849, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.educ.ar/recursos/fullscreen/show/3749' },
-            { id: 89, title: 'Facundo', author: 'Domingo Faustino Sarmiento', year: 1845, status: 'available', color: '#9932CC', pdfUrl: 'https://www.biblioteca-antologica.org/es/wp-content/uploads/2020/12/SARMIENTO-Facundo-civilizaci%C3%B3n-o-barbarie.pdf' },
-            { id: 90, title: 'Borges, un escritor en las orillas', author: 'Beatriz Sarlo', year: 1995, status: 'available', color: '#BA55D3', pdfUrl: 'https://iedamagri.wordpress.com/wp-content/uploads/2017/01/sarlo-beatriz-borges-un-escritor-en-las-orillas.pdf' },
-            { id: 91, title: 'Ensayos argentinos, de Sarmiento a la vanguardia', author: 'Carlos Altamirano, Beatriz Sarlo', year: 1983, status: 'available', color: '#C71585', pdfUrl: 'https://literaturaargentina1unrn.wordpress.com/wp-content/uploads/2012/05/altamirano-carlos-y-sarlo-beatriz-ensayos-argentinos-de-sarmiento-a-la-vanguardia.pdf' },
-            { id: 92, title: 'La historia del diseño industrial reconsiderada', author: 'Auerbach', year: 2051, status: 'available', color: '#DB7093', pdfUrl: 'https://sedici.unlp.edu.ar/bitstream/handle/10915/47968/Documento_completo__.pdf?sequence=1' },
-            { id: 93, title: 'El Diseño Industrial en la Historia', author: 'Aquiles Gay, Lidia Samar', year: 1994, status: 'available', color: '#A0522D', pdfUrl: 'https://faud.unsj.edu.ar/descargas/LECTURAS/Diseno%20Industrial/OBLIGATORIA/3.pdf' },
-            { id: 94, title: 'Historia de la Arquitectura I', author: 'OSCAR ADRIAN DANDER SANCHEZ', year: 2053, status: 'available', color: '#CD853F', pdfUrl: 'https://www.aliat.click/BibliotecasDigitales/construccion/Historia_de_la_arquitectura_I/Historia_de_la_arquitectura_I-Parte1.pdf' },
-            { id: 95, title: 'Historias de la Historia de la Arquitectura Argentina', author: 'Daniel Schavelzon', year: 2054, status: 'available', color: '#D2691E', pdfUrl: 'https://www.danielschavelzon.com.ar/ebooks/Historias_hist_arq_1_2.pdf' },
-            { id: 96, title: 'Pequeña Historia del Arte', author: 'Yeang', year: 2055, status: 'available', color: '#B8860B', pdfUrl: 'http://www.minedu.gob.pe/pdf/ed/historia-del-arte-arquitectura-escultura.pdf' },
-            { id: 97, title: 'El castillo', author: 'Franz Kafka', year: 1922, status: 'available', color: '#9932CC', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/el_castillo_kafka.pdf' },
+            { id: 31, title: '¿Sueñan los androides...?', author: 'Philip K Dick', year: 2050, status: 'available', color: '#483D8B', pdfUrl: 'https://www.philosophia.cl/biblioteca/dick/runner.pdf' },
             { id: 98, title: 'Cien Años de Soledad', author: 'Gabriel García Márquez', year: 1967, status: 'available', color: '#8B4513', pdfUrl: 'https://www.secst.cl/upfiles/documentos/19072016_1207am_578dc39115fe9.pdf' },
             { id: 99, title: 'Don Quijote', author: 'Miguel de Cervantes', year: 1605, status: 'available', color: '#A0522D', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Miguel%20de%20Cervantes%20El%20Ingenioso%20Hidalgo%20Don%20Quijote%20de%20la%20Mancha.pdf' },
-            { id: 100, title: 'La Ilíada', author: 'Homero', year: -750, status: 'available', color: '#CD853F', pdfUrl: 'https://colegiolospensamientos.cl/wp-content/uploads/2023/09/Octubre-I%C2%B0M-La-Iliada-Homero.pdf' },
             { id: 101, title: '1984', author: 'George Orwell', year: 1949, status: 'available', color: '#B8860B', pdfUrl: 'https://www.philosophia.cl/biblioteca/orwell/1984.pdf' },
-            { id: 102, title: 'Orgullo y Prejuicio', author: 'Jane Austen', year: 1813, status: 'available', color: '#556B2F', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/orgullo_y_prejuicio_austen.pdf' },
-            { id: 103, title: 'Diario de un escritor', author: 'Fiódor Dostoyevski', year: 1883, status: 'available', color: '#8FBC8F', pdfUrl: 'https://cdn.pruebat.org/libros/pdf/Diario-de-un-escritor-Fiodor-Dostoyevski.pdf' },
-            { id: 104, title: 'Guerra y Paz', author: 'León Tolstói', year: 1869, status: 'available', color: '#9932CC', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Le%C3%B3n%20Tolstoi%20Guerra%20y%20Paz.pdf' },
-            { id: 105, title: 'La Divina Comedia', author: 'Dante Alighieri', year: 1320, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dante%20Alighieri%20Divina%20comedia.pdf' },
-            { id: 106, title: 'La Odisea', author: 'Homero', year: -700, status: 'available', color: '#C71585', pdfUrl: 'https://www.cjpb.org.uy/wp-content/uploads/repositorio/serviciosAlAfiliado/librosDigitales/Homero-Odisea.pdf' },
-            { id: 107, title: 'Moby Dick', author: 'Herman Melville', year: 1851, status: 'available', color: '#DB7093', pdfUrl: 'https://uberty.org/wp-content/uploads/2015/12/herman-melville-moby-dick.pdf' },
-            { id: 108, title: 'Cuentos selectos', author: 'Antón Chéjov', year: 1877, status: 'available', color: '#A0522D', pdfUrl: 'https://ministeriodeeducacion.gob.do/docs/biblioteca-virtual/qYZY-anton-chejov-cuentos-imprescindiblespdf.pdf' },
-            { id: 109, title: 'Fahrenheit 451', author: 'Ray Bradbury', year: 1953, status: 'available', color: '#556B2F', pdfUrl: 'https://lexiconic.net/english/F451.pdf' },
             { id: 110, title: 'Así habló Zaratustra', author: 'Friedrich Nietzsche', year: 1984, status: 'available', color: '#9932CC', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/asi_hablo_zaratustra_nietzsche.pdf' },
-            { id: 111, title: 'Pedro Páramo', author: 'Juan Rulfo', year: 1955, status: 'available', color: '#BA55D3', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Juan%20Rulfo%20-%20Pedro%20P%C3%A1ramo.pdf' },
-            { id: 112, title: 'Fundación', author: 'Isaac Asimov', year: 1951, status: 'available', color: '#C71585', pdfUrl: 'https://www.mercaba.org/SANLUIS/ALiteratura/Literatura%20contempor%C3%A1nea/Asimov,%20Issac/Fundaci%C3%B3n.PDF' },
-            { id: 113, title: 'San Martín y los libros', author: 'Varios autores', year: 1844, status: 'available', color: '#D2691E', pdfUrl: 'https://www.bn.gov.ar/micrositios/admin_assets/issues/files/e1cd48eeef8d5d0208517d4f76ae036f.pdf' },
-            { id: 114, title: 'Casa de los Espíritus', author: 'Isabel Allende', year: 1982, status: 'available', color: '#8FBC8F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Isabel%20Allende%20La%20Casa%20de%20los%20Esp%C3%ADritus.pdf' },
-            { id: 115, title: 'Pobres gentes', author: 'Fiodor Mijaílovich Dostoyevskii', year: 1846, status: 'available', color: '#CD853F', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dostoyevskii,%20Fiodor%20M.%20-%20Pobres%20Gentes.pdf' },
-            { id: 116, title: 'EL Nombre de la Rosa', author: 'Umberto Eco', year: 1980, status: 'available', color: '#556B2F', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Umberto%20Eco%20El%20Nombre%20de%20la%20Rosa.pdf' },
-            { id: 117, title: 'El legado de San Martín', author: 'Instituto Sanmartiniano', year: 1908, status: 'available', color: '#8FBC8F', pdfUrl: 'https://sanmartiniano.cultura.gob.ar/media/uploads/site-31/multimedia/PDFs/el-legado-de-san-martin.pdf' },
-            { id: 118, title: 'Siddhartha', author: 'Hermann Hesse', year: 1922, status: 'available', color: '#BA55D3', pdfUrl: 'https://cpcglobal.org/publications/Siddhartha%20by%20Hermann%20Hesse.pdf' },
-            { id: 119, title: 'La voz del Gran Jefe. San Martín', author: 'Felipe Pigna', year: 1919, status: 'available', color: '#C71585', pdfUrl: 'http://eet485.com.ar/Archivos/Felipe%20Pigna%20-%20La%20voz%20del%20Gran%20Jefe_b8x.pdf' },
+            { id: 115, title: 'Pobres gentes', author: 'Fiodor Dostoyevskii', year: 1846, status: 'available', color: '#CD853F', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Dostoyevskii,%20Fiodor%20M.%20-%20Pobres%20Gentes.pdf' },
+            { id: 82, title: 'El proceso', author: 'Franz Kafka', year: 1925, status: 'available', color: '#20B2AA', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Kafka,%20Franz%20-%20El%20Proceso.pdf' },
+            { id: 33, title: 'I Ching', author: 'China', year: 0, status: 'available', color: '#2E8B57', pdfUrl: 'https://laventanaazulblog.com/wp-content/uploads/2016/12/i_ching-1.pdf' },
+            { id: 34, title: 'Tao Te King', author: 'Lao Tse', year: 500, status: 'available', color: '#3CB371', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/TaoTeKing_LaoTse.pdf' },
+            { id: 36, title: 'Manifiesto Comunista', author: 'Karl Marx', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://marxismocritico.com/wp-content/uploads/2013/11/127255.pdf' },
             { id: 120, title: 'El Lobo Estepario', author: 'Hermann Hesse', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/ElLoboEstepario.pdf' },
             { id: 121, title: 'La metamorfosis', author: 'Franz Kafka', year: 1927, status: 'available', color: '#9932CC', pdfUrl: 'https://www.ucm.es/data/cont/docs/119-2014-02-11-Kafka.La%20metamorfosis.pdf' },
-            { id: 122, title: 'Cuentos Completos, vol I', author: 'Silvina Ocampo', year: 1999, status: 'available', color: '#D2691E', pdfUrl: 'https://airenuestro.com/wp-content/uploads/2015/01/cuentos_1.pdf' },
-            { id: 123, title: 'Cuentos completos II', author: 'Silvina Ocampo', year: 1999, status: 'available', color: '#D2691E', pdfUrl: 'https://airenuestro.com/wp-content/uploads/2015/01/cuentos_2.pdf' },
-            { id: 124, title: 'Poemas breves de Silvina Ocampo', author: 'Silvina Ocampo', year: 2018, status: 'available', color: '#D2691E', pdfUrl: 'https://digitalcommons.usf.edu/cgi/viewcontent.cgi?article=1263&context=surcosur' },
-            { id: 125, title: 'Historias de cronopios y de famas', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca.choapa.cl/Libros/Historias-de-Cronopios-y-de-Famas%20-%20Julio%20Cortazar.pdf' },
-            { id: 126, title: 'Un tal Lucas', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://ddooss.org/libros/Lucas_Julio_Cortazar.pdf' },
-            { id: 127, title: 'Poemas de Julio Cortazar', author: 'Julio Cortazar', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'http://www.elrincondedebbie.com/sites/default/files/pdf/Poemas%20de%20Julio%20Cort%C3%A1zar.pdf' },
-            { id: 128, title: 'Selección de textos de Katherine Mansfield', author: 'KATHERINE MANSFIELD', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://materialdelectura.unam.mx/images/stories/pdf5/katherine-mansfield-95.pdf' },
-            { id: 129, title: 'Felicidad', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/escritura1/wp-content/uploads/sites/119/2020/05/MANSFIELD-K-2003-%E2%80%9CFelicidad%E2%80%9D-en-Cuentos-completos-De-bolsillo-Buenos-Aires..pdf' },
             { id: 130, title: 'Fiesta en el jardín', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/BIBLIOWEB/upload/Fiesta%20en%20el%20jard%C3%83%C2%ADn.pdf' },
-            { id: 131, title: 'Éxtasis', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://tallervirtualdeescritores.com/wp-content/uploads/2024/05/Mansfield_Extasis.pdf?srsltid=AfmBOoqPaoP-lS9wjOxgAWMd8HmbRT0NNk9_PMfYreDrYCFh9oDVKil5' },
-            { id: 132, title: 'La casa de muñecas', author: 'Katherine Mansfield', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.curriculumnacional.cl/614/articles-25888_recurso_pdf.pdf' },
-            { id: 133, title: 'Orlando', author: 'Virginia Woolf', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://elplacerdelalectura.com/wp-content/uploads/2020/02/orlando.pdf' },
-            { id: 134, title: 'Socialismo comunitario', author: 'Álvaro García Linera', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://www.vicepresidencia.gob.bo/IMG/pdf/socialismo_comunitario-2.pdf' },
-            { id: 135, title: 'EL Estado en transición. Bloque de poder y punto de bifurcación', author: 'Alvaro García Linera', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://bibliotecavirtual.clacso.org.ar/ar/libros/coedicion/linera/7.4.pdf' },
-            { id: 136, title: 'Forma valor y forma comunidad', author: 'Alvaro García Linera', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://traficantes.net/sites/default/files/pdfs/Forma%20valor%20y%20forma%20comunidad%20-%20Traficantes%20de%20Sue%C3%B1os.pdf' },
-            { id: 137, title: 'La potencia plebeya: acción colectiva e identidades indígenas, obreras y populares en Bolivia', author: 'Arthur Schopenhauer', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca-repositorio.clacso.edu.ar/bitstream/CLACSO/15717/1/La-potencia-plebeya.pdf' },
-            { id: 138, title: 'Las metamorfosis', author: 'Ovidio', year: 8, status: 'available', color: '#D2691E', pdfUrl: 'https://gaceta.cch.unam.mx/sites/default/files/libros/2022-05/las-metamorfosis-de-ovidio.pdf' },
-            { id: 139, title: 'Tragedias, de Euripides', author: 'Eurípides', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://hipermedula.org/wp-content/uploads/2018/04/Euripides.Tragedias-I.-El-Ciclope.-Alcestis.-Medea.-Los-Heraclidas.-Hipolito.-Andromaca.-Hecuba.pdf' },
-            { id: 140, title: 'Electra', author: 'Eurípides', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://literaturauvmsep.wordpress.com/wp-content/uploads/2014/05/euripides-electra-bilingue.pdf' },
-            { id: 141, title: 'Tragedias. Esquilo', author: 'Esquilo', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Esquilo%20-%20Tragedias.pdf' },
-            { id: 142, title: 'La orestiada', author: 'Esquilo', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'http://www.ctvteatro.com/Biblioteca/Esquilo/La.Orestiada.pdf' },
-            { id: 143, title: 'Las siete tragedias de Sófocles', author: 'Sófocles', year: 500, status: 'available', color: '#D2691E', pdfUrl: 'https://ministeriodeeducacion.gob.do/docs/biblioteca-virtual/XxkQ-las-siete-tragedias-de-sofogles-jose-alemanypdf.pdf' },
-            { id: 144, title: 'El camarada', author: 'Takiji Kobayashi', year: 1932, status: 'available', color: '#D2691E', pdfUrl: 'https://elsudamericano.wordpress.com/wp-content/uploads/2019/06/161.el-camarada-takiji-kobayashi.pdf' },
-            { id: 145, title: 'Haikus y Tankas', author: 'Takahashi Mutsuo', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.canela.org.es/cuadernoscanela/canelapdf/cc3-4nivon.pdf' },
-            { id: 146, title: 'Filosofía mapuche: palabras arcaicas para despertar el Ser', author: 'Ziley Mora Penroz', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.folkloretradiciones.com.ar/literatura/Mora%20Penros%20Ziley%20-%20Filosofia%20Mapuche.pdf' },
-            { id: 147, title: 'Poesía contemporanea del Japón. Antología', author: 'Varios', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://gregoryzambrano.com/wp-content/uploads/2010/09/poesia_contemporanea_del_japon.pdf' },
-            { id: 148, title: 'Libélulas, luciérnagas y mariposas: 39 haikús japoneses', author: 'Varios', year: 2004, status: 'available', color: '#D2691E', pdfUrl: 'https://www.redalyc.org/pdf/586/58639306.pdf' },
-            { id: 149, title: 'Las mil y una noches', author: 'Varios', year: 800, status: 'available', color: '#D2691E', pdfUrl: 'https://0201.nccdn.net/1_2/000/000/17f/d54/Las-mil-y-una-noches.pdf' },
-            { id: 150, title: 'Qué es el budismo', author: 'JOrge Luis Borges y Alicia Jurado', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://worcel.com/archivos/6/Borges%20&%20Jurado-Que%20Es%20El%20Budismo.pdf' },
-            { id: 151, title: 'El libro de los seres imaginarios', author: 'Jorge Luis Borges', year: 1982, status: 'available', color: '#D2691E', pdfUrl: 'https://tuscriaturasarchivos.home.blog/wp-content/uploads/2020/03/el-libro-de-los-seres-imaginarios-por-jorge-luis-borges-alfabetico.pdf' },
-            { id: 152, title: 'Tractatus logico-filosophocus', author: 'Lugwig Wittgenstein', year: 1818, status: 'available', color: '#D2691E', pdfUrl: 'https://www.filosoficas.unam.mx/~tomasini/TRADUCCIONES/WITTGENSTEIN/Traduccion-TLP.pdf' },
-            { id: 153, title: 'Sobre el lenguaje: Lugwig Wittgenstein', author: 'James Robinson', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://eltalondeaquiles.pucp.edu.pe/wp-content/uploads/2017/03/wittgenstein-sobre-el-lenguaje-robinson.pdf' },
-            { id: 154, title: 'Cálculo integral', author: 'Carlos Rojas', year: 2022, status: 'available', color: '#D2691E', pdfUrl: 'https://proyectodescartes.org/iCartesiLibri/PDF/C%C3%A1lculo_Diferencial_e_Integral-2.pdf' },
-	    { id: 155, title: 'Conferencia sobre Ética: Lugwig Wittgenstein', author: 'Lugwig Wittgenstein', year: 1965, status: 'available', color: '#D2691E', pdfUrl: 'https://www.philosophia.cl/biblioteca/Wittgenstein/conferencia.pdf' },
-            { id: 156, title: 'Investigaciones filosóficas', author: 'Lugwig Wittgenstein', year: 1967, status: 'available', color: '#D2691E', pdfUrl: 'https://educacion.uncuyo.edu.ar/upload/wittgenstein-investigaciones-filosoficas.pdf' },
-            { id: 157, title: 'Cuadernos azul y marrón', author: 'James Robinson', year: 1968, status: 'available', color: '#D2691E', pdfUrl: 'https://lenguajeyconocimiento.wordpress.com/wp-content/uploads/2014/03/wittgenstein-cuadernos-azul-y-marron.pdf' },
-            { id: 158, title: 'Seguir con el problema', author: 'Donna Haraway', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ivam.es/wp-content/uploads/intro_cap2_haraway_consonni-2.pdf' },
-            { id: 159, title: 'Manifiesto cyborg', author: 'Donna Haraway', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://www.solidaridadobrera.org/ateneo_nacho/libros/Donna%20Haraway%20-%20Manifiesto%20Cyborg.pdf' },
-            { id: 160, title: 'El mundo de la biología', author: 'Varios', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://acfiman.org/wp-content/uploads/2023/04/el-mundo-de-la-biologia.pdf' },
-            { id: 161, title: 'Botánica sistemática de las plantas con semilla', author: 'UNL', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'https://bibliotecavirtual.unl.edu.ar:8443/bitstream/handle/11185/5567/botanica1_web.pdf?sequence=1&isAllowed=y' },
-            { id: 162, title: 'Eso no estaba en mi libro de botánica', author: 'Rosa Porcel', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'https://info-biblioteca.mincyt.gob.ve/wp-content/uploads/2024/09/Eso-no-estaba-en-mi-libro-de-Botanica-Rosa-Porcel.pdf' },
-            { id: 163, title: 'Manual de plantas medicinales de la región chaqueña', author: 'INTA', year: 2024, status: 'available', color: '#D2691E', pdfUrl: 'https://editorial.uncaus.edu.ar/wp-content/uploads/2024/11/UNCAUS_Manual-de-plantas-medicinales.pdf' },
-            { id: 164, title: 'Manual de plantas medicinales de las sierras de Córdoba', author: 'Donna Haraway', year: 2011, status: 'available', color: '#D2691E', pdfUrl: 'https://www.sib.gob.ar/portal/wp-content/uploads/2023/03/Manual-Entre-Hierbas-y-Yuyos-serranos.pdf' },
-            { id: 165, title: 'Usos tradicionales de las plantas medicinales de la región patagónica', author: 'INTA', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://cenpat.conicet.gov.ar/wp-content/uploads/sites/91/2016/03/USOS-TRADICIONALES-DE-LAS-PLANTAS-DE-LA-MESETA-PATAG%C3%93NICA.pdf' },
-            { id: 166, title: 'Manual de microbiología general', author: 'Varios', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://www.unirioeditora.com.ar/wp-content/uploads/2018/10/978-987-688-124-1.pdf' },
-            { id: 167, title: 'Ecología Urbana', author: 'UNGS', year: 2012, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ungs.edu.ar/wp-content/uploads/pdfs_ediciones/Ecolog%C3%ADa_Urbana-completo.pdf' },
-            { id: 168, title: 'Fundamentos de ecología y ambiente', author: 'UNLU', year: 2017, status: 'available', color: '#D2691E', pdfUrl: 'https://ri.unlu.edu.ar/xmlui/bitstream/handle/rediunlu/1367/Ecologia%20y%20ambiente_DIGITAL.pdf?sequence=1&isAllowed=y' },
-            { id: 169, title: 'Atlas de zoología general', author: 'UNS', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'http://eprints.natura.unsa.edu.ar/728/1/Atlas_Zoologia_General_IRNyMA_2020.pdf' },
-            { id: 170, title: 'Introducción a la teoría de números', author: 'Instituto tecnológico de Costa Rica', year: 2010, status: 'available', color: '#D2691E', pdfUrl: 'https://repositoriotec.tec.ac.cr/bitstream/handle/2238/6299/introducci%C3%B3n-teor%C3%ADa-n%C3%BAmeros.pdf?sequence=1&isAllowed=y' },
-            { id: 171, title: 'Una introducción a los números complejos', author: 'Universidad de los Andes', year: 2001, status: 'available', color: '#D2691E', pdfUrl: 'https://www.uv.mx/personal/aherrera/files/2014/08/01a.-INTRODUCCION-A-LOS-NUMEROS-COMPLEJOS.pdf' },
-            { id: 172, title: 'Breve Historia del Arte', author: 'Carlos Javier Taranilla', year: 2014, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ccp.gob.bo/wp-content/uploads/2020/12/Breve-historia-del-arte-Carlos-Javier-Taranilla.pdf' },
-            { id: 173, title: 'La matemática como una de las Bellas Artes', author: 'Pablo Amster', year: 2006, status: 'available', color: '#D2691E', pdfUrl: 'https://padron.entretemas.com.ve/cursos/Epistem/Libros/AmsterP-LaMatemBArtes.pdf' },
-            { id: 174, title: 'Curso de topología', author: 'UNAM', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://academicos.fciencias.unam.mx/wp-content/uploads/sites/94/2016/08/Notas-Topologia.pdf' },
-            { id: 175, title: 'Una introducción a la teoría matemática del sonido', author: 'Universidad de La Laguna', year: 2019, status: 'available', color: '#D2691E', pdfUrl: 'https://riull.ull.es/xmlui/bitstream/handle/915/16283/Una%20Introduccion%20Matematica%20a%20la%20Teoria%20del%20Sonido.pdf?sequence=1' },
-            { id: 176, title: 'Termodinámica, apunte didáctico', author: 'UNM', year: 2019, status: 'available', color: '#D2691E', pdfUrl: 'https://editorial.unam.edu.ar/images/documentos_digitales/F8_TERMODINMICA_Parte1.pdf' },
-            { id: 177, title: 'Los herederos: los estudiantes y la cultura', author: 'Pierre Bourdieu', year: 1964, status: 'available', color: '#D2691E', pdfUrl: 'https://socioeducacion.wordpress.com/wp-content/uploads/2011/05/bourdieu-pierr-los-herederos.pdf' },
-            { id: 178, title: 'Campo de poder, campo intelectual', author: 'Pierre Bourdieu', year: 1981, status: 'available', color: '#D2691E', pdfUrl: 'https://www.fceia.unr.edu.ar/geii/maestria/DoraBibliografia/Ampliatoria/Bourdieu,%20Campo%20de%20Poder%20y%20Campo%20intelectual.pdf' },
-            { id: 179, title: 'Discuros sobre la primera década de Títo Livio', author: 'Nicolás Maquiavelo', year: 1531, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/Discursos_de_tito_livio-1.pdf' },
-            { id: 180, title: 'El príncipe', author: 'Nicolás Maquiavelo', year: 1531, status: 'available', color: '#D2691E', pdfUrl: 'https://apiperiodico.jalisco.gob.mx/api/sites/periodicooficial.jalisco.gob.mx/files/maquiavelo-_principe.pdf' },
-            { id: 181, title: 'Clausewitz: concepto, historia y realidad', author: 'Yuri Tolmos Mantilla', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://www.esffaa.edu.pe/wp-content/uploads/2020/10/LIBRO-CLAUSEWITZ-2015.pdf' },
-            { id: 181, title: 'De la guerra, libro I', author: 'Karl von Clausewitz', year: 1832, status: 'available', color: '#D2691E', pdfUrl: 'https://filosofiadelaguerra.wordpress.com/wp-content/uploads/2018/04/de-la-guerra-tomo-1-final-web.pdf' },
-            { id: 182, title: 'La mandrágora', author: 'Nicolás Maquiavelo', year: 1531, status: 'available', color: '#D2691E', pdfUrl: 'https://escrituracreativa.com/wp-content/uploads/LA-MANDR%C3%81GORA_Maquiavelo_01.pdf' },
-            { id: 183, title: 'El arte de la guerra', author: 'Sun Tzu', year: 1000, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/El_arte_de_la_guerra-Sun_Tzu.pdf' },
-            { id: 184, title: 'Matar a un ruiseñor', author: 'Harper Lee', year: 1960, status: 'available', color: '#D2691E', pdfUrl: 'https://www.formarse.com.ar/libros/Libros-recomendados-pdf/Matar%20a%20un%20ruise%C3%B1or%E2%80%93%20Harper%20Lee.pdf' },
-            { id: 185, title: 'El viejo y el mar', author: 'Ernest Hemingway', year: 1952, status: 'available', color: '#D2691E', pdfUrl: 'https://www.ampf.org.ar/ampf/wp-content/uploads/2020/07/El-viejo-y-el-mar.pdf' },
-            { id: 186, title: 'Por quién doblan las campanas', author: 'Ernest Hemingway', year: 1940, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Ernst%20Hemingway%20%20%20Por%20quien%20Doblan%20las%20Campanas.pdf' },
-            { id: 187, title: 'El ruido y la furia', author: 'WILLIAM FAULKNER', year: 1929, status: 'available', color: '#D2691E', pdfUrl: 'https://www.taller-palabras.com/Datos/Cuentos_Bibliotec/ebooks/Faulkner%20William%20-%20El%20Sonido%20y%20la%20Furia.pdf' },
-            { id: 188, title: 'El congreso de literatura', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://israelleon.wordpress.com/wp-content/uploads/2011/09/aira-cesar-el-congreso-de-literatura.pdf' },
-            { id: 189, title: 'El carrito', author: 'Cesar Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/wp-content/uploads/sites/145/2020/06/26._el_carrito_c_aira.pdf' },
-            { id: 190, title: 'La confesión', author: 'César Aira', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://iedamagri.wordpress.com/wp-content/uploads/2019/07/aira-cesar-la-confesion.pdf' },
-            { id: 191, title: 'Perro', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://www.radiokermes.com/images/2020/CUENTOS_VERANO_2020-2021/81-_C%C3%A9sar_Aira_-_El_perro.pdf' },
-            { id: 192, title: 'Yo era una niña de siete años', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://interzonaeditora.com/admin/files/libros/233/AIRANiasieteaosMUESTRAW.pdf' },
-            { id: 193, title: 'La utilidad del arte', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://hamamarino.wordpress.com/wp-content/uploads/2018/12/aira-la-utilidad-del-arte.pdf' },
-            { id: 194, title: 'Cómo me hice monja', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://revistafractalario.wordpress.com/wp-content/uploads/2014/08/aira-cc3a9sar-cc3b3mo-me-hice-monja.pdf' },
-            { id: 195, title: 'Yo era una chica moderna', author: 'César Aira', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://interzonaeditora.com/admin/files/libros/232/AIRAYoeraunachicamodernaMUESTRAWEB.pdf' },
-            { id: 196, title: 'El té de Dios', author: 'César Aira', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://perio.unlp.edu.ar/catedras/wp-content/uploads/sites/145/2020/06/el_te_de_dios_c_aira.pdf' },
-            { id: 197, title: 'Cumbres Borrascosas', author: 'Emily Bronté', year: 1847, status: 'available', color: '#D2691E', pdfUrl: 'https://www.suneo.mx/literatura/subidas/Charlotte%20Bront%C3%A9%20Cumbres%20Borrascosas.pdf' },
-            { id: 198, title: 'Cálculo diferencial e integral', author: 'Siefan Baanach', year: 1967, status: 'available', color: '#D2691E', pdfUrl: 'https://thunderbooks.wordpress.com/wp-content/uploads/2009/06/calculo-diferencial-e-integral-de-banach.pdf' },
-	    { id: 199, title: 'Secretos del antiguo Egipto', author: 'José Padrós', year: 2020, status: 'available', color: '#D2691E', pdfUrl: 'https://info-biblioteca.mincyt.gob.ve/wp-content/uploads/2024/09/Secretos-del-Antiguo-Egipto-Josep-Padro-i-Parcerisa.pdf' },
-	    { id: 200, title: 'Poder y cultura en el antiguo Egipto', author: 'CONICET', year: 2019, status: 'available', color: '#D2691E', pdfUrl: 'https://www.icsoh.unsa.edu.ar/libros/libro-poderycultura.pdf' },
-	    { id: 201, title: 'PLANTAS DEL ANTIGUO EGIPTO: ORIGEN, USOS Y PRESENCIA EN CHILE', author: 'Museo Nacional de Chile', year: 2018, status: 'available', color: '#D2691E', pdfUrl: 'https://publicaciones.mnhn.gob.cl/668/articles-87521_archivo_01.pdf' },
-	    { id: 202, title: 'Lógicas sociales del antiguo Egipto', author: 'Marcelo Campagno', year: 2018, status: 'available', color: '#D2691E', pdfUrl: 'https://publicaciones.filo.uba.ar/sites/publicaciones.filo.uba.ar/files/L%C3%B3gicas%20sociales%20en%20el%20Antiguo%20Egipto_interactivo_0.pdf' },
-	    { id: 203, title: 'Libro egipcio de los muertos', author: 'Kemet', year: 0, status: 'available', color: '#D2691E', pdfUrl: 'https://www.archivodelafrontera.com/wp-content/uploads/2016/01/AN%C3%93NIMO-El-Libro-Egipcio-de-los-Muertos-1.pdf' },
-	    { id: 204, title: 'Golondrinas de la noche 1', author: 'RusFilm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=ZTUx-JGhKhg&list=LL&index=91' },
-	    { id: 205, title: 'Golondrinas de la noche 2', author: 'RusFilm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=TCUItv0b6fs' },
-	    { id: 206, title: 'Golondrinas de la noche 3', author: 'RusFIlm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=j5mQABMHZEA&list=PLot2IRajUzp7ejarb-UMeP9vMp0DVhAf7&index=3' },
-	    { id: 207, title: 'Golondrinas de la noche 4', author: 'RusFIlm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=rnweYqII9cI&list=PLot2IRajUzp7ejarb-UMeP9vMp0DVhAf7&index=4' },
-	    { id: 208, title: 'Golondrinas de la noche 5', author: 'RusFilm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=J1mPe7k0zEk&list=PLot2IRajUzp7ejarb-UMeP9vMp0DVhAf7&index=5' },
-	    { id: 209, title: 'Golondrinas de la noche 6', author: 'RusFilm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=UPQA_8S6U6Y&list=PLot2IRajUzp7ejarb-UMeP9vMp0DVhAf7&index=6' },
-	    { id: 210, title: 'Golondrinas de la noche 7', author: 'RusFilm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=IMkySutlMTY&list=PLot2IRajUzp7ejarb-UMeP9vMp0DVhAf7&index=7' },
-	    { id: 211, title: 'Golondrinas de la noche 8', author: 'RusFilm', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=1Mt2sdweBXw&list=PLot2IRajUzp7ejarb-UMeP9vMp0DVhAf7&index=8' },
-	    { id: 212, title: 'La hora de los hornos', author: 'Pino Solanas, Octavio Getino', year: 1968, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=z2HRWWyQ-kY' },
-	    { id: 213, title: 'Meditaciones', author: 'Marco Aurelio', year: 180, status: 'available', color: '#D2691E', pdfUrl: 'https://www.humanidades.unam.mx/bibliotheca/bsgrm$pensamientos$dura$1edicion$TIT_102.pdf' },
-	    { id: 214, title: 'Tratados morales de Séneca', author: 'Séneca', year: 0, status: 'available', color: '#D2691E', pdfUrl: 'https://www.cristoraul.org/SPANISH/sala-de-lectura/BIBLIOTECATERCERMILENIO/CLASICOS/ROMANOS/SENECA/Seneca-TratadosMorales.pdf' },
-	    { id: 215, title: 'Enquiridion: manual de vida', author: 'Epícteto', year: 100, status: 'available', color: '#D2691E', pdfUrl: 'https://libroesoterico.com/biblioteca/Varios%202/Epicteto%20-%20Manual.pdf' },
-	    { id: 216, title: 'Raices de Europa. Canal de Youtube', author: 'Raices de Europa', year: 2026, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/@raicesdeeuropa' },
-	    { id: 217, title: 'Instituto de física teórica IFT', author: 'IFT', year: 2026, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/@IFTMadrid' },
-	    { id: 218, title: 'Les Luthiers', author: 'Les Luthiers', year: 2026, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/@LesLuthiersOficial' },
-	    { id: 219, title: 'Awka Liwen', author: 'Osvaldo Bayer', year: 2010, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=FxKT5e5S9hQ' },
-	    { id: 220, title: 'Mi viejo rebelde', author: 'Ana Bayer', year: 2018, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=BCxgpq6nd-s' },
-	    { id: 221, title: 'Felipe Pigna: canal de Youtube', author: 'Felipe Pigna', year: 2026, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/@FelipePignaHistoria' },
-	    { id: 222, title: 'Argentina latente', author: 'Pino Solanas', year: 2004, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=iZeJ1b3Qc6c' },
-	    { id: 222, title: 'La guerra del fracking', author: 'Pino Solanas', year: 2013, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=YA6Xp1WDQq4' },
-	    { id: 223, title: 'No puedo ya fingir ser una nada', author: 'Javier García Rodriguez', year: 2010, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=_NS_PpFCAfo' },
-	    { id: 224, title: 'Escribir', author: 'Chantall Maillard', year: 2004, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=4mYCxaJPjjg' },
-	    { id: 225, title: 'Diarios indios', author: 'Chantall Maillard', year: 2005, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=4mYCxaJPjjg' },
-	    { id: 226, title: 'Hainuwele', author: 'Chantall Maillard', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=ct3-AueISRc' },
-	    { id: 227, title: 'Las islas nuevas', author: 'María Luisa Bombal', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoriachilena.gob.cl/archivos2/pdfs/MC0011099.pdf' },
-	    { id: 228, title: 'La amortajada', author: 'María Luisa Bombal', year: 1941, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoriachilena.gob.cl/archivos2/pdfs/MC0011098.pdf' },
-	    { id: 229, title: 'La última niebla', author: 'María Luisa Bombal', year: 1941, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoriachilena.gob.cl/archivos2/pdfs/MC0005023.pdf' },
-	    { id: 230, title: 'Diario de la guerra del cerdo', author: 'Adolfo Bioy Casares', year: 1969, status: 'available', color: '#D2691E', pdfUrl: 'https://radiorama.com.ar/jugueterabiosobar.com.ar/biblioteca_rabiosa/Diario%20de%20la%20guerra%20de%20cerdo%20-Adolfo%20Bioy%20Casares.pdf' },
-	    { id: 231, title: 'Cuentos breves y extraordinarios', author: 'Jorge Luis Borges y Bioy Casares', year: 1953, status: 'available', color: '#D2691E', pdfUrl: 'https://treseso.wordpress.com/wp-content/uploads/2010/11/jorge-luis-borges-y-a-bioy-casares-cuentos-breves-y-extraordinarios.pdf' },
-	    { id: 232, title: 'El sueño de los heroes', author: 'Adolfo Bioy Casares', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://charlaenespanol.wordpress.com/wp-content/uploads/2013/11/adolfo-bioy-casares-el-sueno-de-los-heroes.pdf' },
-	    { id: 233, title: 'Textos de Adolfo Bioy Casares', author: 'Adolfo Bioy Casares', year: 2009, status: 'available', color: '#D2691E', pdfUrl: 'https://asociaciondeescritoresmex.org/mx/archive/CP/adolfo_bioy.pdf' },
-	    { id: 234, title: 'La odisa de la mente', author: 'Varios', year: 2024, status: 'available', color: '#D2691E', pdfUrl: 'https://repositorio-aberto.up.pt/bitstream/10216/164292/2/700829.pdf' },
-	    { id: 235, title: 'Entrevista al Papa Francisco', author: 'Fontevecchia', year: 2024, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=19wIlrs4jx4' },
-	    { id: 236, title: 'La mafia judía en la Argentina', author: 'Fabián Spollansky', year: 2008, status: 'available', color: '#D2691E', pdfUrl: 'https://argenleaks.com/wp-content/uploads/2025/10/La_Mafia_Judia_en_Argentina_de_Fabian_Sp.pdf' },
-	    { id: 237, title: 'Breve síntesis de la Compañía de Jesús', author: 'Anónimo', year: 2008, status: 'available', color: '#D2691E', pdfUrl: 'http://www.cerpe.org.ve/tl_files/Cerpe/contenido/documentos/Identidad%20Ignaciana%20-%20Modulo%20del%20DGSI/M1PIUnidad3_T8_10p.pdf' },
-	    { id: 238, title: 'El saber de los jesuitas, historias naturales y el Nuevo Mundo', author: 'Varios', year: 2005, status: 'available', color: '#D2691E', pdfUrl: 'https://www.historiadecucuta.com/wp-content/uploads/2021/01/El-saber-de-los-jesuitas-historias-naturales-y-el-Nuevo-Mundo-Luis-Millones-Figueroa-Domingo-Ledezma-eds.-1.pdf' },
-	    { id: 239, title: 'Jesuitas en las Américas: Presencia en el tiempo', author: 'Varios', year: 2019, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/libros/pm.726/pm.726.pdf' },
-	    { id: 240, title: 'Simón Rodríguez y los jesuitas', author: 'Guillermo Briceño Porras', year: 2015, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca-repositorio.clacso.edu.ar/bitstream/CLACSO/15391/1/Simon-Rodriguez-y-los-jesuitas.pdf' },
-	    { id: 241, title: 'El jesuita', author: 'Varios', year: 2005, status: 'available', color: '#D2691E', pdfUrl: 'https://www.velasquez.com.co/LuisF/MAGISTERIO/EBOOK-EL%20JESUITA.pdf' },
-	    { id: 242, title: 'Los jesuitas y la cultura rioplatense', author: 'Fabián Spollansky', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://jp-projeto-missoes.s3.amazonaws.com/wp-content/uploads/Furlong/Furlong+Guillermo+SJ+-+Los+Jesuitas+y+cultura+RioPlatense.pdf' },
-	    { id: 243, title: 'Memoria del saqueo', author: 'Pino Solanas', year: 2004, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=HU5tGYDe9zk' },
-	    { id: 244, title: 'Linda, linda, linda', author: '', year: 2005, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=h-ZREodNCpQ' },
-	    { id: 245, title: 'Ya somos cyborgs', author: 'Anónimo', year: 1984, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=9qzbv5s1iJI' },
-	    { id: 246, title: 'Anatomia Extinction', author: 'Shozin Fukui', year: 1995, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=sC3qJZPy_mY' },
-	    { id: 247, title: 'Invasión', author: '', year: 1997, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=Tr7f6zEsiYY&list=LL&index=3&t=2297s' },
-	    { id: 248, title: 'burst city', author: 'Sogo Ishii', year: 1982, status: 'available', color: '#D2691E', pdfUrl: 'https://www.youtube.com/watch?v=fK_KyGzUa0E' },
-	    { id: 249, title: 'La pequeña lámpara', author: 'Gassam Kanafi', year: 2021, status: 'available', color: '#D2691E', pdfUrl: 'https://palestina.int.ar/wp-content/uploads/2024/09/La-Peque%C3%B1a-L%C3%A1mpara-maqueta-5.pdf' },
-	    { id: 250, title: 'El pasado de Palestina en disputa: Arqueología y religión en el conflicto palestino-israelí', author: 'Pfoh, Emanuel', year: 2016, status: 'available', color: '#D2691E', pdfUrl: 'https://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.13647/pr.13647.pdf' },
-	    { id: 251, title: 'Palestina: de la Nakba al apartheid. La lucha de un pueblo por su liberación', author: 'Brizuela, Natlia', year: 2021, status: 'available', color: '#D2691E', pdfUrl: 'https://huelladelsur.ar/app/uploads/2021/07/Dossier-Palestina-PDF-final.pdf' },
-	    { id: 252, title: 'NAKBA Palestina, 1948, y los reclamos de la memoria', author: 'Lila Abu-Lughod, Ahmad Saadi', year: 2017, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca.clacso.edu.ar/clacso/se/20180518032650/Nakba_Palestina.pdf' },
-	    { id: 253, title: 'Clarice Lispector: Cuentos Reunidos', author: 'Clarice Lispector', year: 2021, status: 'available', color: '#D2691E', pdfUrl: 'https://www.amsafe.org.ar/wp-content/uploads/Cuentos_reunidos.pdf' },
-	    { id: 254, title: 'La pasión según GH', author: 'Clarice Lispector', year: 2017, status: 'available', color: '#D2691E', pdfUrl: 'https://libroschorcha.wordpress.com/wp-content/uploads/2017/12/la-pasion-segun-g-h-clarice-lispector.pdf' },
-	    { id: 255, title: 'Shakespeare: Obra Completa', author: '', year: 2017, status: 'available', color: '#D2691E', pdfUrl: 'https://www.colegioemaus.edu.ar/assets/tragedias_shakespeare.pdf' },
-	    { id: 256, title: 'Macbeth', author: 'Shakespeare, William', year: 1620, status: 'available', color: '#D2691E', pdfUrl: 'https://cdn.pruebat.org/libros/pdf/Macbeth.pdf' },
-	    { id: 257, title: 'Hamlet', author: 'William Shakespeare', year: 1620, status: 'available', color: '#D2691E', pdfUrl: 'https://biblioteca-repositorio.clacso.edu.ar/libreria_cm_archivos/pdf_2655.pdf' },
-	    { id: 258, title: 'El Rey Lear', author: 'William Shakespeare', year: 1620, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/William%20Shakespeare%20-%20El%20Rey%20Lear.pdf' },
-	    { id: 259, title: 'Mujercitas', author: 'LOUISA MAY ALCOTT', year: 1968, status: 'available', color: '#D2691E', pdfUrl: 'https://web.seducoahuila.gob.mx/biblioweb/upload/mujercitas.pdf' },
-	    { id: 260, title: 'Alicia en el país de las maravillas', author: 'Lewis Carrol', year: 1865, status: 'available', color: '#D2691E', pdfUrl: 'https://elcinturondeorion.com/wp-content/uploads/2020/05/carroll-lewis-alicia-en-el-pais-de-las-maravillas-2.pdf' },
-            { id: 261, title: 'Alicia a través del espejo', author: 'Lewis Carrol', year: 1880, status: 'available', color: '#D2691E', pdfUrl: 'https://www.argentina.gob.ar/sites/default/files/a_traves_del_espejo_y_lo_que_alicia_encontro_al_otro_lado-lewis_carroll_revisado.pdf' }
-];
+            { id: 138, title: 'Las metamorfosis', author: 'Ovidio', year: 8, status: 'available', color: '#D2691E', pdfUrl: 'https://gaceta.cch.unam.mx/sites/default/files/libros/2022-05/las-metamorfosis-de-ovidio.pdf' }
+        ];
         let allBooks = [...books];
         let filteredBooks = [...books];
         let liveBugs = [];
         let currentPdfUrl = '';
+        let currentDictWord = '';
 
         // =========================================
         // LÓGICA BIBLIOTECA
@@ -1056,7 +817,6 @@
                 booksContainer.appendChild(nihongoBook);
                 const aeternusBook = createSpecialBook('AeternusApp', 'https://kami00dragon.github.io/AeternusApp/', '#5D4037');
                 booksContainer.appendChild(aeternusBook);
-                // RESTAURADO: GRAMATICAPP
                 const gramaticBook = createSpecialBook('GramaticApp', 'https://kami00dragon.github.io/gramaticapp/#posturas-teoricas', '#5D4037');
                 booksContainer.appendChild(gramaticBook);
             }
@@ -1075,7 +835,7 @@
                 container.appendChild(noResults); return;
             }
             liveBugs = [];
-            const totalShelves = 100; 
+            const totalShelves = 20; 
             const baseBooksPerShelf = Math.floor(filteredBooks.length / totalShelves);
             const extraBooks = filteredBooks.length % totalShelves;
             for (let i = 0; i < totalShelves; i++) {
@@ -1108,7 +868,6 @@
         const readerDesk = document.getElementById('readerDesk');
         const settingsPanel = document.getElementById('tool-settings');
         const btnGoogleView = document.getElementById('btn-google-view');
-        const selectedTextInput = document.getElementById('selected-text-input');
         const readerFooter = document.getElementById('readerFooter');
         
         let state = { tool: 'hand', isDrawing: false, lastX: 0, lastY: 0, color: '#000000', size: 2, zoom: 1, isGoogleView: false };
@@ -1120,22 +879,22 @@
             
             pdfIframe.src = url; 
             state.isGoogleView = false;
+            btnGoogleView.classList.remove('active');
             
             setTool('hand');
             resetZoom();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             setTimeout(resizeCanvas, 1000);
-            selectedTextInput.value = '';
-            // Reset footer
             readerFooter.classList.remove('expanded');
             document.getElementById('reader-notes').value = '';
+            document.getElementById('pdf-search-input').value = '';
         }
 
         function toggleGoogleViewer() {
             if(!currentPdfUrl) return;
             state.isGoogleView = !state.isGoogleView;
             if(state.isGoogleView) {
-                pdfIframe.src = "https://docs.google.com/gview?embedded=1&url=" + encodeURIComponent(currentPdfUrl);
+                pdfIframe.src = "https://docs.google.com/gview?embedded=1&url=" + encodeURIComponent(currentPdfUrl) + "&scrollbar=0";
                 btnGoogleView.classList.add('active');
             } else {
                 pdfIframe.src = currentPdfUrl;
@@ -1147,7 +906,6 @@
             readerModal.classList.remove('active');
             pdfIframe.src = '';
             currentPdfUrl = '';
-            selectedTextInput.value = '';
             ctx.clearRect(0,0,canvas.width, canvas.height);
             window.speechSynthesis.cancel();
         }
@@ -1163,10 +921,10 @@
 
             if(toolName === 'hand') {
                 readerDesk.classList.remove('mode-draw');
-                canvas.style.pointerEvents = 'none';
+                readerDesk.style.overflowY = 'auto';
             } else {
                 readerDesk.classList.add('mode-draw');
-                canvas.style.pointerEvents = 'auto';
+                readerDesk.style.overflowY = 'hidden'; 
             }
         }
 
@@ -1174,18 +932,24 @@
         document.getElementById('tool-size').addEventListener('input', (e) => state.size = parseInt(e.target.value));
 
         function resizeCanvas() {
-            const rect = paperContainer.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
+            // Ajustamos el canvas exactamente al tamaño del papel contenedor (5000px)
+            canvas.width = paperContainer.offsetWidth; 
+            canvas.height = paperContainer.offsetHeight;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
+            ctx.lineWidth = state.size;
+            ctx.strokeStyle = state.color;
         }
 
         function getPos(e) {
             const rect = canvas.getBoundingClientRect();
+            // Importante: Como el canvas tiene el mismo tamaño que el papel, las coordenadas son absolutas
             const scaleX = canvas.width / rect.width;
             const scaleY = canvas.height / rect.height;
-            return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+            return { 
+                x: (e.clientX - rect.left) * scaleX, 
+                y: (e.clientY - rect.top) * scaleY 
+            };
         }
 
         function startDraw(e) { if(state.tool === 'hand') return; state.isDrawing = true; const pos = getPos(e); state.lastX = pos.x; state.lastY = pos.y; }
@@ -1195,13 +959,23 @@
             ctx.beginPath();
             ctx.moveTo(state.lastX, state.lastY);
             ctx.lineTo(pos.x, pos.y);
+            
             ctx.lineWidth = state.size;
             if(state.tool === 'eraser') {
-                ctx.globalCompositeOperation = 'destination-out'; ctx.strokeStyle = 'rgba(0,0,0,1)'; ctx.lineWidth = state.size * 5;
+                ctx.globalCompositeOperation = 'destination-out'; 
+                ctx.strokeStyle = 'rgba(0,0,0,1)'; 
+                ctx.lineWidth = state.size * 5;
             } else if (state.tool === 'highlighter') {
-                ctx.globalCompositeOperation = 'source-over'; ctx.strokeStyle = hexToRgba(state.color, 0.3); ctx.lineWidth = state.size * 4;
+                // Multiply funciona bien si el fondo (PDF) es blanco.
+                // Si el PDF tiene fondo negro, esto lo aclararía. 
+                // Asumimos fondo blanco estándar.
+                ctx.globalCompositeOperation = 'multiply'; 
+                ctx.strokeStyle = hexToRgba(state.color, 0.4); 
+                ctx.lineWidth = state.size * 6;
             } else {
-                ctx.globalCompositeOperation = 'source-over'; ctx.strokeStyle = state.color; ctx.lineWidth = state.size;
+                ctx.globalCompositeOperation = 'source-over'; 
+                ctx.strokeStyle = state.color; 
+                ctx.lineWidth = state.size;
             }
             ctx.stroke();
             state.lastX = pos.x; state.lastY = pos.y;
@@ -1213,12 +987,16 @@
         canvas.addEventListener('mouseup', stopDraw);
         canvas.addEventListener('mouseout', stopDraw);
 
-        // Touch support
         canvas.addEventListener('touchstart', e => { const touch=e.touches[0]; const me=new MouseEvent('mousedown',{clientX:touch.clientX,clientY:touch.clientY}); canvas.dispatchEvent(me); e.preventDefault(); }, {passive:false});
         canvas.addEventListener('touchmove', e => { const touch=e.touches[0]; const me=new MouseEvent('mousemove',{clientX:touch.clientX,clientY:touch.clientY}); canvas.dispatchEvent(me); e.preventDefault(); }, {passive:false});
         canvas.addEventListener('touchend', e => { const me=new MouseEvent('mouseup',{}); canvas.dispatchEvent(me); });
 
-        function adjustZoom(delta) { state.zoom += delta; if(state.zoom < 0.5) state.zoom = 0.5; if(state.zoom > 3) state.zoom = 3; applyZoom(); }
+        function adjustZoom(delta) { 
+            state.zoom += delta; 
+            if(state.zoom < 0.5) state.zoom = 0.5; 
+            if(state.zoom > 3) state.zoom = 3; 
+            applyZoom(); 
+        }
         function resetZoom() { state.zoom = 1; applyZoom(); }
         function applyZoom() { paperContainer.style.transform = `scale(${state.zoom})`; }
 
@@ -1234,77 +1012,102 @@
             }
         }
         
-        // Auto collapse if clicking outside
         document.addEventListener('click', (e) => {
             if (readerModal.classList.contains('active') && readerFooter.classList.contains('expanded')) {
-                // Check if click is inside footer
                 if (!readerFooter.contains(e.target) && !e.target.closest('.tool-btn')) {
                     readerFooter.classList.remove('expanded');
                 }
             }
         });
 
-        // --- Helper: Get Text ---
-        async function getTextToProcess() {
-            let text = selectedTextInput.value.trim();
+        // --- Helper: Procesador HÍBRIDO de Portapapeles ---
+        async function getClipboardText() {
+            // Método 1: API Moderna (Requiere HTTPS o localhost y permiso explícito)
+            try {
+                const text = await navigator.clipboard.readText();
+                if(text && text.trim().length > 0) return text.trim();
+            } catch (err) {
+                console.warn("API moderna falló, intentando método clásico...", err);
+            }
+
+            // Método 2: Fallback Clásico (document.execCommand)
+            // Crea un textarea temporal, pega, lee y elimina. Funciona incluso si la copia vino de un iframe.
+            const hiddenInput = document.createElement("textarea");
+            hiddenInput.style.position = "fixed";
+            hiddenInput.style.left = "-9999px";
+            document.body.appendChild(hiddenInput);
+            hiddenInput.focus();
             
-            // Si está vacío, intentar portapapeles
-            if (!text) {
-                try {
-                    text = await navigator.clipboard.readText();
-                    if (text) {
-                        selectedTextInput.value = text; // Mostrar en input
-                    }
-                } catch (err) {
-                    console.log('Portapapeles no disponible o vacío');
-                }
+            // Comando de pegado
+            const successful = document.execCommand('paste');
+            
+            const text = hiddenInput.value;
+            document.body.removeChild(hiddenInput);
+
+            if (successful && text && text.trim().length > 0) {
+                return text.trim();
             }
-            return text;
+            
+            showToast("No se pudo acceder al portapapeles. Selecciona el texto, presiona Ctrl+C y pulsa el botón de nuevo.");
+            return null;
         }
 
-        // --- Traductor ---
-        async function translateSelection() {
-            const text = await getTextToProcess();
-            if (!text) {
-                showToast("Escribe o pega una palabra primero");
-                return;
+        async function processClipboardAction(actionType) {
+            const text = await getClipboardText();
+            if (!text) { return; } // Error handled in helper
+
+            if (actionType === 'wikipedia') {
+                const url = `https://es.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(text)}`;
+                window.open(url, '_blank');
+            } else if (actionType === 'dict') {
+                currentDictWord = text;
+                document.getElementById('dictOverlay').classList.add('active');
+                document.getElementById('dictModal').classList.add('active');
+            } else if (actionType === 'translate') {
+                const url = `https://translate.google.com/?sl=auto&tl=es&text=${encodeURIComponent(text)}`;
+                window.open(url, '_blank');
             }
-            const url = `https://translate.google.com/?sl=auto&tl=es&text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
         }
 
-        // --- Wikipedia ---
-        async function openWikipedia() {
-            const text = await getTextToProcess();
-            if (!text) {
-                showToast("Escribe o pega una palabra primero");
-                return;
+        // --- NUEVO: Buscador en PDF (Google Viewer Search API) ---
+        function searchInPdf() {
+            const term = document.getElementById('pdf-search-input').value.trim();
+            if (!term) { showToast("Escribe una palabra para buscar"); return; }
+            
+            if (!state.isGoogleView) {
+                state.isGoogleView = true;
+                btnGoogleView.classList.add('active');
             }
-            const url = `https://es.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
+            
+            const baseUrl = "https://docs.google.com/gview?embedded=1&url=" + encodeURIComponent(currentPdfUrl) + "&scrollbar=0";
+            pdfIframe.src = baseUrl + "#search=" + encodeURIComponent(term);
+            showToast("Buscando y resaltando...");
+        }
+
+        // --- Descargas (Solo PDF original) ---
+        function downloadOriginalPDF() {
+            if(!currentPdfUrl) { showToast("No hay documento cargado"); return; }
+            const link = document.createElement('a');
+            link.href = currentPdfUrl;
+            link.download = "documento.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // --- Diccionario ---
-        async function prepareDictionary() {
-            const text = await getTextToProcess();
-            // Abrir modal directamente
-            const input = document.getElementById('dict-search-term-input');
-            input.value = text || ''; 
-            document.getElementById('dictOverlay').classList.add('active');
-            document.getElementById('dictModal').classList.add('active');
-            if (!text) input.focus();
-        }
-
         function closeDictionaryModal() {
             document.getElementById('dictOverlay').classList.remove('active');
             document.getElementById('dictModal').classList.remove('active');
+            currentDictWord = '';
         }
 
         function searchDict(langCode) {
-            const word = document.getElementById('dict-search-term-input').value.trim();
-            if(!word) {
-                showToast("Escribe una palabra en el campo de texto");
-                return;
+            const word = currentDictWord;
+            if(!word) { 
+                showToast("No hay palabra seleccionada.");
+                closeDictionaryModal();
+                return; 
             }
             
             let url = '';
@@ -1325,15 +1128,13 @@
             if(url) {
                 window.open(url, '_blank');
                 closeDictionaryModal();
-                if(!selectedTextInput.value) selectedTextInput.value = word;
             }
         }
 
-        // --- Text-to-Speech Mejorado ---
+        // --- Text-to-Speech ---
         function speakNotes() {
             const text = document.getElementById('reader-notes').value.trim();
             const langCode = document.getElementById('tts-lang').value;
-
             if(!text) return;
             window.speechSynthesis.cancel();
 
@@ -1349,12 +1150,10 @@
             const langVoices = voices.filter(v => v.lang.startsWith(langCode));
             
             if (langVoices.length > 0) {
-                const preferred = ['Google', 'Microsoft', 'Amazon', 'Samantha', 'Xiaoxiao', 'Mei-Jia'];
-                let selectedVoice = langVoices.find(v => preferred.some(p => v.name.includes(p)));
-                if (!selectedVoice) {
-                    const femaleVoice = langVoices.find(v => v.name.includes('Female') || v.name.includes('Zira') || v.name.includes('Helena') || v.name.includes('Sabina'));
-                    selectedVoice = femaleVoice || langVoices[0];
-                }
+                const femaleKeywords = ['Google', 'Microsoft', 'Amazon', 'Female', 'Woman', 'Zira', 'Heidi', 'Veena', 'Huihui', 'Tian Tian', 'Klara', 'Katya', 'Ayumi', 'Xiaoxiao'];
+                let selectedVoice = langVoices.find(v => femaleKeywords.some(k => v.name.includes(k)));
+                if (!selectedVoice) selectedVoice = langVoices.find(v => v.name.includes('Female') || v.name.includes('Woman'));
+                if (!selectedVoice) selectedVoice = langVoices[0];
                 if (selectedVoice) u.voice = selectedVoice;
             }
 
@@ -1381,19 +1180,13 @@
             document.getElementById('modalInfo').innerHTML = `<p><strong>Autor:</strong> ${book.author}</p><p><strong>Año:</strong> ${book.year}</p>`;
             
             const isVideo = book.pdfUrl.includes('youtube') || book.pdfUrl.includes('youtu.be');
-            
             const modalFormats = document.getElementById('modalFormats');
             
             if (isVideo) {
-                modalFormats.innerHTML = `
-                    <a href="${book.pdfUrl}" target="_blank" class="watch-video-btn">
-                        🎥 Ver vídeo en Youtube
-                    </a>
-                `;
+                modalFormats.innerHTML = `<a href="${book.pdfUrl}" target="_blank" class="watch-video-btn">🎥 Ver vídeo en Youtube</a>`;
             } else {
-                modalFormats.innerHTML = `<button onclick="openMaterialReader('${book.pdfUrl}')" class="read-pdf-btn">📖 ABRIR LECTOR MATERIAL</button>`;
+                modalFormats.innerHTML = `<button onclick="openMaterialReader('${book.pdfUrl}')" class="read-pdf-btn">📖 Entrar a la sala de lectura</button>`;
             }
-            
             document.getElementById('bookModal').classList.add('active');
         }
         function closeBookModal() { document.getElementById('bookModal').classList.remove('active'); }
